@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#151719" />
+  <title>Dota Build Assistant</title>
+  <meta name="description" content="Локальный помощник по предметам Dota 2: распознаёт героев на скриншоте и предлагает билд под вражеский драфт." />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">⚔</div>
+        <div>
+          <h1>Dota Build Assistant</h1>
+          <p>Скинь скрин — получи билд под конкретную игру</p>
+        </div>
+      </div>
+      <div class="local-pill" title="Скриншот анализируется в браузере и никуда не отправляется">🔒 локально</div>
+    </header>
+
+    <main class="layout">
+      <section class="panel input-panel">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">1 · ДРАФТ</div>
+            <h2>Загрузи скриншот</h2>
+          </div>
+          <button id="demoBtn" class="btn ghost">Заполнить пример</button>
+        </div>
+
+        <div class="segmented" id="modeTabs" aria-label="Режим скриншота">
+          <button data-mode="enemies5" class="active">5 врагов</button>
+          <button data-mode="draft10">10 героев</button>
+        </div>
+        <p class="hint" id="modeHint">Лучший режим для узкой полоски с пятью портретами, как в драфте.</p>
+
+        <div id="dropZone" class="drop-zone" tabindex="0" role="button" aria-label="Загрузить скриншот">
+          <input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp" hidden />
+          <div class="drop-icon">▣</div>
+          <div class="drop-title">Перетащи скрин сюда</div>
+          <div class="drop-sub">или нажми для выбора · PNG/JPG/WebP · можно Ctrl+V</div>
+        </div>
+
+        <div id="previewWrap" class="preview-wrap hidden">
+          <img id="previewImage" alt="Скриншот драфта" />
+          <button id="clearImageBtn" class="preview-clear" title="Убрать скрин">×</button>
+        </div>
+
+        <div id="recognitionStatus" class="status hidden"></div>
+        <div id="recognitionProgress" class="progress hidden"><div></div></div>
+
+        <div id="draftEditor" class="draft-editor hidden">
+          <div id="alliesBlock" class="team-block hidden">
+            <div class="team-title"><span class="team-dot ally"></span>Союзники</div>
+            <div id="alliesSlots" class="hero-slots"></div>
+          </div>
+          <div class="team-block">
+            <div class="team-title"><span class="team-dot enemy"></span>Противники</div>
+            <div id="enemiesSlots" class="hero-slots"></div>
+          </div>
+          <button id="swapTeamsBtn" class="btn ghost wide hidden">⇄ Поменять команды местами</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="eyebrow">2 · МОЙ ГЕРОЙ</div>
+        <div class="form-grid">
+          <label class="field full">
+            <span>Я играю на</span>
+            <select id="myHeroSelect"><option value="">Выбери героя</option></select>
+          </label>
+          <label class="field">
+            <span>Позиция</span>
+            <select id="positionSelect">
+              <option value="1">1 — керри</option>
+              <option value="2">2 — мид</option>
+              <option value="3">3 — оффлейн</option>
+              <option value="4">4 — саппорт</option>
+              <option value="5">5 — хард-саппорт</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Состояние игры</span>
+            <select id="gameStateSelect">
+              <option value="even">Равная</option>
+              <option value="ahead">Мы впереди</option>
+              <option value="behind">Мы позади</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Минута <em>необязательно</em></span>
+            <input id="minuteInput" type="number" min="0" max="120" inputmode="numeric" placeholder="22" />
+          </label>
+          <label class="field">
+            <span>Уже куплено <em>необязательно</em></span>
+            <input id="currentItemsInput" type="text" placeholder="Manta, Treads..." />
+          </label>
+        </div>
+
+        <button id="buildBtn" class="btn primary wide big" disabled>Подобрать билд</button>
+        <p class="microcopy">Никакого API и сервера: рекомендации считаются прямо в браузере.</p>
+      </section>
+
+      <section class="panel result-panel">
+        <div id="emptyResult" class="empty-result">
+          <div class="empty-icon">⌁</div>
+          <h2>Здесь появится билд</h2>
+          <p>Сначала распознай противников и выбери своего героя. Я разложу предметы по приоритету и объясню, зачем каждый нужен именно в этой игре.</p>
+        </div>
+
+        <div id="result" class="hidden">
+          <div class="section-head result-head">
+            <div>
+              <div class="eyebrow">РЕКОМЕНДАЦИЯ</div>
+              <h2 id="resultTitle">Билд</h2>
+            </div>
+            <span id="ruleModeBadge" class="badge">local rules</span>
+          </div>
+
+          <div id="nextItemCard" class="next-card hidden">
+            <div class="small-label">ПОКУПАЙ СЕЙЧАС</div>
+            <div class="item-row">
+              <img id="nextItemIcon" class="item-icon lg" alt="" />
+              <div>
+                <div id="nextItemName" class="next-name"></div>
+                <div id="nextItemReason" class="muted"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="result-section">
+            <h3>Рекомендуемый порядок</h3>
+            <div id="coreBuild" class="build-chain"></div>
+          </div>
+
+          <div class="result-section">
+            <h3>Почему это работает</h3>
+            <div id="coreReasons" class="reason-list"></div>
+          </div>
+
+          <div class="result-section">
+            <h3>Ситуативные</h3>
+            <div id="situational" class="cards-grid"></div>
+          </div>
+
+          <div class="result-section danger-section">
+            <h3>Не спешил бы покупать</h3>
+            <div id="avoidList" class="reason-list"></div>
+          </div>
+
+          <div class="result-section">
+            <h3>Что опасно в их драфте</h3>
+            <div id="matchupNotes" class="chips"></div>
+          </div>
+
+          <div id="uncertaintyBox" class="uncertainty hidden"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>Не связан с Valve. Данные героев и изображения загружаются из публичных Dota/OpenDota-источников.</span>
+      <span>Если распознавание ошиблось — нажми на героя и исправь.</span>
+    </footer>
+  </div>
+
+  <dialog id="heroDialog" class="hero-dialog">
+    <div class="dialog-head">
+      <div>
+        <div class="eyebrow">ИСПРАВИТЬ РАСПОЗНАВАНИЕ</div>
+        <h3>Выбери героя</h3>
+      </div>
+      <button id="dialogClose" class="icon-btn">×</button>
+    </div>
+    <input id="heroSearch" class="hero-search" placeholder="Начни вводить имя..." autocomplete="off" />
+    <div id="heroGrid" class="hero-grid"></div>
+  </dialog>
+
+  <script src="./app.js"></script>
+</body>
+</html>
