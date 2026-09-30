@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#151719" />
   <title>Dota Build Assistant</title>
-  <meta name="description" content="Локальный помощник по предметам Dota 2: распознаёт героев на скриншоте и предлагает билд под вражеский драфт." />
+  <meta name="description" content="Локальный помощник по предметам Dota 2: распознаёт 10 героев на скриншоте и предлагает билд под вражеский драфт." />
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="stylesheet" href="./styles.css" />
 </head>
@@ -16,7 +16,7 @@
         <div class="brand-mark">⚔</div>
         <div>
           <h1>Dota Build Assistant</h1>
-          <p>Скинь скрин — получи билд под конкретную игру</p>
+          <p>Скинь скрин десяти героев — получи билд под конкретную игру</p>
         </div>
       </div>
       <div class="local-pill" title="Скриншот анализируется в браузере и никуда не отправляется">🔒 локально</div>
@@ -32,11 +32,7 @@
           <button id="demoBtn" class="btn ghost">Заполнить пример</button>
         </div>
 
-        <div class="segmented" id="modeTabs" aria-label="Режим скриншота">
-          <button data-mode="enemies5" class="active">5 врагов</button>
-          <button data-mode="draft10">10 героев</button>
-        </div>
-        <p class="hint" id="modeHint">Лучший режим для узкой полоски с пятью портретами, как в драфте.</p>
+        <p class="hint">Ожидается одна горизонтальная строка из 10 портретов: первые 5 слева — одна команда, последние 5 справа — другая.</p>
 
         <div id="dropZone" class="drop-zone" tabindex="0" role="button" aria-label="Загрузить скриншот">
           <input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp" hidden />
@@ -54,24 +50,34 @@
         <div id="recognitionProgress" class="progress hidden"><div></div></div>
 
         <div id="draftEditor" class="draft-editor hidden">
-          <div id="alliesBlock" class="team-block hidden">
-            <div class="team-title"><span class="team-dot ally"></span>Союзники</div>
-            <div id="alliesSlots" class="hero-slots"></div>
+          <div class="draft-row-head">
+            <span>Слева</span>
+            <span>10 распознанных героев</span>
+            <span>Справа</span>
           </div>
-          <div class="team-block">
-            <div class="team-title"><span class="team-dot enemy"></span>Противники</div>
-            <div id="enemiesSlots" class="hero-slots"></div>
-          </div>
-          <button id="swapTeamsBtn" class="btn ghost wide hidden">⇄ Поменять команды местами</button>
+          <div id="draftSlots" class="hero-slots ten"></div>
+          <p class="hint">Если герой распознан неправильно — нажми на его карточку и исправь вручную.</p>
         </div>
 
         <div class="divider"></div>
 
-        <div class="eyebrow">2 · МОЙ ГЕРОЙ</div>
+        <div class="eyebrow">2 · МОЯ КОМАНДА</div>
+        <label class="field full side-field">
+          <span>Где моя команда на скрине?</span>
+          <div class="segmented full-width" id="teamSideTabs">
+            <button data-side="left" class="active">← Слева</button>
+            <button data-side="right">Справа →</button>
+          </div>
+        </label>
+
+        <div class="divider compact"></div>
+
+        <div class="eyebrow">3 · МОЙ ГЕРОЙ</div>
         <div class="form-grid">
           <label class="field full">
             <span>Я играю на</span>
-            <select id="myHeroSelect"><option value="">Выбери героя</option></select>
+            <select id="myHeroSelect" disabled><option value="">Сначала распознай 10 героев</option></select>
+            <small id="heroSelectHint" class="select-hint">После распознавания здесь будут только герои твоей команды из этого скрина.</small>
           </label>
           <label class="field">
             <span>Позиция</span>
@@ -109,7 +115,7 @@
         <div id="emptyResult" class="empty-result">
           <div class="empty-icon">⌁</div>
           <h2>Здесь появится билд</h2>
-          <p>Сначала распознай противников и выбери своего героя. Я разложу предметы по приоритету и объясню, зачем каждый нужен именно в этой игре.</p>
+          <p>Загрузи 10 героев, выбери сторону своей команды и своего героя. Затем я разложу предметы по приоритету и объясню, зачем каждый нужен против этой пятёрки.</p>
         </div>
 
         <div id="result" class="hidden">
