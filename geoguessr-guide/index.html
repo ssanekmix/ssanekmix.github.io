@@ -2,171 +2,181 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0f172a" />
-  <title>GeoGuessr — шпаргалка новичка</title>
-  <meta name="description" content="Визуальная шпаргалка GeoGuessr: языки, номера, столбы, болларды, разметка, движение и карта стран." />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#07111f" />
+  <title>GeoGuessr — практический гайд</title>
+  <meta name="description" content="Практический визуальный гайд GeoGuessr: языки, блюр номеров, столбы, болларды, знаки, разметка, левостороннее движение и карта стран." />
   <link rel="preconnect" href="https://unpkg.com" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQ3YN9prYAIeGGZb59nMZP5jKIJ0r1k=" crossorigin="" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
-  <header class="topbar">
-    <a class="brand" href="#top" aria-label="Наверх">
-      <span class="brand-mark">◎</span>
-      <span>GeoGuessr Guide</span>
-    </a>
-    <nav class="nav" aria-label="Основная навигация">
-      <a href="#languages">Языки</a>
-      <a href="#plates">Номера</a>
-      <a href="#poles">Столбы</a>
-      <a href="#essentials">Важно</a>
-      <a href="#map-section">Карта</a>
-    </nav>
-  </header>
+<header class="topbar">
+  <a class="brand" href="#top"><span class="brand-mark">◎</span><span>GeoGuessr Lab</span></a>
+  <nav class="nav" aria-label="Навигация">
+    <a href="#languages">Языки</a>
+    <a href="#plates">Номера</a>
+    <a href="#poles">Столбы</a>
+    <a href="#roads">Знаки / разметка</a>
+    <a href="#essentials">Meta</a>
+    <a href="#map-section">Карта</a>
+  </nav>
+</header>
 
-  <main id="top">
-    <section class="hero section">
-      <div class="hero-copy">
-        <span class="eyebrow">ШПАРГАЛКА ДЛЯ НАЧАЛА</span>
-        <h1>Увидел признак → быстро сузил страну</h1>
-        <p>Не учи всё сразу. Сначала узнавай письменность, сторону движения, номера и самые заметные дорожные признаки. На каждой карточке можно сразу открыть страну на карте.</p>
-        <div class="hero-actions">
-          <a class="button primary" href="#languages">Начать с языков</a>
-          <a class="button ghost" href="#essentials">Что учить первым</a>
-        </div>
-        <div class="legend">
-          <span><b class="dot easy"></b> очень сильная подсказка</span>
-          <span><b class="dot medium"></b> сужает выбор</span>
-          <span><b class="dot combo"></b> лучше сочетать с другими</span>
-        </div>
+<main id="top">
+  <section class="hero section">
+    <div class="hero-copy">
+      <span class="eyebrow">ПРАКТИЧЕСКИЙ ГАЙД · НАЧАЛЬНЫЙ → СРЕДНИЙ</span>
+      <h1>Смотри на то, что переживает блюр.</h1>
+      <p class="lead">Не «этот столб похож на Европу», а: <b>дырки доходят до земли + широкие прорези + белый низ → Румыния</b>. Не «жёлтый номер», а: <b>жёлтый с двух сторон + синяя EU-полоска → Нидерланды / Люксембург</b>.</p>
+      <div class="hero-actions">
+        <a class="button primary" href="#plates">Сначала номера</a>
+        <a class="button ghost" href="#poles">Потом столбы</a>
       </div>
-      <div class="hero-card">
-        <div class="round-label">Пример раунда</div>
-        <div class="fake-street">
-          <div class="sky"></div>
-          <div class="road"></div>
-          <div class="signboard">თბილისი<br><small>Tbilisi</small></div>
-          <div class="pole p1"></div>
-          <div class="pole p2"></div>
-        </div>
-        <div class="hero-answer">
-          <span>Видишь <b>თბილისი</b></span>
-          <strong>→ 🇬🇪 Грузия</strong>
-        </div>
+      <div class="rule-strip">
+        <div><b>1.</b> Найди крупный признак</div>
+        <div><b>2.</b> Сузь до 2–4 стран</div>
+        <div><b>3.</b> Подтверди вторым признаком</div>
       </div>
-    </section>
+    </div>
+    <div class="hero-demo">
+      <div class="demo-label">КАК ДУМАТЬ В РАУНДЕ</div>
+      <div class="demo-frame">
+        <div class="blur-plate black three"><i></i><i></i><i></i></div>
+      </div>
+      <div class="demo-steps">
+        <span>чёрный фон</span><b>→</b><span>3 белых кластера</span><b>→</b><strong>🇮🇩 Индонезия</strong>
+      </div>
+      <small>Сравни: Малайзия обычно даёт 2 светлых кластера.</small>
+    </div>
+  </section>
 
-    <section class="quick section" id="first-steps">
-      <div class="section-head">
-        <div>
-          <span class="eyebrow">ПОРЯДОК МЫСЛЕЙ</span>
-          <h2>Что проверять за первые 10 секунд</h2>
-        </div>
-      </div>
-      <div class="steps-grid">
-        <article class="step-card"><span>01</span><h3>Язык / алфавит</h3><p>Иногда сразу даёт страну: Грузия, Армения, Корея, Таиланд.</p></article>
-        <article class="step-card"><span>02</span><h3>Сторона движения</h3><p>Лево или право — моментально выбрасывает половину вариантов.</p></article>
-        <article class="step-card"><span>03</span><h3>Номерные знаки</h3><p>Цвет, форма, полоса ЕС, наличие переднего номера.</p></article>
-        <article class="step-card"><span>04</span><h3>Дорога и инфраструктура</h3><p>Разметка, болларды, столбы, знаки и материал дороги.</p></article>
-      </div>
-    </section>
+  <section class="section compact" id="workflow">
+    <div class="section-head">
+      <div><span class="eyebrow">ПЕРВЫЕ 10 СЕКУНД</span><h2>Порядок проверки</h2></div>
+    </div>
+    <div class="steps-grid">
+      <article class="step-card"><span>01</span><h3>Текст</h3><p>Алфавит, уникальные буквы, язык на знаках.</p></article>
+      <article class="step-card"><span>02</span><h3>Движение</h3><p>Если едут слева — сразу открывай карту левосторонних стран ниже.</p></article>
+      <article class="step-card"><span>03</span><h3>Номера</h3><p>Фон → длина → боковые полосы → сколько светлых пятен осталось после blur.</p></article>
+      <article class="step-card"><span>04</span><h3>Дорога</h3><p>Крайние/центральные линии → болларды → столбы → знаки → Google-car meta.</p></article>
+    </div>
+  </section>
 
-    <section class="section" id="languages">
-      <div class="section-head">
-        <div>
-          <span class="eyebrow">01 · ЯЗЫКИ</span>
-          <h2>Письменность — самый быстрый старт</h2>
-          <p>Смотри не на смысл слова, а на форму букв. Нажми «На карте», если не помнишь, где страна.</p>
-        </div>
-        <div class="filter-wrap"><input id="languageSearch" type="search" placeholder="Поиск: Польша, кириллица, ł..." /></div>
-      </div>
-      <div class="cards-grid" id="languageGrid"></div>
-    </section>
+  <section class="section" id="languages">
+    <div class="section-head">
+      <div><span class="eyebrow">01 · ЯЗЫКИ</span><h2>Форма букв, а не перевод</h2><p>На карточке только то, что реально можно выхватить глазами за пару секунд.</p></div>
+      <div class="filter-wrap"><input id="languageSearch" type="search" placeholder="Польша, кириллица, ł, Таиланд…" /></div>
+    </div>
+    <div class="cards-grid" id="languageGrid"></div>
+  </section>
 
-    <section class="section alt" id="plates">
-      <div class="section-head">
-        <div>
-          <span class="eyebrow">02 · НОМЕРА</span>
-          <h2>Номерные знаки, которые реально стоит знать</h2>
-          <p>В Street View номера часто размыты, поэтому важнее цвет и общий силуэт, а не цифры.</p>
-        </div>
-      </div>
-      <div class="cards-grid" id="plateGrid"></div>
-    </section>
+  <section class="section alt" id="plates">
+    <div class="section-head">
+      <div><span class="eyebrow">02 · НОМЕРНЫЕ ЗНАКИ</span><h2>Читай номер даже когда Google его уничтожил</h2><p>Буквы почти бесполезны. Остаются фон, пропорции, цветные края и «островки» светлого/тёмного текста.</p></div>
+    </div>
 
-    <section class="section" id="poles">
-      <div class="section-head">
-        <div>
-          <span class="eyebrow">03 · СТОЛБЫ И БОЛЛАРДЫ</span>
-          <h2>Инфраструктура у дороги</h2>
-          <p>Сначала учи не десятки тонких отличий, а самые визуально уникальные варианты.</p>
-        </div>
-      </div>
-      <div class="cards-grid" id="poleGrid"></div>
-    </section>
+    <div class="blur-principles">
+      <div><span class="blur-no">1</span><b>Фон</b><p>чёрный / белый / жёлтый / зелёный / оранжевый</p></div>
+      <div><span class="blur-no">2</span><b>Перед vs зад</b><p>UK-подобные страны часто: белый спереди, жёлтый сзади</p></div>
+      <div><span class="blur-no">3</span><b>Кластеры</b><p>на чёрном номере белый текст превращается в 2–3 размытых пятна</p></div>
+      <div><span class="blur-no">4</span><b>Края</b><p>синяя / жёлтая / зелёная / оранжевая полоска часто переживает blur</p></div>
+      <div><span class="blur-no">5</span><b>Форма</b><p>длинный европейский, короткий, квадратный задний, двухстрочный</p></div>
+    </div>
 
-    <section class="section alt" id="essentials">
-      <div class="section-head">
-        <div>
-          <span class="eyebrow">04 · ЕЩЁ ВАЖНЕЕ СТОЛБОВ</span>
-          <h2>Подсказки с максимальной отдачей для новичка</h2>
-          <p>Эти вещи встречаются почти в каждом раунде и помогают даже когда вокруг нет текста.</p>
-        </div>
-      </div>
-      <div class="essential-grid" id="essentialGrid"></div>
-    </section>
+    <div class="subhead"><span>ЧЁРНЫЙ ФОН</span><h3>Сначала посчитай светлые кластеры</h3></div>
+    <div class="lesson-grid" id="blackPlateGrid"></div>
 
-    <section class="section map-section" id="map-section">
-      <div class="section-head map-head">
-        <div>
-          <span class="eyebrow">05 · КАРТА</span>
-          <h2>Где вообще находится эта страна?</h2>
-          <p>Выбери страну — карта приблизится к ней. Из карточек выше сюда можно прыгать кнопкой «На карте».</p>
-        </div>
-        <label class="country-picker">Страна
-          <select id="countrySelect"></select>
-        </label>
-      </div>
-      <div class="map-layout">
-        <div id="map" aria-label="Карта стран"></div>
-        <aside class="map-info" id="mapInfo">
-          <div class="flag-wrap"><img id="mapFlag" alt="Флаг страны" /></div>
-          <div>
-            <div class="mini-label">СЕЙЧАС НА КАРТЕ</div>
-            <h3 id="mapCountryName">Грузия</h3>
-            <p id="mapCountryHint">Кавказ, между Чёрным морем и Каспийским регионом.</p>
-          </div>
-        </aside>
-      </div>
-    </section>
+    <div class="subhead"><span>ЖЁЛТЫЙ / БЕЛЫЙ</span><h3>Передний и задний номер — это отдельная подсказка</h3></div>
+    <div class="lesson-grid" id="yellowPlateGrid"></div>
 
-    <section class="section drill">
-      <div class="section-head">
-        <div>
-          <span class="eyebrow">МИНИ-ТРЕНИРОВКА</span>
-          <h2>Проверь, что уже запомнил</h2>
-        </div>
-      </div>
-      <div class="quiz" id="quiz">
-        <div class="quiz-visual" id="quizVisual"></div>
-        <div class="quiz-body">
-          <div class="mini-label">ЧТО ЭТО ЗА СТРАНА?</div>
-          <h3 id="quizPrompt"></h3>
-          <div class="quiz-options" id="quizOptions"></div>
-          <div class="quiz-result" id="quizResult"></div>
-          <button class="button ghost" id="nextQuiz" type="button">Следующий пример</button>
-        </div>
-      </div>
-    </section>
-  </main>
+    <div class="subhead"><span>ЦВЕТНЫЕ КРАЯ</span><h3>Полоска может быть полезнее всего номера</h3></div>
+    <div class="lesson-grid" id="stripePlateGrid"></div>
+  </section>
 
-  <footer>
-    <div><b>GeoGuessr Guide</b> · визуальная шпаргалка для начала</div>
-    <div class="footer-note">Правило новичка: один признак редко доказывает страну — ищи подтверждение вторым.</div>
-  </footer>
+  <section class="section" id="poles">
+    <div class="section-head">
+      <div><span class="eyebrow">03 · СТОЛБЫ И БОЛЛАРДЫ</span><h2>Распознавай геометрию, а не «вайб»</h2><p>У каждого примера ниже есть конкретные признаки и отдельная строка «если ракурс плохой».</p></div>
+    </div>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="./app.js"></script>
+    <div class="angle-check">
+      <b>Если столб виден боком / наполовину:</b>
+      <span>① доходят ли отверстия/полосы до земли</span>
+      <span>② форма прорези: круглая / овальная / прямоугольная</span>
+      <span>③ толщина столба</span>
+      <span>④ отражатель: цвет + форма + утоплен/торчит</span>
+      <span>⑤ посмотри следующий столб — не угадывай по одному плохому кадру</span>
+    </div>
+
+    <div class="subhead"><span>ГЛАВНОЕ СРАВНЕНИЕ</span><h3>Дырчатые бетонные столбы Европы</h3></div>
+    <div class="comparison-table" id="holeyPoleCompare"></div>
+
+    <div class="subhead"><span>АЗИЯ</span><h3>Чёрно-жёлтые полосы: Taiwan vs Korea vs Japan</h3></div>
+    <div class="lesson-grid" id="asiaPoleGrid"></div>
+
+    <div class="subhead"><span>БОЛЛАРДЫ</span><h3>Передний отражатель решает</h3></div>
+    <div class="lesson-grid" id="bollardGrid"></div>
+  </section>
+
+  <section class="section alt" id="roads">
+    <div class="section-head">
+      <div><span class="eyebrow">04 · ЗНАКИ И РАЗМЕТКА</span><h2>Смотри на цветовые схемы и длину линий</h2><p>Текст на знаке может быть нечитаемым — фон, рамка, форма стрелки и разметка обычно остаются.</p></div>
+    </div>
+    <div class="wide-lessons" id="roadLessons"></div>
+  </section>
+
+  <section class="section" id="essentials">
+    <div class="section-head"><div><span class="eyebrow">05 · META И ДВИЖЕНИЕ</span><h2>То, что стоит выучить раньше экзотики</h2></div></div>
+
+    <article class="left-drive-card">
+      <div class="left-drive-copy">
+        <span class="eyebrow">ЛЕВОСТОРОННЕЕ ДВИЖЕНИЕ</span>
+        <h3>Увидел, что машины держатся слева → вот твой пул</h3>
+        <p>Карта специально показывает только частые GeoGuessr-страны с левосторонним движением. Правостороннюю карту не дублирую: всё остальное проверяй уже другими признаками.</p>
+        <div class="region-groups" id="leftDriveGroups"></div>
+      </div>
+      <div id="leftDriveMap" aria-label="Карта стран с левосторонним движением"></div>
+    </article>
+
+    <div class="subhead"><span>GOOGLE CAR / COVERAGE</span><h3>Сильные meta — но проверяй актуальность coverage</h3></div>
+    <div class="lesson-grid" id="metaGrid"></div>
+  </section>
+
+  <section class="section map-section alt" id="map-section">
+    <div class="section-head map-head">
+      <div><span class="eyebrow">06 · КАРТА СТРАН</span><h2>Не знаешь, где страна — кликай из любой карточки</h2><p>Это часть обучения: сначала научиться назвать страну, потом мгновенно ставить её хотя бы в правильный регион.</p></div>
+      <label class="country-picker">Страна<select id="countrySelect"></select></label>
+    </div>
+    <div class="map-layout">
+      <div id="map" aria-label="Карта мира"></div>
+      <aside class="map-info">
+        <div class="flag-wrap"><img id="mapFlag" alt="Флаг" /></div>
+        <div><div class="mini-label">СЕЙЧАС НА КАРТЕ</div><h3 id="mapCountryName">Грузия</h3><p id="mapCountryHint"></p></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section drill">
+    <div class="section-head"><div><span class="eyebrow">МИНИ-ТРЕНИРОВКА</span><h2>Не узнавай текст — узнавай паттерн</h2></div></div>
+    <div class="quiz">
+      <div class="quiz-visual" id="quizVisual"></div>
+      <div class="quiz-body">
+        <div class="mini-label" id="quizKind">ЧТО ЗА СТРАНА?</div>
+        <h3 id="quizPrompt"></h3>
+        <div class="quiz-options" id="quizOptions"></div>
+        <div class="quiz-result" id="quizResult"></div>
+        <button class="button ghost" id="nextQuiz" type="button">Следующий</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div><b>GeoGuessr Lab</b><br><span>Сделано как личная учебная шпаргалка: конкретный признак → кандидаты → подтверждение.</span></div>
+  <div class="sources"><b>Источники для проверки:</b> Plonk It · Learnable Meta · GeoHints · пользовательские заметки. Coverage и meta со временем меняются.</div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="./app.js"></script>
 </body>
 </html>
