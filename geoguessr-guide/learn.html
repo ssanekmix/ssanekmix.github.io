@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="theme-color" content="#07111f" />
+<title>GeoGuessr Lab — единый справочник</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:#07111f;color:#edf4ff;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.shell{height:100%;display:grid;grid-template-rows:auto 1fr}.shellbar{position:relative;z-index:100;display:flex;align-items:center;gap:18px;padding:12px clamp(14px,3vw,34px);background:#081422;border-bottom:1px solid rgba(255,255,255,.1);box-shadow:0 8px 30px rgba(0,0,0,.25)}.brand{display:flex;align-items:center;gap:10px;font-weight:900;white-space:nowrap}.mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#21d07a,#2f7cff);display:grid;place-items:center;color:#04130b}.tabs{display:flex;gap:8px;flex:1;overflow:auto;padding:2px}.tab{border:1px solid rgba(255,255,255,.09);background:#112238;color:#b9c9dc;border-radius:12px;padding:10px 15px;font-weight:850;cursor:pointer;white-space:nowrap}.tab:hover{background:#18304e;color:#fff}.tab.active{background:#21d07a;color:#04130b;border-color:#21d07a}.hint{color:#7f93ad;font-size:.82rem;white-space:nowrap}.frame-wrap{min-height:0;background:#07111f}.frame{display:block;width:100%;height:100%;border:0;background:#07111f}@media(max-width:750px){.shellbar{gap:10px;flex-wrap:wrap}.brand{width:100%}.tabs{order:2;width:100%}.hint{display:none}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="shellbar">
+    <div class="brand"><span class="mark">◎</span><span>GeoGuessr Lab</span></div>
+    <nav class="tabs" aria-label="Разделы GeoGuessr Lab">
+      <button class="tab" data-page="guide" type="button">🧭 Гайд</button>
+      <button class="tab" data-page="flags" type="button">🚩 Флаги</button>
+      <button class="tab" data-page="countries" type="button">🌍 Страны / сравнение</button>
+    </nav>
+    <span class="hint">одна вкладка → весь справочник</span>
+  </header>
+  <div class="frame-wrap"><iframe class="frame" id="contentFrame" title="GeoGuessr Lab content"></iframe></div>
+</div>
+<script>
+const pages={guide:'./index.html',flags:'./flags.html',countries:'./countries.html'};
+const frame=document.getElementById('contentFrame');
+const buttons=[...document.querySelectorAll('.tab')];
+function openPage(key,push=true){
+  if(!pages[key])key='guide';
+  frame.src=pages[key];
+  buttons.forEach(b=>b.classList.toggle('active',b.dataset.page===key));
+  if(push)history.replaceState(null,'','#'+key);
+  document.title=`GeoGuessr Lab — ${key==='guide'?'гайд':key==='flags'?'флаги':'страны'}`;
+}
+buttons.forEach(b=>b.addEventListener('click',()=>openPage(b.dataset.page)));
+window.addEventListener('hashchange',()=>openPage(location.hash.slice(1)||'guide',false));
+openPage(location.hash.slice(1)||'guide',false);
+</script>
+</body>
+</html>
