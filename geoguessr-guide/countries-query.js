@@ -1,0 +1,1 @@
+(()=>{const code=new URLSearchParams(location.search).get('flag');if(!code)return;const c=C.find(x=>x.code===code||x.domain===`.${code}`);if(!c)return;selA.value=c.key;renderCompare();setTimeout(()=>document.getElementById('compare')?.scrollIntoView({behavior:'smooth'}),80)})();
