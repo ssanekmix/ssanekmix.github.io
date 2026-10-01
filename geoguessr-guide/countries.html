@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#07111f" />
+  <title>GeoGuessr Lab — страны и сравнения</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./reference.css" />
+</head>
+<body class="reference-page">
+<header class="topbar">
+  <a class="brand" href="./"><span class="brand-mark">◎</span><span>GeoGuessr Lab</span></a>
+  <nav class="nav"><a href="./">Гайд</a><a href="./flags.html">Флаги</a><a href="./countries.html" style="color:white;background:#132238">Страны</a></nav>
+</header>
+<main>
+  <section class="ref-hero">
+    <span class="eyebrow">СПРАВОЧНИК · КОГДА СОМНЕВАЕШЬСЯ МЕЖДУ 2–3 СТРАНАМИ</span>
+    <h1>Не «похоже на Европу». Доводи до конкретной страны.</h1>
+    <p>Здесь собраны частые страны GeoGuessr и признаки по слоям: язык → домен → номера → дороги → столбы/болларды → архитектура → город → религиозные объекты → гидранты → ландшафт → Meta. Слабые признаки помечены как слабые и не должны использоваться в одиночку.</p>
+    <div class="ref-toolbar">
+      <input id="countrySearch" class="ref-search" type="search" placeholder="Поиск: Франция, .hr, мечеть, гидрант, rue..." />
+      <select id="countryRegion" class="ref-select"><option value="all">Все регионы</option><option>Европа</option><option>Азия</option><option>Ближний Восток</option><option>Африка</option><option>Америка</option><option>Океания</option></select>
+      <div class="ref-tabs"><a href="#compare">Сравнить 2 страны</a><a href="#quick-pairs">Частые пары</a><a href="#domains">Домены</a><a href="#hydrants">Гидранты</a><a href="#all-countries">Все страны</a></div>
+    </div>
+  </section>
+
+  <section class="country-section alt" id="compare">
+    <div class="section-head"><div><span class="eyebrow">СРАВНЕНИЕ</span><h2>Выбери две страны и сравни рядом</h2><p>Самый полезный режим, когда в раунде уже осталось два варианта.</p></div></div>
+    <div class="country-controls">
+      <label>Страна A<select id="compareA" class="ref-select"></select></label>
+      <button id="swapCountries" class="swap" type="button">⇄</button>
+      <label>Страна B<select id="compareB" class="ref-select"></select></label>
+    </div>
+    <div id="pairDecision" class="decision"></div>
+    <div class="country-compare" id="countryCompare"></div>
+  </section>
+
+  <section class="country-section" id="quick-pairs">
+    <div class="section-head"><div><span class="eyebrow">ЧАСТЫЕ СТУПОРЫ</span><h2>Пары, которые реально путаются</h2></div></div>
+    <div id="pairGrid" class="country-grid"></div>
+  </section>
+
+  <section class="country-section alt" id="domains">
+    <div class="section-head"><div><span class="eyebrow">САЙТЫ И ДОМЕНЫ</span><h2>Окончание домена — почти бесплатный country clue</h2><p>Если видишь URL на магазине, автобусе, билборде или муниципальном сайте, окончание вроде <b>.jp</b>, <b>.hr</b>, <b>.sk</b>, <b>.tr</b>, <b>.ae</b> часто сразу даёт страну.</p></div></div>
+    <div class="domain-grid" id="domainGrid"></div>
+  </section>
+
+  <section class="country-section" id="hydrants">
+    <div class="section-head"><div><span class="eyebrow">ГИДРАНТЫ</span><h2>Полезно, но не переоценивай</h2><p>Цвет отдельного гидранта часто зависит от города. Здесь только признаки, которые реально имеют GeoGuessr-ценность.</p></div></div>
+    <div class="country-grid" id="hydrantGrid"></div>
+  </section>
+
+  <section class="country-section alt" id="latin-languages">
+    <div class="section-head"><div><span class="eyebrow">ЛАТИНИЦА · КОГДА ВСЕ БУКВЫ «НОРМАЛЬНЫЕ»</span><h2>Как не зависнуть между европейскими языками</h2><p>Смотри на короткие служебные слова, окончания улиц и 1–2 характерные буквы. Это обычно быстрее, чем пытаться читать предложение целиком.</p></div></div>
+    <div id="latinGrid" class="country-grid"></div>
+  </section>
+
+  <section class="country-section" id="all-countries">
+    <div class="section-head"><div><span class="eyebrow">СПРАВОЧНИК</span><h2>Частые страны GeoGuessr</h2><p>Открывай карточку и читай сверху вниз, пока один из признаков не совпадёт с раундом.</p></div></div>
+    <div id="countryGrid" class="country-grid"></div>
+  </section>
+</main>
+<footer><b>GeoGuessr Lab · Страны</b><span>Сильный clue > комбинация средних > «вайб».</span></footer>
+<script src="./countries.js"></script>
+</body>
+</html>
