@@ -4,124 +4,110 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="theme-color" content="#07111f" />
-  <title>GeoGuessr Lab — визуальный гайд</title>
-  <meta name="description" content="Визуальный практический гайд GeoGuessr: языки, блюр номеров, столбы, болларды, знаки, разметка, левостороннее движение и карта стран." />
+  <title>GeoGuessr Lab — единый справочник</title>
+  <meta name="description" content="Единый визуальный справочник GeoGuessr: страны, языки, номера, дороги, столбы, Google car meta, флаги и карта." />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
   <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./reference.css" />
   <style>
-    .photo-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:4px 0 30px}.photo-grid-two{grid-template-columns:repeat(2,minmax(0,1fr))}.photo-ref{margin:0;overflow:hidden;border:1px solid rgba(255,255,255,.09);border-radius:20px;background:#0f1d30}.photo-ref img{display:block;width:100%;height:230px;object-fit:contain;background:#0a1422}.photo-ref.tall img{height:360px;object-fit:contain}.photo-ref figcaption{display:grid;gap:5px;padding:14px 16px}.photo-ref figcaption b{font-size:1.05rem}.photo-ref figcaption span{color:#aebbd0;font-size:.92rem}@media(max-width:900px){.photo-grid,.photo-grid-two{grid-template-columns:1fr 1fr}}@media(max-width:620px){.photo-grid,.photo-grid-two{grid-template-columns:1fr}.photo-ref img,.photo-ref.tall img{height:auto;max-height:420px}}
+    .master-nav{display:flex;gap:7px;flex-wrap:wrap}.master-nav a{padding:8px 11px;border-radius:999px;background:#112238;color:#c4d3e6;font-weight:800;font-size:.9rem}.master-nav a:hover{background:#1a3352;color:#fff}.hero{min-height:430px}.hero h1{font-size:clamp(2.7rem,6vw,5rem)}.hero-copy{max-width:1000px}.section-note{color:#91a5bf;margin:-10px 0 22px}.deep-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.deep-card{background:#0f1d30;border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:16px}.deep-card h4{margin:12px 0 8px;font-size:1.05rem}.deep-card ul{margin:0;padding-left:18px;color:#c7d4e6}.deep-card li{margin:6px 0}.deep-visual{height:110px;background:#0a1422;border-radius:13px;display:grid;place-items:center}.plate-group{margin:26px 0 34px}.plate-group>h3{font-size:1.45rem}.plate{width:82%;max-width:250px;height:58px;border-radius:7px;position:relative;display:flex;align-items:center;justify-content:center;gap:12px;box-shadow:0 6px 18px rgba(0,0,0,.3)}.plate.white{background:#f5f5ef}.plate.yellow{background:#edcf2c}.plate.black{background:#070707}.plate.green{background:#2c9a55}.plate.blue{background:#2256b8}.plate.greenish{background:#dfead8}.plate.split{background:linear-gradient(90deg,#f5f5ef 0 49%,#edcf2c 49% 100%)}.plate.split-square{background:linear-gradient(90deg,#f5f5ef 0 62%,#edcf2c 62% 100%)}.plate.eu-left:before,.plate.eu-both:before,.plate.eu-both:after,.plate.ua:before,.plate.pt:after,.plate.green-left:before{content:"";position:absolute;top:0;bottom:0;width:14px}.plate.eu-left:before,.plate.eu-both:before{left:0;background:#1c52ad}.plate.eu-both:after{right:0;background:#1c52ad}.plate.ua:before{left:0;background:linear-gradient(#2472cf 0 50%,#f0d431 50%)}.plate.pt:after{right:0;background:#f2cf29}.plate.green-left:before{left:0;background:#1e8f4b}.plate.redchars:after{content:"ABC 123";color:#8e2635;font-weight:900}.plate.short{width:62%}.plate.clusters3 i,.plate.clusters2 i{display:block;height:11px;border-radius:8px;background:#fff;filter:blur(2px)}.plate.clusters3 i:nth-child(1){width:35px}.plate.clusters3 i:nth-child(2){width:62px}.plate.clusters3 i:nth-child(3){width:35px}.plate.clusters2 i:nth-child(1){width:65px}.plate.clusters2 i:nth-child(2){width:80px}.car-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.car-card{overflow:hidden;border-radius:20px;border:1px solid rgba(255,255,255,.08);background:#0f1d30}.car-card img,.car-placeholder{width:100%;height:240px;object-fit:cover;background:#0a1422;display:grid;place-items:center;text-align:center;color:#6e84a0}.car-copy{padding:16px}.car-copy h4{margin:.35rem 0 .6rem}.car-copy ul{padding-left:18px;color:#c7d4e6;margin:0}.car-copy li{margin:6px 0}.country-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.flags-section,.country-section{padding-left:clamp(18px,5vw,74px);padding-right:clamp(18px,5vw,74px)}.compact-head{margin-bottom:18px}.photo-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:4px 0 30px}.photo-ref{margin:0;overflow:hidden;border:1px solid rgba(255,255,255,.09);border-radius:20px;background:#0f1d30}.photo-ref img{display:block;width:100%;height:230px;object-fit:contain;background:#0a1422}.photo-ref figcaption{display:grid;gap:5px;padding:14px 16px}.photo-ref figcaption span{color:#aebbd0;font-size:.92rem}@media(max-width:1100px){.deep-grid{grid-template-columns:repeat(2,1fr)}.car-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:700px){.deep-grid,.car-grid,.photo-grid{grid-template-columns:1fr}.topbar{align-items:flex-start}.country-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
 <header class="topbar">
   <a class="brand" href="#top"><span class="brand-mark">◎</span><span>GeoGuessr Lab</span></a>
-  <nav class="nav">
-    <a href="#languages">Языки</a><a href="#plates">Номера</a><a href="#poles">Столбы</a><a href="#roads">Знаки / разметка</a><a href="#left-driving">Левое движение</a><a href="#map-section">Карта</a>
+  <nav class="master-nav">
+    <a href="#countries">Страны</a><a href="#languages">Языки</a><a href="#plates">Номера</a><a href="#roads">Дороги</a><a href="#poles">Столбы</a><a href="#cars">Google car</a><a href="#flags">Флаги</a><a href="#map-section">Карта</a>
   </nav>
 </header>
 
 <main id="top">
   <section class="hero section">
     <div class="hero-copy">
-      <span class="eyebrow">ПРАКТИЧЕСКИЙ ГАЙД · НЕ УГАДЫВАЙ ПО «ВАЙБУ»</span>
-      <h1>Что реально видно в раунде — то и учим.</h1>
-      <p class="lead">Цвет номера после blur, количество светлых пятен, куда доходят прорези столба, цвет отражателя, длина боковой линии, форма знака. Каждая карточка отвечает на два вопроса: <b>что именно увидеть</b> и <b>куда это ведёт</b>.</p>
-      <div class="hero-actions"><a class="button primary" href="#plates">Номера</a><a class="button ghost" href="#poles">Столбы</a></div>
-    </div>
-    <div class="hero-demo">
-      <div class="demo-label">ПРИМЕР: ЧЁРНЫЙ НОМЕР ЧЕРЕЗ BLUR</div>
-      <div class="blur-stage"><div class="blur-plate black three"><i></i><i></i><i></i></div></div>
-      <div class="demo-chain"><span>чёрный фон</span><b>→</b><span>3 светлых кластера</span><b>→</b><strong>🇮🇩 Индонезия</strong></div>
-      <div class="demo-sub">2 кластера → 🇲🇾 Малайзия. Это полезнее, чем пытаться читать символы.</div>
+      <span class="eyebrow">ОДНА СТРАНИЦА · ВСЕ CLUES</span>
+      <h1>Сначала страна. Потом добивай признак.</h1>
+      <p class="lead">Без воды: страна → язык → номер → дорога → столбы/болларды → архитектура → гидранты → Google car/meta → с чем спутать.</p>
+      <div class="hero-actions"><a class="button primary" href="#countries">Страны</a><a class="button ghost" href="#plates">Номера</a><a class="button ghost" href="#cars">Google car</a></div>
     </div>
   </section>
 
-  <section class="section compact">
-    <div class="section-head"><div><span class="eyebrow">ПЕРВЫЕ 10 СЕКУНД</span><h2>Порядок проверки</h2></div></div>
-    <div class="steps-grid">
-      <article class="step-card"><span>01</span><h3>Текст</h3><p>Алфавит и уникальные буквы.</p></article>
-      <article class="step-card"><span>02</span><h3>Сторона движения</h3><p>Если слева — сразу сверяйся с картой левосторонних стран.</p></article>
-      <article class="step-card"><span>03</span><h3>Номера</h3><p>Фон → боковые полосы → форма → светлые пятна после blur.</p></article>
-      <article class="step-card"><span>04</span><h3>Дорога</h3><p>Разметка → болларды → столбы → знаки → Google-car meta.</p></article>
+  <section class="country-section alt" id="countries">
+    <div class="section-head"><div><span class="eyebrow">01 · ГЛАВНАЯ СЕКЦИЯ</span><h2>Страны: отличительные факты</h2></div></div>
+    <div class="ref-toolbar">
+      <input id="countrySearch" class="ref-search" type="search" placeholder="Франция, .hr, мечеть, гидрант..." />
+      <select id="countryRegion" class="ref-select"><option value="all">Все регионы</option><option>Европа</option><option>Азия</option><option>Ближний Восток</option><option>Африка</option><option>Америка</option><option>Океания</option></select>
     </div>
+    <h3 class="subhead">Сравнить две страны</h3>
+    <div class="country-controls"><label>Страна A<select id="compareA" class="ref-select"></select></label><button id="swapCountries" class="swap" type="button">⇄</button><label>Страна B<select id="compareB" class="ref-select"></select></label></div>
+    <div id="pairDecision" class="decision"></div><div class="country-compare" id="countryCompare"></div>
+    <h3 class="subhead">Частые ступоры</h3><div id="pairGrid" class="country-grid"></div>
+    <h3 class="subhead">Домены</h3><div class="domain-grid" id="domainGrid"></div>
+    <h3 class="subhead">Гидранты</h3><div class="country-grid" id="hydrantGrid"></div>
+    <h3 class="subhead">Все основные страны</h3><div id="countryGrid" class="country-grid"></div>
   </section>
 
   <section class="section" id="languages">
-    <div class="section-head"><div><span class="eyebrow">01 · ЯЗЫКИ</span><h2>Письменность и буквы-маркеры</h2><p>Здесь только то, что реально помогает сузить страну.</p></div><input id="languageSearch" class="search" type="search" placeholder="Польша, кириллица, ř..." /></div>
+    <div class="section-head"><div><span class="eyebrow">02 · ЯЗЫКИ</span><h2>От уникальных алфавитов до похожей латиницы</h2></div><input id="languageSearch" class="search" type="search" placeholder="Польша, ř, straat, rue..." /></div>
     <div class="cards-grid" id="languageGrid"></div>
+    <h3 class="subhead">Когда все буквы выглядят «обычно»</h3><div id="latinGrid" class="country-grid"></div>
   </section>
 
   <section class="section alt" id="plates">
-    <div class="section-head"><div><span class="eyebrow">02 · НОМЕРНЫЕ ЗНАКИ</span><h2>Учи то, что переживает размытие</h2><p>Не цифры. Смотри на фон, крупные цветные полосы и на то, на сколько светлых блоков распадается номер.</p></div></div>
-    <div class="lesson-callout"><b>Как смотреть на номер:</b><span>1. цвет фона</span><span>2. перед/зад</span><span>3. полосы по краям</span><span>4. 2 / 3 светлых кластера</span><span>5. длинный или двухстрочный</span></div>
-    <h3 class="subhead">Чёрные номера — сначала различи Азию</h3>
-    <div class="cards-grid plates-grid" id="blackPlateGrid"></div>
-    <h3 class="subhead">Жёлтые — цвет один, страны разные</h3>
-    <div class="cards-grid plates-grid" id="yellowPlateGrid"></div>
-    <h3 class="subhead">Специальные цветовые признаки Европы</h3>
-    <div class="cards-grid plates-grid" id="specialPlateGrid"></div>
-
-    <h3 class="subhead">Реальный вид — без схем</h3>
-    <div class="photo-grid">
-      <figure class="photo-ref"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Indonesian%20License%20Plate%20for%20Cars.jpg?width=900" alt="Чёрный индонезийский номер" loading="lazy"><figcaption><b>🇮🇩 Индонезия</b><span>Чёрный фон, белые символы. В GeoGuessr blur часто превращает группы символов в 3 светлых пятна.</span></figcaption></figure>
-      <figure class="photo-ref"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Singapore%20white-on-black%20vehicle%20registration%20plate%20real%20example.jpg?width=900" alt="Чёрный номер Сингапура" loading="lazy"><figcaption><b>🇸🇬 Сингапур</b><span>Настоящий white-on-black номер: визуально более цельная строка, не учи его как стабильные 2/3 кластера.</span></figcaption></figure>
-      <figure class="photo-ref"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Dutch%20plate%20yellow%20NL%20car.png?width=900" alt="Жёлтый номер Нидерландов" loading="lazy"><figcaption><b>🇳🇱 Нидерланды</b><span>Ярко-жёлтая пластина + синяя EU-полоса слева. Через blur жёлтый прямоугольник остаётся отлично виден.</span></figcaption></figure>
-    </div>
+    <div class="section-head"><div><span class="eyebrow">03 · НОМЕРА</span><h2>Если номер просто белый — что делать дальше</h2></div></div>
+    <div class="lesson-callout"><b>Порядок:</b><span>фон</span><span>перед/зад</span><span>левая полоса</span><span>правая полоса</span><span>цвет текста</span><span>длина/форма</span><span>blur-кластеры</span></div>
+    <div id="plateDecisionGrid"></div>
+    <h3 class="subhead">Старые карточки для быстрого повторения</h3><div class="cards-grid plates-grid" id="blackPlateGrid"></div><div class="cards-grid plates-grid" id="yellowPlateGrid"></div><div class="cards-grid plates-grid" id="specialPlateGrid"></div>
+    <h3 class="subhead">Реальный вид</h3>
+    <div class="photo-grid"><figure class="photo-ref"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Indonesian%20License%20Plate%20for%20Cars.jpg?width=900" alt="Индонезийский номер"><figcaption><b>🇮🇩 Индонезия</b><span>Чёрный фон; через blur часто три светлых группы.</span></figcaption></figure><figure class="photo-ref"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Dutch%20plate%20yellow%20NL%20car.png?width=900" alt="Нидерландский номер"><figcaption><b>🇳🇱 Нидерланды</b><span>Жёлтый спереди и сзади + EU-полоса.</span></figcaption></figure><figure class="photo-ref"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/MUTCD%20CW14-3.svg?width=900" alt="Визуальный референс"><figcaption><b>Главное правило</b><span>Через blur учи цветные блоки и форму, не символы.</span></figcaption></figure></div>
   </section>
 
-  <section class="section" id="poles">
-    <div class="section-head"><div><span class="eyebrow">03 · СТОЛБЫ И БОЛЛАРДЫ</span><h2>Форма → прорези → окраска → отражатели</h2><p>Ракурс меняет силуэт, поэтому для каждого признака указано, что остаётся заметным сбоку и издалека.</p></div></div>
-
-    <div class="photo-grid photo-grid-two">
-      <figure class="photo-ref tall"><img src="./assets/taiwan-pole.webp" alt="Реальная оранжево-чёрная маркировка столба Тайваня из заметок пользователя" loading="lazy"><figcaption><b>🇹🇼 Тайвань — из твоих заметок</b><span>Главное не оттенок, а то, что диагональная чёрно-жёлто/оранжевая маркировка тянется к самому основанию. Под углом всё равно виден длинный полосатый участок.</span></figcaption></figure>
-      <figure class="photo-ref tall"><img src="https://learnablemeta.com/images/iklofsfUFV6mDtBk1YnbOCPSVNwruGwLkmjP.avif" alt="Двойной бетонный столб Аргентины" loading="lazy"><figcaption><b>🇦🇷 Аргентина — double concrete pole</b><span>Две параллельные округлые бетонные стойки, соединённые бетонными кольцами/перемычками. Силуэт читается даже издалека.</span></figcaption></figure>
-    </div>
-
-    <h3 class="subhead">«Дырчатые» бетонные столбы Европы</h3>
-    <div class="comparison-board" id="holeyPoleGrid"></div>
-    <h3 class="subhead">Сильные столбовые признаки</h3>
-    <div class="cards-grid" id="poleGrid"></div>
-    <h3 class="subhead">Болларды</h3>
-    <div class="cards-grid" id="bollardGrid"></div>
+  <section class="section" id="roads">
+    <div class="section-head"><div><span class="eyebrow">04 · ДОРОГИ</span><h2>Разметка, покрытие, городские улицы</h2></div></div>
+    <div id="roadDecisionGrid" class="deep-grid"></div>
+    <h3 class="subhead">Знаки и разметка по странам</h3><div class="cards-grid" id="roadGrid"></div>
   </section>
 
-  <section class="section alt" id="roads">
-    <div class="section-head"><div><span class="eyebrow">04 · ЗНАКИ И РАЗМЕТКА</span><h2>То, что видно даже без текста</h2><p>Цвет фона знака, форма, длина штрихов и цвет крайних линий часто работают с десятков метров.</p></div></div>
+  <section class="section alt" id="poles">
+    <div class="section-head"><div><span class="eyebrow">05 · СТОЛБЫ / БОЛЛАРДЫ</span><h2>Форма, прорези, отражатели</h2></div></div>
+    <h3 class="subhead">Дырчатые бетонные столбы</h3><div class="comparison-board" id="holeyPoleGrid"></div>
+    <h3 class="subhead">Столбы</h3><div class="cards-grid" id="poleGrid"></div>
+    <h3 class="subhead">Болларды</h3><div class="cards-grid" id="bollardGrid"></div>
+  </section>
 
-    <div class="photo-grid photo-grid-two">
-      <figure class="photo-ref"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/SE%20road%20sign%20X1%20%284%20chevrons%2C%20right%29.svg?width=1200" alt="Шведские сине-жёлтые шевроны" loading="lazy"><figcaption><b>🇸🇪 Швеция</b><span>Синий прямоугольник + жёлтые стрелки. На дальнем ракурсе именно сочетание цветов узнаётся раньше формы стрелок.</span></figcaption></figure>
-      <figure class="photo-ref"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/MUTCD%20CW14-3.svg?width=900" alt="Американский знак No Passing Zone" loading="lazy"><figcaption><b>🇺🇸 США</b><span>Редкая форма: жёлтый боковой треугольник-пеннант. Даже когда надпись NO PASSING ZONE не читается, силуэт остаётся очень заметным.</span></figcaption></figure>
-    </div>
+  <section class="section" id="cars">
+    <div class="section-head"><div><span class="eyebrow">06 · GOOGLE CAR / META</span><h2>Смотри на настоящую машину, а не на эмодзи</h2></div></div>
+    <div id="carPhotoGrid" class="car-grid"></div>
+    <h3 class="subhead">Ещё metas</h3><div class="cards-grid" id="metaGrid"></div>
+  </section>
 
-    <div class="cards-grid" id="roadGrid"></div>
+  <section class="flags-section alt" id="flags">
+    <div class="section-head"><div><span class="eyebrow">07 · ФЛАГИ</span><h2>Флаги и похожие пары</h2></div></div>
+    <div class="ref-toolbar"><input id="flagSearch" class="ref-search" type="search" placeholder="Франция, Croatia..." /><select id="flagRegion" class="ref-select"><option value="all">Все регионы</option><option value="Европа">Европа</option><option value="Азия">Азия</option><option value="Африка">Африка</option><option value="Америка">Америка</option><option value="Океания">Океания</option><option value="Ближний Восток">Ближний Восток</option></select></div>
+    <h3 class="subhead">Похожие</h3><div class="similar-grid" id="similarFlags"></div>
+    <h3 class="subhead">Все</h3><div id="flagSections"></div>
+    <div style="display:none"><img id="flagQuizImage"><div id="flagQuizOptions"></div><div id="flagQuizResult"></div><button id="nextFlagQuiz"></button></div>
   </section>
 
   <section class="section" id="left-driving">
-    <div class="section-head"><div><span class="eyebrow">05 · ЛЕВОСТОРОННЕЕ ДВИЖЕНИЕ</span><h2>Увидел движение слева — вот где искать</h2><p>Правосторонние страны здесь специально не расписываю. Синее на карте — левостороннее движение.</p></div></div>
-    <div class="left-layout">
-      <figure class="left-map-card"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Countries%20driving%20on%20the%20left%20or%20right.svg?width=1600" alt="Карта стран с левосторонним и правосторонним движением" /><figcaption>Синие страны — движение слева. Карта Wikimedia Commons, public domain.</figcaption></figure>
-      <div class="left-country-list" id="leftCountryList"></div>
-    </div>
+    <div class="section-head"><div><span class="eyebrow">08 · ЛЕВОЕ ДВИЖЕНИЕ</span><h2>Карта левосторонних стран</h2></div></div>
+    <div class="left-layout"><figure class="left-map-card"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Countries%20driving%20on%20the%20left%20or%20right.svg?width=1600" alt="Карта левостороннего движения"><figcaption>Синие страны — движение слева.</figcaption></figure><div class="left-country-list" id="leftCountryList"></div></div>
   </section>
 
-  <section class="section alt" id="meta">
-    <div class="section-head"><div><span class="eyebrow">06 · GOOGLE-CAR / META</span><h2>Сильные признаки, которые стоит знать рано</h2><p>Используй как подтверждение: coverage меняется, но некоторые metas всё ещё очень сильные.</p></div></div>
-    <div class="cards-grid" id="metaGrid"></div>
-  </section>
-
-  <section class="section map-section" id="map-section">
-    <div class="section-head map-head"><div><span class="eyebrow">07 · ГДЕ СТРАНА</span><h2>Карта для обучения географии</h2><p>Кнопка «На карте» на карточках переносит сюда и приближает нужную страну.</p></div><label class="country-picker">Страна<select id="countrySelect"></select></label></div>
-    <div class="map-layout"><div id="map"></div><aside class="map-info"><div class="flag-wrap"><img id="mapFlag" alt="Флаг" /></div><div class="mini-label">СЕЙЧАС НА КАРТЕ</div><h3 id="mapCountryName"></h3><p id="mapCountryHint"></p></aside></div>
+  <section class="section alt map-section" id="map-section">
+    <div class="section-head map-head"><div><span class="eyebrow">09 · КАРТА</span><h2>Где находится страна</h2></div><label class="country-picker">Страна<select id="countrySelect"></select></label></div>
+    <div class="map-layout"><div id="map"></div><aside class="map-info"><div class="flag-wrap"><img id="mapFlag" alt="Флаг"></div><h3 id="mapCountryName"></h3><p id="mapCountryHint"></p></aside></div>
   </section>
 
   <section class="section drill">
-    <div class="section-head"><div><span class="eyebrow">МИНИ-ТРЕНИРОВКА</span><h2>Узнай признак без подсказки</h2></div></div>
-    <div class="quiz"><div class="quiz-visual" id="quizVisual"></div><div class="quiz-body"><div class="mini-label">ЧТО ВЫБЕРЕШЬ?</div><h3 id="quizPrompt"></h3><div class="quiz-options" id="quizOptions"></div><div class="quiz-result" id="quizResult"></div><button class="button ghost" id="nextQuiz">Следующий</button></div></div>
+    <div class="section-head"><div><span class="eyebrow">ТРЕНИРОВКА</span><h2>Быстрый тест</h2></div></div>
+    <div class="quiz"><div class="quiz-visual" id="quizVisual"></div><div class="quiz-body"><h3 id="quizPrompt"></h3><div class="quiz-options" id="quizOptions"></div><div class="quiz-result" id="quizResult"></div><button class="button ghost" id="nextQuiz">Следующий</button></div></div>
   </section>
 </main>
-
-<footer><b>GeoGuessr Lab</b><span>Один признак сужает. Два независимых признака подтверждают.</span></footer>
+<footer><b>GeoGuessr Lab</b><span>Одна страница: https://ssanekmix.github.io/geoguessr-guide/</span></footer>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script src="./app.js"></script>
+<script type="module" src="./countries.js"></script>
+<script type="module" src="./flags.js"></script>
+<script src="./extras.js"></script>
 </body>
 </html>
