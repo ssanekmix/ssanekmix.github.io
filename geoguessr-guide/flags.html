@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#07111f" />
+  <title>GeoGuessr Lab — флаги</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./reference.css" />
+</head>
+<body class="reference-page">
+<header class="topbar">
+  <a class="brand" href="./"><span class="brand-mark">◎</span><span>GeoGuessr Lab</span></a>
+  <nav class="nav"><a href="./">Гайд</a><a href="./flags.html" style="color:white;background:#132238">Флаги</a><a href="./countries.html">Страны</a></nav>
+</header>
+<main>
+  <section class="ref-hero">
+    <span class="eyebrow">ОТДЕЛЬНАЯ ВКЛАДКА · ФЛАГИ</span>
+    <h1>Флаг увидел — страну не ищи вслепую.</h1>
+    <p>Здесь не просто коллекция флагов. Сначала идут пары, которые реально путаются, потом — быстрый справочник по регионам и тренировка.</p>
+    <div class="ref-toolbar">
+      <input id="flagSearch" class="ref-search" type="search" placeholder="Поиск: Франция, red white blue..." />
+      <select id="flagRegion" class="ref-select"><option value="all">Все регионы</option><option value="Европа">Европа</option><option value="Азия">Азия</option><option value="Африка">Африка</option><option value="Америка">Америка</option><option value="Океания">Океания</option></select>
+      <div class="ref-tabs"><a href="#similar">Похожие</a><a href="#all-flags">Все флаги</a><a href="#flag-quiz">Квиз</a></div>
+    </div>
+  </section>
+
+  <section class="flags-section alt" id="similar">
+    <div class="section-head"><div><span class="eyebrow">СНАЧАЛА ВЫУЧИ ЭТО</span><h2>Флаги, которые легко перепутать</h2><p>У каждой пары написано, куда смотреть первым.</p></div></div>
+    <div class="similar-grid" id="similarFlags"></div>
+  </section>
+
+  <section class="flags-section" id="all-flags">
+    <div class="section-head"><div><span class="eyebrow">СПРАВОЧНИК</span><h2>Основные флаги GeoGuessr</h2><p>Нажми «На карту» — вернёшься в основной гайд сразу на нужную страну.</p></div></div>
+    <div id="flagSections"></div>
+  </section>
+
+  <section class="flags-section alt" id="flag-quiz">
+    <div class="section-head"><div><span class="eyebrow">ТРЕНИРОВКА</span><h2>Узнай флаг без подписи</h2></div></div>
+    <div class="flag-quiz">
+      <div class="flag-quiz-visual"><img id="flagQuizImage" alt="Флаг для вопроса" /></div>
+      <div><div class="mini-label">КАКАЯ СТРАНА?</div><div id="flagQuizOptions" class="flag-quiz-options"></div><div id="flagQuizResult" class="quiz-result"></div><button id="nextFlagQuiz" class="button ghost">Следующий</button></div>
+    </div>
+  </section>
+</main>
+<footer><b>GeoGuessr Lab · Флаги</b><span><a href="./countries.html">Перейти к справочнику стран →</a></span></footer>
+<script src="./flags.js"></script>
+</body>
+</html>
