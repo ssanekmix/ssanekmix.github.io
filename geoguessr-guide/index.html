@@ -5,22 +5,23 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <meta name="theme-color" content="#07111f" />
 <title>GeoGuessr Lab — единый справочник</title>
-<meta name="description" content="Практический единый справочник GeoGuessr: страны, языки, номера, дороги, столбы, город/джунгли/пустыня, Google car, флаги и карта." />
+<meta name="description" content="Практический единый справочник GeoGuessr: страны, языки, номера, дороги, столбы, город/джунгли/пустыня, машина Google, флаги и карта." />
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
 <link rel="stylesheet" href="./site.css" />
+<link rel="stylesheet" href="./site-v2.css" />
 </head>
 <body>
 <header class="top">
   <a class="brand" href="#top">◎ GeoGuessr Lab</a>
   <nav class="nav">
-    <a href="#countries">Страны</a><a href="#languages">Языки</a><a href="#plates">Номера</a><a href="#roads">Дороги</a><a href="#poles">Столбы</a><a href="#environment">Город / джунгли / пустыня</a><a href="#cars">Google car</a><a href="#flags">Флаги</a><a href="#map-section">Карта</a>
+    <a href="#countries">Страны</a><a href="#languages">Языки</a><a href="#plates">Номера</a><a href="#roads">Дороги</a><a href="#poles">Столбы</a><a href="#environment">Город / джунгли / пустыня</a><a href="#cars">Машина Google</a><a href="#flags">Флаги</a><a href="#map-section">Карта</a>
   </nav>
 </header>
 <main id="top">
   <section class="hero section">
     <span class="eyebrow">ОДНА СТРАНИЦА · БЕЗ ВОДЫ</span>
     <h1>Увидел признак → сузил страны → добил вторым признаком.</h1>
-    <p>Страна, язык, номер, дорога, столбы, среда и Google-car. Слабые признаки не используются в одиночку.</p>
+    <p>Страна, язык, номер, дорога, столбы, среда и машина Google. Слабые признаки не используются в одиночку.</p>
   </section>
 
   <section class="section alt" id="countries">
@@ -43,7 +44,7 @@
 
   <section class="section alt" id="plates">
     <div class="section-head"><div><span class="eyebrow">03 · НОМЕРА</span><h2>Одна система по цвету и форме</h2><p>Белый номер не даёт страну. Сначала края, потом цвет символов, длина и перед/зад.</p></div></div>
-    <div class="pill-row"><span class="pill">1 фон</span><span class="pill">2 перед/зад</span><span class="pill">3 левая полоса</span><span class="pill">4 правая полоса</span><span class="pill">5 цвет текста</span><span class="pill">6 длина/форма</span><span class="pill">7 blur-кластеры</span></div>
+    <div class="pill-row"><span class="pill">1 фон</span><span class="pill">2 перед/зад</span><span class="pill">3 левая полоса</span><span class="pill">4 правая полоса</span><span class="pill">5 цвет текста</span><span class="pill">6 длина/форма</span><span class="pill">7 блоки после размытия</span></div>
     <div id="plateGroups"></div>
   </section>
 
@@ -63,7 +64,7 @@
   </section>
 
   <section class="section alt" id="cars">
-    <div class="section-head"><div><span class="eyebrow">07 · GOOGLE CAR</span><h2>Что видно в самой панораме</h2><p>Для Kenya, Ghana, Kyrgyzstan и Nigeria — реальные изображения; ниже только конкретные детали, которые надо найти глазами.</p></div></div>
+    <div class="section-head"><div><span class="eyebrow">07 · МАШИНА GOOGLE</span><h2>Что видно в самой панораме</h2><p>Для Кении, Ганы, Кыргызстана и Нигерии — реальные изображения; ниже только конкретные детали, которые надо найти глазами.</p></div></div>
     <div id="carGrid" class="car-grid"></div>
   </section>
 
@@ -81,5 +82,6 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script src="./site.js"></script>
 <script src="./site-patch.js"></script>
+<script src="./site-v2.js"></script>
 </body>
 </html>
