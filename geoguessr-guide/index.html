@@ -20,7 +20,7 @@
   <section class="hero section">
     <span class="eyebrow">ОДНА СТРАНИЦА · БЕЗ ВОДЫ</span>
     <h1>Увидел признак → сузил страны → добил вторым признаком.</h1>
-    <p>Главное сначала: страна, язык, номер, дорога, столбы, среда и Google-car. Слабые «вайбовые» признаки не используются в одиночку.</p>
+    <p>Страна, язык, номер, дорога, столбы, среда и Google-car. Слабые признаки не используются в одиночку.</p>
   </section>
 
   <section class="section alt" id="countries">
@@ -42,43 +42,44 @@
   </section>
 
   <section class="section alt" id="plates">
-    <div class="section-head"><div><span class="eyebrow">03 · НОМЕРА</span><h2>Не отдельные карточки вперемешку — одна система по цвету</h2><p>Белый номер не даёт страну. Сначала края, потом цвет символов, длина и перед/зад.</p></div></div>
+    <div class="section-head"><div><span class="eyebrow">03 · НОМЕРА</span><h2>Одна система по цвету и форме</h2><p>Белый номер не даёт страну. Сначала края, потом цвет символов, длина и перед/зад.</p></div></div>
     <div class="pill-row"><span class="pill">1 фон</span><span class="pill">2 перед/зад</span><span class="pill">3 левая полоса</span><span class="pill">4 правая полоса</span><span class="pill">5 цвет текста</span><span class="pill">6 длина/форма</span><span class="pill">7 blur-кластеры</span></div>
     <div id="plateGroups"></div>
   </section>
 
   <section class="section" id="roads">
-    <div class="section-head"><div><span class="eyebrow">04 · ДОРОГИ</span><h2>Что думать, если ты просто в городе и видишь белую разметку</h2></div></div>
+    <div class="section-head"><div><span class="eyebrow">04 · ДОРОГИ</span><h2>Если ты в городе и видишь обычную белую разметку</h2></div></div>
     <div id="roadRules" class="road-flow"></div>
   </section>
 
   <section class="section alt" id="poles">
-    <div class="section-head"><div><span class="eyebrow">05 · СТОЛБЫ</span><h2>Смотри форму, до какой высоты идут отверстия и окраску</h2></div></div>
+    <div class="section-head"><div><span class="eyebrow">05 · СТОЛБЫ</span><h2>Форма, отверстия, окраска, верхушка</h2></div></div>
     <div id="poleGrid" class="pole-grid"></div>
   </section>
 
   <section class="section" id="environment">
-    <div class="section-head"><div><span class="eyebrow">06 · СРЕДА</span><h2>Ориентиры прямо в городе, джунглях и пустыне</h2></div></div>
+    <div class="section-head"><div><span class="eyebrow">06 · СРЕДА</span><h2>Город, джунгли, пустыня</h2></div></div>
     <div id="envGrid" class="env-grid"></div>
   </section>
 
   <section class="section alt" id="cars">
-    <div class="section-head"><div><span class="eyebrow">07 · GOOGLE CAR</span><h2>Что именно должно торчать снизу/сзади панорамы</h2><p>Крупная схема показывает расположение деталей. Под ней — ссылка на реальный пример из гайда.</p></div></div>
+    <div class="section-head"><div><span class="eyebrow">07 · GOOGLE CAR</span><h2>Что видно в самой панораме</h2><p>Для Kenya, Ghana, Kyrgyzstan и Nigeria — реальные изображения; ниже только конкретные детали, которые надо найти глазами.</p></div></div>
     <div id="carGrid" class="car-grid"></div>
   </section>
 
   <section class="section" id="flags">
-    <div class="section-head"><div><span class="eyebrow">08 · ФЛАГИ</span><h2>Нормальная сетка одинакового размера</h2></div></div>
+    <div class="section-head"><div><span class="eyebrow">08 · ФЛАГИ</span><h2>Флаги одинакового размера</h2></div></div>
     <h3 class="subhead">Похожие пары</h3><div id="flagPairs" class="grid g3"></div>
     <h3 class="subhead">Все основные</h3><div id="flagGrid" class="flag-grid"></div>
   </section>
 
   <section class="section alt" id="map-section">
     <div class="section-head"><div><span class="eyebrow">09 · КАРТА</span><h2>Где находится страна</h2></div><select id="mapCountry" class="select"></select></div>
-    <div class="map-wrap"><div id="map" class="map"></div><aside class="map-side"><img id="mapFlag" alt=""><h3 id="mapName"></h3><p id="mapDomain"></p><p class="no-water">Выбирай страну сверху. Если координаты ещё не заведены, карта остаётся общая — сами country clues работают независимо.</p></aside></div>
+    <div class="map-wrap"><div id="map" class="map"></div><aside class="map-side"><img id="mapFlag" alt=""><h3 id="mapName"></h3><p id="mapDomain"></p></aside></div>
   </section>
 </main>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script src="./site.js"></script>
+<script src="./site-patch.js"></script>
 </body>
 </html>
