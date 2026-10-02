@@ -86,10 +86,14 @@
     buildStudy(data,list,byId,main);
     library.addEventListener('click',e=>{
       const button=e.target.closest('[data-study-country]');if(!button)return;
+      for(const id of ['studyKind','studyField','studyMode'])document.getElementById(id).value='all';
       document.getElementById('studyCountry').value=button.dataset.studyCountry;
       document.getElementById('studyCountry').dispatchEvent(new Event('change'));
       document.getElementById('study-cards').scrollIntoView({behavior:'smooth'});
     });
+    if(location.hash==='#study-cards'||location.hash==='#country-library'){
+      document.getElementById(location.hash.slice(1))?.scrollIntoView();
+    }
   }
 
   function addReferenceTables(list){
