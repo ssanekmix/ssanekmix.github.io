@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="./site-v4.css" />
 <link rel="stylesheet" href="./site-v5.css" />
 <link rel="stylesheet" href="./site-v6.css" />
-<link rel="stylesheet" href="./site-v8.css" />
+<link rel="stylesheet" href="./site-v8.css?v=20261002-content" />
 </head>
 <body>
 <header class="top">
@@ -43,6 +43,13 @@
 
   <section class="section" id="languages">
     <div class="section-head"><div><span class="eyebrow">02 · ЯЗЫКИ</span><h2>Уникальные письменности + похожая латиница в одном месте</h2></div></div>
+    <h3 class="subhead" id="east-asian-scripts">Японский, корейский и китайский: сравни глазами</h3>
+    <div class="script-compare-grid">
+      <article class="script-compare-card"><h4>🇯🇵 Японский — смесь знаков</h4><div class="script-sample" lang="ja">東京<span>へ</span>行<span>く</span></div><p>Сложные иероглифы стоят рядом с простыми знаками. Здесь <strong>へ и く</strong> — японская азбука.</p><div class="script-sample script-details" lang="ja">の り ひ あ · カ タ ナ</div><p>Хирагана бывает округлой, катакана — угловатой. Обе состоят из отдельных знаков: округлость сама по себе страну не определяет.</p></article>
+      <article class="script-compare-card"><h4>🇰🇷 Корейский — блоки из букв</h4><div class="script-sample" lang="ko">한 국 역</div><p>Внутри каждого блока несколько простых букв: <strong lang="ko">한 = ㅎ + ㅏ + ㄴ</strong>. Они стоят рядом и друг над другом.</p><div class="script-sample script-details" lang="ko">ㅇ ㅁ ㄴ ㅏ ㅗ</div><p>Ищи повторяющиеся кружки ㅇ, прямые углы и палочки с коротким ответвлением. Не в каждом блоке есть круг; один круг без остальных признаков ничего не решает.</p></article>
+      <article class="script-compare-card"><h4>🇨🇳 Китайский — иероглифы</h4><div class="script-sample" lang="zh">中 山 路</div><p>Каждый знак — отдельный иероглиф; нет японской азбуки の / り / カ и корейских букв, собранных в слоговые блоки.</p><div class="script-sample script-details" lang="zh">车站 · 車站</div><p>Пример: «станция» в упрощённом и традиционном письме. Знаки бывают и простыми (山), и сложными (灣): число штрихов само по себе не решает.</p></article>
+    </div>
+    <div class="script-check"><strong>Порядок проверки:</strong> блоки вроде 한 / 역 → корейский; знаки の / り / カ среди иероглифов → японский. <strong>Только иероглифы — пока неоднозначно:</strong> японская вывеска 東京 тоже может быть без азбуки. Найди ещё текст и проверь движение: Япония и Гонконг — слева, Тайвань и материковый Китай — справа. Китайское письмо встречается также в Сингапуре и других странах.</div>
     <h3 class="subhead">Сначала отличи сам алфавит</h3><div id="uniqueLangGrid" class="grid g4"></div>
     <h3 class="subhead" id="latin-start">Если все буквы «обычные»</h3><div id="latinGrid" class="grid g3"></div>
   </section>
@@ -92,9 +99,9 @@
   </section>
 </main>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-<script src="./site.js"></script>
+<script src="./site.js?v=20261002-content"></script>
 <script src="./site-patch.js"></script>
-<script src="./site-v2.js"></script>
+<script src="./site-v2.js?v=20261002-content"></script>
 <script src="./site-v3.js"></script>
 <script src="./site-v4.js"></script>
 <script src="./site-v5.js"></script>
