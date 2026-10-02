@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <meta name="theme-color" content="#07111f" />
 <title>GeoGuessr Lab — единый справочник</title>
-<meta name="description" content="Практический единый справочник GeoGuessr: страны, языки, номера, дороги, знаки, почва, столбы, среда, машина Google, флаги и левостороннее движение." />
+<meta name="description" content="Практический единый справочник GeoGuessr: страны, языки, номера, дороги, разметка, знаки, почва, столбы, среда, машина Google, флаги и левостороннее движение." />
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
 <link rel="stylesheet" href="./site.css" />
 <link rel="stylesheet" href="./site-v2.css" />
@@ -17,14 +17,14 @@
 <header class="top">
   <a class="brand" href="#top">◎ GeoGuessr Lab</a>
   <nav class="nav">
-    <a href="#countries">Страны</a><a href="#languages">Языки</a><a href="#plates">Номера</a><a href="#roads">Дороги</a><a href="#signs">Знаки / почва</a><a href="#poles">Столбы</a><a href="#environment">Город / джунгли / пустыня</a><a href="#cars">Машина Google</a><a href="#flags">Флаги</a><a href="#map-section">Левое движение</a>
+    <a href="#decision-path">Определитель</a><a href="#countries">Страны</a><a href="#latin-start">Языки</a><a href="#plates">Номера</a><a href="#roads">Покрытие</a><a href="#road-lines">Разметка</a><a href="#signs">Знаки / почва</a><a href="#poles">Столбы</a><a href="#environment">Город / джунгли / пустыня</a><a href="#cars">Машина Google</a><a href="#flags">Флаги</a><a href="#map-section">Левое движение</a>
   </nav>
 </header>
 <main id="top">
   <section class="hero section">
     <span class="eyebrow">ОДНА СТРАНИЦА · БЕЗ ВОДЫ</span>
     <h1>Увидел признак → сузил страны → добил вторым признаком.</h1>
-    <p>Страна, язык, номер, дорога, знаки, почва, столбы, среда и машина Google. Слабые признаки не используются в одиночку.</p>
+    <p>Страна, язык, номер, дорога, разметка, знаки, почва, столбы, среда и машина Google. Слабые признаки не используются в одиночку.</p>
   </section>
 
   <section class="section alt" id="countries">
@@ -42,7 +42,7 @@
   <section class="section" id="languages">
     <div class="section-head"><div><span class="eyebrow">02 · ЯЗЫКИ</span><h2>Уникальные письменности + похожая латиница в одном месте</h2></div></div>
     <h3 class="subhead">Сначала отличи сам алфавит</h3><div id="uniqueLangGrid" class="grid g4"></div>
-    <h3 class="subhead">Если все буквы «обычные»</h3><div id="latinGrid" class="grid g3"></div>
+    <h3 class="subhead" id="latin-start">Если все буквы «обычные»</h3><div id="latinGrid" class="grid g3"></div>
   </section>
 
   <section class="section alt" id="plates">
@@ -52,7 +52,7 @@
   </section>
 
   <section class="section" id="roads">
-    <div class="section-head"><div><span class="eyebrow">04 · ДОРОГИ</span><h2>Реальные покрытия и разметка</h2><p>Только реальные фото: что именно искать на асфальте, бетоне, кирпиче и грунте.</p></div></div>
+    <div class="section-head"><div><span class="eyebrow">04 · ПОКРЫТИЕ</span><h2>Покрытие дороги</h2><p>Асфальт, бетонные плиты, кирпич/брусчатка и грунт — отдельно от дорожной разметки.</p></div></div>
     <div id="roadRules" class="road-flow"></div>
   </section>
 
