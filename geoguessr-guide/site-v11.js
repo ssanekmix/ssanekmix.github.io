@@ -11,6 +11,7 @@ function applyV11(){
   addHebrewLanguageV11();
   highlightPlateKeysV11();
   runV11Qa();
+  setTimeout(runV11Qa,700);
 }
 
 function removeDomainsV11(){
@@ -100,6 +101,7 @@ function highlightPlateKeysV11(){
       if(!p)return NodeFilter.FILTER_REJECT;
       if(p.closest('mark,.v11-plate-key,script,style'))return NodeFilter.FILTER_REJECT;
       if(p.matches('b,strong,h1,h2,h3,h4'))return NodeFilter.FILTER_REJECT;
+      regex.lastIndex=0;
       return regex.test(node.nodeValue)?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT;
     }});
 
@@ -141,6 +143,7 @@ function runV11Qa(){
     horizontalOverflow:document.documentElement.scrollWidth>document.documentElement.clientWidth+2,
     checkedAt:new Date().toISOString()
   };
+  result.passed=!!(result.hebrewCard&&result.domainsRemoved&&result.countryMoreButtonGone&&result.collapsedCountryCards===0&&result.countriesNavTarget==='#compare'&&result.highlightedPlateKeys>0&&!result.horizontalOverflow);
   window.__geoV11Qa=result;
   document.documentElement.dataset.geoV11Qa=JSON.stringify(result);
 }
