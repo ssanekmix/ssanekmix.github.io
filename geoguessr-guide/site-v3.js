@@ -12,14 +12,18 @@ function addRedPlates(){
  host.appendChild(sec);
 }
 
-function photoCard(x){return `<article class="real-card"><img src="${x.img}" alt="${x.title}" loading="lazy"><div class="body"><h3>${x.title}</h3><ul>${x.facts.map(f=>`<li>${f}</li>`).join('')}</ul>${x.strength?`<span class="strength">${x.strength}</span>`:''}</div></article>`}
+function photoCard(x){return `<article class="real-card"><img src="${x.img}" alt="${x.title}" loading="lazy"${x.position?` style="object-position:${x.position}"`:""}><div class="body"><h3>${x.title}</h3><ul>${x.facts.map(f=>`<li>${f}</li>`).join('')}</ul>${x.strength?`<span class="strength">${x.strength}</span>`:''}${photoCreditV3(x)}</div></article>`}
+
+function photoCreditV3(x){
+ return x.photoSource?`<p class="photo-note"><a href="${x.photoSource}" target="_blank" rel="noopener">Фото: ${x.photoAuthor}</a> · <a href="https://creativecommons.org/licenses/by-sa/${x.photoLicense}/" target="_blank" rel="noopener">CC BY-SA ${x.photoLicense}</a> · уменьшено</p>`:'';
+}
 
 function rebuildRoadsWithPhotos(){
  const host=document.getElementById('roadRules'); if(!host)return;
  host.className='road-real-grid';
  const cards=[
  {title:'Филиппины — бетонные плиты',img:'https://salaymisor.gov.ph/wp-content/uploads/2022/06/purok-8-road1.png',facts:['Светло-серое бетонное полотно с регулярными поперечными швами.','Очень частый образ на обычных улицах Филиппин.','Английский текст + правостороннее движение резко усиливают Филиппины.'],strength:'сильный в связке'},
- {title:'Нидерланды — кирпичная/брусчатая улица',img:'https://cloud.funda.nl/valentina_media/228/994/128.jpg?options=width%3D720',facts:['Мелкие прямоугольные кирпичи, часто уложенные «ёлочкой».','Очень типично для жилых кварталов Нидерландов.','Жёлтые номера, велосипеды и каналы подтверждают.'],strength:'средний'},
+ {title:'Нидерланды — кирпичная/брусчатая улица',img:'./assets/nl-brick-street.jpg',position:'center bottom',photoSource:'https://commons.wikimedia.org/wiki/File:Netherlands,_Makkinga,_Brink_(1).jpg',photoAuthor:'Vincent van Zeijst',photoLicense:'4.0',facts:['Мелкие прямоугольные кирпичи, часто уложенные «ёлочкой».','Очень типично для жилых кварталов Нидерландов.','Жёлтые номера, велосипеды и каналы подтверждают.'],strength:'средний'},
  {title:'Нидерланды — красная велодорожка',img:'https://upload.wikimedia.org/wikipedia/commons/e/eb/Fietsstrook_Herenweg_Oudorp.jpg',facts:['Красное/бордовое покрытие именно отдельной велосипедной полосы.','Смотри на велосипеды, белые велосипедные символы и отделение от автомобильной полосы.'],strength:'сильный образ NL'},
  {title:'Норвегия — жёлтый центр',img:'https://motorcycle-diaries.com/sites/default/files/styles/image_gallery_full/public/roads/NK-14-jul_0344.jpg?itok=qrU8iIY3',facts:['Жёлтая центральная линия и белые края очень характерны для Норвегии.','На узких дорогах центр может исчезать, поэтому проверяй также длинные крайние штрихи и рельеф.'],strength:'сильный в Скандинавии'},
  {title:'Красно-оранжевый грунт',img:'https://upload.wikimedia.org/wikipedia/commons/4/48/Route_Nationale_8_%28Madagascar%29_03.JPG',facts:['Латеритная красно-оранжевая почва встречается в тропиках: Мадагаскар, Бразилия, Камбоджа, части Африки и др.','Сам цвет страну не определяет — смотри растительность, движение, язык и машину Google.'],strength:'слабый без второго признака'},
@@ -65,3 +69,4 @@ function rebuildPolesWithPhotos(){
  ];
  host.innerHTML=data.map(photoCard).join('');
 }
+

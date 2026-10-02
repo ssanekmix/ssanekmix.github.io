@@ -92,7 +92,7 @@ function addWhiteYellowPlateFamily(){
 function hardenRealImages(){
   const fallbacks={
     'Филиппины — бетонные плиты':'https://commons.wikimedia.org/wiki/Special:Redirect/file/Concrete%20road%20in%20the%20Philippines.jpg?width=1000',
-    'Нидерланды — кирпичная/брусчатая улица':'https://commons.wikimedia.org/wiki/Special:Redirect/file/Brick%20road%20Netherlands.jpg?width=1000',
+    'Нидерланды — кирпичная/брусчатая улица':'./assets/nl-brick-street.jpg',
     'Нидерланды — красная велодорожка':'https://commons.wikimedia.org/wiki/Special:Redirect/file/Fietsstrook_Herenweg_Oudorp.jpg?width=1000',
     'Норвегия — жёлтый центр':'https://commons.wikimedia.org/wiki/Special:Redirect/file/Road%20in%20Norway.jpg?width=1000',
     'Чёрный вулканический грунт':'https://commons.wikimedia.org/wiki/Special:Redirect/file/Black%20sand%20beach%2C%20Iceland.jpg?width=1000',

@@ -28,13 +28,13 @@ const V5FLAGS={
   'Катар':['qa','арабский + английский'],'Иордания':['jo','арабский']
 };
 
-function safePhoto(src,title,fallback){
+function safePhoto(src,title,fallback,position){
   const fb=fallback||'';
-  return `<img src="${src}" alt="${title}" loading="lazy" onerror="if(this.dataset.fallback&&this.src!==this.dataset.fallback){this.src=this.dataset.fallback}else{this.closest('.v5-photo-card')?.classList.add('v5-no-photo');this.remove()}" data-fallback="${fb}">`;
+  return `<img src="${src}" alt="${title}" loading="lazy"${position?` style="object-position:${position}"`:""} onerror="if(this.dataset.fallback&&this.src!==this.dataset.fallback){this.src=this.dataset.fallback}else{this.closest('.v5-photo-card')?.classList.add('v5-no-photo');this.remove()}" data-fallback="${fb}">`;
 }
 
 function photoCardV5(x){
-  return `<article class="v5-photo-card">${x.img?safePhoto(x.img,x.title,x.fallback):''}<div class="v5-photo-body"><h3>${x.title}</h3>${x.kicker?`<div class="v5-kicker">${x.kicker}</div>`:''}<ul>${x.facts.map(f=>`<li>${f}</li>`).join('')}</ul>${x.strength?`<span class="v5-strength">${x.strength}</span>`:''}${x.source?`<a class="source-link" href="${x.source}" target="_blank" rel="noopener">Пример / источник ↗</a>`:''}</div></article>`;
+  return `<article class="v5-photo-card">${x.img?safePhoto(x.img,x.title,x.fallback,x.position):''}<div class="v5-photo-body"><h3>${x.title}</h3>${x.kicker?`<div class="v5-kicker">${x.kicker}</div>`:''}<ul>${x.facts.map(f=>`<li>${f}</li>`).join('')}</ul>${x.strength?`<span class="v5-strength">${x.strength}</span>`:''}${x.source?`<a class="source-link" href="${x.source}" target="_blank" rel="noopener">Пример / источник ↗</a>`:''}${photoCreditV3(x)}</div></article>`;
 }
 
 function fixLanguageJumpV5(){
@@ -137,8 +137,8 @@ function rebuildSignsV5(){
 function rebuildEnvironmentV5(){
   const host=document.getElementById('envGrid'); if(!host)return;
   const cards=[
-    {title:'🇵🇪 Перу — горы и побережье',kicker:'АНДЫ + ИСПАНСКИЙ + ПОЛОСАТЫЕ СТОЙКИ',facts:['Перу не только Лима: в Андах горные дороги и серпантины; на побережье сухо, на востоке тропики.','Горная местность не определяет страну. Добивай чёрно-белыми стойками знаков и номерами.'],source:'https://www.plonkit.net/peru'},
-    {title:'🇪🇨 Эквадор — Анды и тропики',kicker:'РЕЛЬЕФ ПОХОЖ НА СОСЕДЕЙ',facts:['Горы встречаются, но страна не вся горная. Испанский + белые номера — только начало проверки.','Посмотри форму знаков, их заднюю сторону и машину Google.'],source:'https://www.plonkit.net/ecuador'},
+    {title:'🇵🇪 Перу — горы и побережье',img:'./assets/peru-andes-road.jpg',photoSource:'https://commons.wikimedia.org/wiki/File:Winding_mountain_road_to_Machu_Picchu_-_panoramio.jpg',photoAuthor:'Colin W — серпантин к Мачу-Пикчу',photoLicense:'3.0',kicker:'АНДЫ + ИСПАНСКИЙ + ПОЛОСАТЫЕ СТОЙКИ',facts:['Перу не только Лима: в Андах горные дороги и серпантины; на побережье сухо, на востоке тропики.','Горная местность не определяет страну. Добивай чёрно-белыми стойками знаков и номерами.'],source:'https://www.plonkit.net/peru'},
+    {title:'🇪🇨 Эквадор — Анды и тропики',img:'./assets/ecuador-andes-road.jpg',position:'center bottom',photoSource:'https://commons.wikimedia.org/wiki/File:Paso_Papallacta.jpg',photoAuthor:'Sylvain2803 — перевал Папальякта',photoLicense:'3.0',kicker:'РЕЛЬЕФ ПОХОЖ НА СОСЕДЕЙ',facts:['Горы встречаются, но страна не вся горная. Испанский + белые номера — только начало проверки.','Посмотри форму знаков, их заднюю сторону и машину Google.'],source:'https://www.plonkit.net/ecuador'},
     {title:'🇳🇱 Нидерланды — город',img:'https://3pulse.com/uploads/photo/14/66/60/2020/09/05/43723f7b1e_medium.jpg',fallback:'https://upload.wikimedia.org/wikipedia/commons/5/5e/Amsterdam_canals_and_bicycles.jpg',kicker:'КАНАЛ + ВЕЛОСИПЕДЫ + ЖЁЛТЫЕ НОМЕРА',facts:['Красная велодорожка дополнительно усиливает.']},
     {title:'🇰🇷 Южная Корея — город',img:'https://s3.ap-northeast-2.amazonaws.com/com.hogangnono.upload/image/original/apt/3AVa3/20240419060653_Cjxd5oH92j2B3aN6lH',fallback:'https://upload.wikimedia.org/wikipedia/commons/1/16/Apartment_complex_in_Seoul.jpg',kicker:'МНОГО ОДИНАКОВЫХ ВЫСОТНЫХ БЛОКОВ',facts:['Корейский текст + горы вокруг города быстро закрывают страну.']},
     {title:'🇦🇪 ОАЭ — город / сухая среда',img:'https://www.dewdropsnursery.com/images/Jumeirah_Park.jpg',fallback:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Dubai_skyline_2015.jpg?width=1200',kicker:'НОВЫЕ ШИРОКИЕ ДОРОГИ + СВЕТЛЫЕ ВИЛЛЫ / БАШНИ',facts:['Арабский + английский на знаках — сильное подтверждение.']},
