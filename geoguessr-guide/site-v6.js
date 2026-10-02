@@ -13,7 +13,7 @@ function upgradeDecisionWizardV6(){
   sec.innerHTML=`
     <div class="section-head"><div><span class="eyebrow">00 · ОПРЕДЕЛИТЕЛЬ</span><h2>Иди по шагам, пока не останется страна</h2><p>Отвечай только на то, что реально видишь. Если признака нет — выбирай «не знаю».</p></div></div>
     <div class="v6-wizard">
-      <div class="v6-wizard-top"><div id="v6Progress" class="v6-progress">Шаг 1</div><button id="v6Reset" class="v6-reset" type="button">↻ Начать заново</button></div>
+      <div class="v6-wizard-top" style="position:static!important"><div id="v6Progress" class="v6-progress">Шаг 1</div><button id="v6Reset" class="v6-reset" type="button">↻ Начать заново</button></div>
       <div style="margin-bottom:14px"><button id="v6Americas" class="v6-reset" type="button">Начать с Америки: США, Канада, Мексика…</button></div>
       <div id="v6Trail" class="v6-trail"></div>
       <div id="v6Question" class="v6-question"></div>
