@@ -7,6 +7,8 @@ function applyV5(){
   rebuildSignsV5();
   rebuildEnvironmentV5();
   addSpainPoleV5();
+  addAndeanCarsV5();
+  addEcuadorPoleV5();
   enrichFrequentPairsV5();
   repairKnownImagesV5();
 }
@@ -17,7 +19,7 @@ const V5FLAGS={
   'Иран':['ir','персидский'],'Индия':['in','хинди + региональные'],'Турция':['tr','турецкий'],'ОАЭ':['ae','арабский + английский'],
   'Малайзия':['my','малайский'],'Индонезия':['id','индонезийский'],'Испания':['es','испанский'],'Португалия':['pt','португальский'],
   'Ирландия':['ie','ирландский + английский'],'Швеция':['se','шведский'],'Финляндия':['fi','финский + шведский'],'Норвегия':['no','норвежский'],
-  'Филиппины':['ph','филиппинский + английский'],'Гайана':['gy','английский'],'Аргентина':['ar','испанский'],'Перу':['pe','испанский'],
+  'Филиппины':['ph','филиппинский + английский'],'Гайана':['gy','английский'],'Аргентина':['ar','испанский'],'Перу':['pe','испанский'],'Эквадор':['ec','испанский'],
   'Греция':['gr','греческий'],'Япония':['jp','японский'],'Южная Корея':['kr','корейский'],'Таиланд':['th','тайский'],
   'Румыния':['ro','румынский'],'Венгрия':['hu','венгерский'],'Польша':['pl','польский'],'Болгария':['bg','болгарский'],
   'Сербия':['rs','сербский'],'Северная Македония':['mk','македонский'],'Италия':['it','итальянский'],
@@ -32,7 +34,7 @@ function safePhoto(src,title,fallback){
 }
 
 function photoCardV5(x){
-  return `<article class="v5-photo-card">${safePhoto(x.img,x.title,x.fallback)}<div class="v5-photo-body"><h3>${x.title}</h3>${x.kicker?`<div class="v5-kicker">${x.kicker}</div>`:''}<ul>${x.facts.map(f=>`<li>${f}</li>`).join('')}</ul>${x.strength?`<span class="v5-strength">${x.strength}</span>`:''}</div></article>`;
+  return `<article class="v5-photo-card">${x.img?safePhoto(x.img,x.title,x.fallback):''}<div class="v5-photo-body"><h3>${x.title}</h3>${x.kicker?`<div class="v5-kicker">${x.kicker}</div>`:''}<ul>${x.facts.map(f=>`<li>${f}</li>`).join('')}</ul>${x.strength?`<span class="v5-strength">${x.strength}</span>`:''}${x.source?`<a class="source-link" href="${x.source}" target="_blank" rel="noopener">Пример / источник ↗</a>`:''}</div></article>`;
 }
 
 function fixLanguageJumpV5(){
@@ -116,6 +118,8 @@ function addRoadMarkingsV5(){
 function rebuildSignsV5(){
   const host=document.getElementById('signGrid'); if(!host)return;
   const cards=[
+    {title:'🇪🇨 Эквадор — красный круг на белой табличке',img:'https://storage.googleapis.com/images-test-e94d1.firebasestorage.app/geo-features-groups/geo-group-2872_0_full.avif',kicker:'БЕЛЫЙ КВАДРАТ ВОКРУГ КРАСНОГО КРУГА',facts:['На многих знаках ограничения скорости красный круг стоит на белой квадратной табличке с тонким чёрным контуром. Это шире, чем белая окантовка по краю.','Белое снаружи красного есть и в других странах. Испанский сужает выбор; белые номера и машина Google помогают отличить Эквадор.','Иногда задники знаков бирюзовые — полезная дополнительная подсказка.'],source:'https://www.geocoach.me/theory/ecuador/identify'},
+    {title:'🇵🇪 Перу — чёрно-белые стойки знаков',img:'https://storage.googleapis.com/images-test-e94d1.firebasestorage.app/geo-features-groups/geo-group-1350_1_preview.avif',kicker:'ПОЛОСЫ НА СТОЙКЕ, А НЕ НА ЩИТЕ ЗНАКА',facts:['Чередующиеся чёрные и белые полосы на опоре дорожного знака — сильный признак Перу в Южной Америке.','Испанский + такая стойка + горная дорога хорошо сочетаются. Горы бывают и в Эквадоре, Колумбии, Боливии и Чили.','По всему миру полосатые стойки не уникальны: сначала проверь регион и язык.'],source:'https://www.plonkit.net/peru'},
     {title:'🇪🇸 Испания — сине-белые шевроны',img:'https://cyclingcols.b-cdn.net/photos/large/Confrides.jpg',fallback:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/J4B.svg/1024px-J4B.svg.png',kicker:'СИНИЙ ФОН + БЕЛЫЕ СТРЕЛКИ',facts:['В Испании бывают и чёрно-белые, и сине-белые шевроны.','Сине-белые в Европе ещё встречаются во Франции.','Испания часто показывает несколько стрелок на одной панели — добивай номерами и испанским текстом.']},
     {title:'🇵🇱 Польша — предупреждающий знак',img:'https://i.iplsc.com/000LZYOQY3IC6TMP-C323-F4.webp',fallback:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Poland_road_sign_A-1.svg/800px-Poland_road_sign_A-1.svg.png',kicker:'ЖЁЛТЫЙ ФОН + ТОНКАЯ КРАСНАЯ КАЙМА',facts:['Треугольник жёлтый внутри, красная кайма заметно тонкая.','В Европе это очень сильная Польша.','Не путай с обычными белыми предупреждающими знаками соседей.']},
     {title:'🇪🇸 Испания ↔ 🇫🇷 Франция — красная кайма',img:'https://images.prismic.io/ornikar/3f92c9d1dd6774ab5eeb85ce599b9d55b6e7d7fd_panneau-danger-virages-epingle.jpg?auto=compress,format',fallback:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/France_road_sign_A1c.svg/800px-France_road_sign_A1c.svg.png',kicker:'СМОТРИ НА САМЫЙ КРАЙ ЗНАКА',facts:['Испания: толстая красная кайма идёт прямо до физического края знака — без тонкой белой полоски снаружи.','Франция / Италия / Португалия: обычно виден тонкий белый внешний контур вокруг красного.','Если видишь только обратную сторону — в Испании стойки часто плоские.']},
@@ -133,6 +137,8 @@ function rebuildSignsV5(){
 function rebuildEnvironmentV5(){
   const host=document.getElementById('envGrid'); if(!host)return;
   const cards=[
+    {title:'🇵🇪 Перу — горы и побережье',kicker:'АНДЫ + ИСПАНСКИЙ + ПОЛОСАТЫЕ СТОЙКИ',facts:['Перу не только Лима: в Андах горные дороги и серпантины; на побережье сухо, на востоке тропики.','Горная местность не определяет страну. Добивай чёрно-белыми стойками знаков и номерами.'],source:'https://www.plonkit.net/peru'},
+    {title:'🇪🇨 Эквадор — Анды и тропики',kicker:'РЕЛЬЕФ ПОХОЖ НА СОСЕДЕЙ',facts:['Горы встречаются, но страна не вся горная. Испанский + белые номера — только начало проверки.','Посмотри форму знаков, их заднюю сторону и машину Google.'],source:'https://www.plonkit.net/ecuador'},
     {title:'🇳🇱 Нидерланды — город',img:'https://3pulse.com/uploads/photo/14/66/60/2020/09/05/43723f7b1e_medium.jpg',fallback:'https://upload.wikimedia.org/wikipedia/commons/5/5e/Amsterdam_canals_and_bicycles.jpg',kicker:'КАНАЛ + ВЕЛОСИПЕДЫ + ЖЁЛТЫЕ НОМЕРА',facts:['Красная велодорожка дополнительно усиливает.']},
     {title:'🇰🇷 Южная Корея — город',img:'https://s3.ap-northeast-2.amazonaws.com/com.hogangnono.upload/image/original/apt/3AVa3/20240419060653_Cjxd5oH92j2B3aN6lH',fallback:'https://upload.wikimedia.org/wikipedia/commons/1/16/Apartment_complex_in_Seoul.jpg',kicker:'МНОГО ОДИНАКОВЫХ ВЫСОТНЫХ БЛОКОВ',facts:['Корейский текст + горы вокруг города быстро закрывают страну.']},
     {title:'🇦🇪 ОАЭ — город / сухая среда',img:'https://www.dewdropsnursery.com/images/Jumeirah_Park.jpg',fallback:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Dubai_skyline_2015.jpg?width=1200',kicker:'НОВЫЕ ШИРОКИЕ ДОРОГИ + СВЕТЛЫЕ ВИЛЛЫ / БАШНИ',facts:['Арабский + английский на знаках — сильное подтверждение.']},
@@ -144,6 +150,21 @@ function rebuildEnvironmentV5(){
   ];
   host.className='v5-photo-grid';
   host.innerHTML=cards.map(photoCardV5).join('');
+}
+
+function addAndeanCarsV5(){
+  const host=document.getElementById('carGrid'); if(!host||document.getElementById('andeanGoogleCars'))return;
+  const group=document.createElement('div');group.id='andeanGoogleCars';group.style.display='contents';
+  group.innerHTML=[
+    {title:'🇪🇨 Эквадор — белый пикап Google (Gen4)',img:'https://storage.googleapis.com/images-test-e94d1.firebasestorage.app/geo-features-groups/geo-group-2863_0_full.avif',kicker:'БЕЛЫЙ ПИКАП + ЧЁРНЫЙ КУЗОВ СЗАДИ + БЕЗ АНТЕННЫ',facts:['В покрытии Gen4 использовался белый пикап с чёрной задней частью, без антенны. Может быть сильно размыт.','Пикапы есть и в Панаме/Коста-Рике: у них может быть видна передняя антенна.','В Gen3 Эквадора обычная белая машина с короткой толстой антенной. Отсутствие пикапа Эквадор не исключает.'],source:'https://www.plonkit.net/ecuador'},
+    {title:'🇵🇪 Перу — белая/чёрная машина (Gen3)',img:'https://storage.googleapis.com/images-test-e94d1.firebasestorage.app/geo-features-groups/geo-group-1346_0_full.avif',facts:['В Gen3 встречаются белая и чёрная машины; похожие есть у соседей.','Цвет машины слабее испанского текста и полосатых стоек знаков. Есть и другое покрытие.'],source:'https://www.plonkit.net/peru'}
+  ].map(photoCardV5).join('');host.appendChild(group);
+}
+
+function addEcuadorPoleV5(){
+  const host=document.getElementById('poleGrid');if(!host||document.getElementById('ecuadorLadderPole'))return;
+  const wrap=document.createElement('div');wrap.id='ecuadorLadderPole';wrap.style.display='contents';
+  wrap.innerHTML=photoCardV5({title:'🇪🇨 Эквадор — бетонный «лестничный» столб',img:'https://storage.googleapis.com/images-test-e94d1.firebasestorage.app/geo-features-groups/geo-group-1373_0_full.avif',facts:['Много небольших углублений подряд, как ступени лестницы. Полезно в латиноамериканской среде.','Обычные круглые бетонные опоры тоже встречаются и сами по себе почти ничего не дают.'],source:'https://www.geocoach.me/theory/ecuador/identify'});host.appendChild(wrap);
 }
 
 function addSpainPoleV5(){
