@@ -79,3 +79,14 @@ function runV9Audit(){
     js.src='./site-v10.js';js.defer=true;js.dataset.geoV10='1';document.body.appendChild(js);
   }
 })();
+
+(function loadV11(){
+  if(!document.querySelector('link[data-geo-v11]')){
+    const css=document.createElement('link');
+    css.rel='stylesheet';css.href='./site-v11.css';css.dataset.geoV11='1';document.head.appendChild(css);
+  }
+  if(!document.querySelector('script[data-geo-v11]')){
+    const js=document.createElement('script');
+    js.src='./site-v11.js';js.defer=true;js.dataset.geoV11='1';document.body.appendChild(js);
+  }
+})();
