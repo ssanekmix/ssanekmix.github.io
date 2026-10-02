@@ -1,4 +1,8 @@
-window.addEventListener('load',()=>setTimeout(applyV10,4300));
+if(document.readyState==='loading'){
+  window.addEventListener('load',()=>setTimeout(applyV10,500));
+}else{
+  setTimeout(applyV10,500);
+}
 
 function applyV10(){
   removeDomainsV10();
@@ -38,16 +42,10 @@ function collapseCountriesV10(){
   const search=document.getElementById('countrySearch');
   const region=document.getElementById('countryRegion');
 
-  const visibleCards=()=>[...grid.children].filter(el=>{
-    const s=getComputedStyle(el);
-    return s.display!=='none' && !el.hidden;
-  });
-
   const columnCount=()=>{
     const tpl=getComputedStyle(grid).gridTemplateColumns;
     if(!tpl || tpl==='none') return 1;
-    const count=tpl.split(' ').filter(Boolean).length;
-    return Math.max(1,count);
+    return Math.max(1,tpl.split(' ').filter(Boolean).length);
   };
 
   const apply=()=>{
@@ -60,16 +58,15 @@ function collapseCountriesV10(){
       return;
     }
 
-    button.hidden=cards.length<=columnCount();
+    const cols=columnCount();
+    button.hidden=cards.length<=cols;
     if(expanded){
       button.textContent='Скрыть';
       button.setAttribute('aria-expanded','true');
       return;
     }
 
-    const cols=columnCount();
-    const currentlyVisible=visibleCards();
-    currentlyVisible.forEach((card,i)=>{if(i>=cols) card.classList.add('country-v10-hidden');});
+    cards.forEach((card,i)=>{if(i>=cols) card.classList.add('country-v10-hidden');});
     button.textContent='Показать больше';
     button.setAttribute('aria-expanded','false');
   };
@@ -77,7 +74,7 @@ function collapseCountriesV10(){
   button.onclick=()=>{expanded=!expanded;apply();};
   search?.addEventListener('input',()=>{expanded=false;setTimeout(apply,0)});
   region?.addEventListener('change',()=>{expanded=false;setTimeout(apply,0)});
-  new MutationObserver(()=>setTimeout(apply,0)).observe(grid,{childList:true,subtree:false,attributes:true,attributeFilter:['style','class','hidden']});
+  new MutationObserver(()=>setTimeout(apply,0)).observe(grid,{childList:true,subtree:false});
   if('ResizeObserver' in window)new ResizeObserver(()=>apply()).observe(grid);
   window.addEventListener('resize',()=>apply(),{passive:true});
   apply();
