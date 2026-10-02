@@ -3,7 +3,6 @@ window.addEventListener('load',()=>setTimeout(applyV7QA,2400));
 function applyV7QA(){
   fixSwedenSignPhotoV7();
   translateWizardTermsV7();
-  refineYellowCenterPathV7();
   reportImageStateV7();
 }
 
@@ -78,3 +77,4 @@ function reportImageStateV7(){
   window.__geoQa={images:{total:imgs.length,loaded,broken,pending},checkedAt:new Date().toISOString()};
   document.documentElement.dataset.geoBrokenImages=String(broken);
 }
+

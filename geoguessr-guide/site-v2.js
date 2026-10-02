@@ -39,7 +39,7 @@ function rebuildLanguageLookup(){
 
   const latin=[
     {key:'RUE · É È Ç · -EAU',name:'Французский',country:'Франция / Бельгия / часть Швейцарии',street:'rue / avenue / boulevard / chemin',hint:'Часто: de, du, des; окончания -eau, -eux, -ique.',example:'Если видишь rue / sortie / mairie — сразу думай о французской зоне.'},
-    {key:'STRASSE · ß · Ä Ö Ü',name:'Немецкий',country:'Германия / Австрия / часть Швейцарии',street:'Straße / Str. / Weg / Gasse',hint:'Длинные составные слова; Bahnhof, Ausfahrt, Gemeinde.',example:'ß особенно полезна для Германии/Австрии; в Швейцарии часто пишут ss.'},
+    {key:'STRASSE · ß · Ä Ö Ü',name:'Немецкий',country:'Германия / Австрия / немецкая часть Швейцарии',street:'Straße / Str. / Weg / Gasse',hint:'Длинные составные слова; Bahnhof, Ausfahrt, Gemeinde.',example:'В швейцарском стандартном немецком пишут ss вместо ß. Без ß страна ещё не определена: ищи короткий передний номер без ЕС, жёлтую зебру и низкую камеру.'},
     {key:'STRAAT · IJ · AA/EE/OO',name:'Нидерландский',country:'Нидерланды / Фландрия',street:'straat / weg / laan',hint:'Много двойных гласных; gemeente, ingang, uitgang.',example:'Жёлтые номера резко усиливают Нидерланды.'},
     {key:'Ł · Ą · Ę · SZ/CZ',name:'Польский',country:'Польша',street:'ulica / ul. / aleja',hint:'ł почти подарок; также ą, ę, ń, ś, ź, ż.',example:'Слова часто содержат sz, cz, rz.'},
     {key:'Ř · Ě · Ů',name:'Чешский',country:'Чехия',street:'ulice / ul. / náměstí / třída',hint:'ř — самый сильный быстрый маркер.',example:'Č/š/ž есть и у соседей, поэтому ищи именно ř/ě/ů.'},
@@ -50,8 +50,8 @@ function rebuildLanguageLookup(){
     {key:'Ș · Ț · Ă',name:'Румынский',country:'Румыния / Молдова',street:'strada / str. / calea / bulevard',hint:'ș, ț, ă — сильные маркеры.',example:'oraș, strada.'},
     {key:'Ğ · Ş · I / İ',name:'Турецкий',country:'Турция',street:'sokak / sk. / cadde / caddesi / bulvarı',hint:'ğ, ş и точечная/безточечная пара i/ı.',example:'belediyesi — очень полезное слово на муниципальных объектах.'},
     {key:'Ñ · DE LA / DEL · -O/-A',name:'Испанский',country:'Испания + большая часть Латинской Америки',street:'calle / avenida / carretera / camino',hint:'Если специальных букв мало, ищи структуру: de la, del, los, las; очень часты окончания -o/-a/-os/-as.',example:'То есть обычное слово вроде «...o» само по себе слабое, но серия таких окончаний + calle/salida уже полезна.'},
-    {key:'Ã · Õ · -ÃO · DA/DO',name:'Португальский',country:'Португалия / Бразилия',street:'rua / avenida / estrada',hint:'Сильные куски: ã, õ, ção/ções, nh, lh; da/do/das/dos.',example:'rua + saída + ã/õ → очень сильный португальский.'},
-    {key:'VIA · -ZIONE · -O/-A/-I/-E',name:'Итальянский',country:'Италия',street:'via / viale / piazza / strada',hint:'Много слов заканчиваются на -o, -a, -i, -e; частое -zione.',example:'comune, uscita, della/di.'},
+    {key:'Ã · Õ · -ÃO · DA/DO',name:'Португальский',country:'Португалия / Бразилия',street:'rua / avenida / estrada',hint:'Сильные куски: ã, õ, ção/ções, nh, lh; da/do/das/dos.',example:'Бразилия: португальский + полоса номера СВЕРХУ / BR-xxx. Португалия: европейская среда + полоса ЕС СЛЕВА; старые номера с жёлтым блоком справа.'},
+    {key:'VIA · -ZIONE · -O/-A/-I/-E',name:'Итальянский',country:'Италия / итальянская часть Швейцарии',street:'via / viale / piazza / strada',hint:'Много слов заканчиваются на -o, -a, -i, -e; частое -zione.',example:'comune, uscita, della/di.'},
     {key:'VÄGEN · -GATAN · Å Ä Ö',name:'Шведский',country:'Швеция',street:'gata / gatan / väg / vägen',hint:'В названиях улиц часто увидишь -gatan и -vägen.',example:'По твоей заметке: vägen — очень полезный кусок.'},
     {key:'VEIEN · -GATA · Ø Æ Å',name:'Норвежский',country:'Норвегия',street:'vei / veien / gate / gata',hint:'veien — сильный дорожный кусок; также ø/æ/å.',example:'Зелёные коммерческие номера могут дополнительно подтвердить.'},
     {key:'VEJ · GADE · Ø Æ Å',name:'Датский',country:'Дания',street:'vej / gade',hint:'Короткое vej очень полезно против Швеции/Норвегии.',example:'Дания обычно очень плоская.'},
@@ -72,6 +72,7 @@ function rebuildLanguageLookup(){
 function plateSvg(type){
   const common=`<svg viewBox="0 0 360 160" xmlns="http://www.w3.org/2000/svg"><rect width="360" height="160" rx="18" fill="#081321"/>`;
   const white='#f2f1ec', blue='#2058b5', yellow='#f0d22e', black='#080808', green='#2b915c';
+  if(type==='mercosur')return common+`<rect x="54" y="42" width="252" height="78" rx="7" fill="${white}"/><rect x="54" y="42" width="252" height="20" fill="${blue}"/><text x="180" y="57" text-anchor="middle" font-size="12" font-weight="800" fill="white">BRASIL</text><text x="180" y="102" text-anchor="middle" font-size="25" font-weight="800" fill="#111">ABC1D23</text></svg>`;
   if(type==='eu')return common+`<rect x="54" y="48" width="252" height="64" rx="8" fill="${white}"/><rect x="54" y="48" width="18" height="64" fill="${blue}"/><text x="180" y="88" text-anchor="middle" font-size="22" font-weight="800" fill="#111">AB 1234</text></svg>`;
   if(type==='both')return common+`<rect x="54" y="48" width="252" height="64" rx="8" fill="${white}"/><rect x="54" y="48" width="18" height="64" fill="${blue}"/><rect x="288" y="48" width="18" height="64" fill="${blue}"/><text x="180" y="88" text-anchor="middle" font-size="22" font-weight="800" fill="#111">AB 1234</text></svg>`;
   if(type==='plain')return common+`<rect x="54" y="48" width="252" height="64" rx="8" fill="${white}"/><text x="180" y="88" text-anchor="middle" font-size="22" font-weight="800" fill="#111">AB 1234</text></svg>`;
@@ -87,6 +88,7 @@ function rebuildPlateFamilies(){
   const host=document.getElementById('plateGroups');
   if(!host)return;
   const families=[
+{"title":"Белый + синяя полоса СВЕРХУ — Mercosur","type":"mercosur","note":"Схема нового бразильского номера. Верхняя полоса общая с другими странами Mercosur; полоса ЕС находится слева.","rows":[["Бразилия","BRASIL на полосе + португальский (rua, saída, ã/õ, nh/lh). Старые номера бывают без синей полосы."],["Аргентина / Уругвай / Парагвай","Верхняя синяя полоса сама по себе их не отделяет. Смотри язык, название страны и инфраструктуру."],["Бразилия — коммерческие","На новом белом номере красные символы; старый вариант — красный фон."]]},
     {title:'Белый + синяя полоса слева',type:'eu',note:'Это НЕ страна — так выглядит огромная часть Европы. Здесь сразу переходи к языку, правому краю номера и окружению.',rows:[
       ['Франция / Германия / Испания / Польша / Хорватия / Словакия и др.','Один номер почти не различает их. Нужен язык, столбы, знаки, домен.'],
       ['Бельгия','Если символы выглядят бордово-красными, это уже отдельный сильный признак Бельгии.'],
@@ -97,6 +99,8 @@ function rebuildPlateFamilies(){
       ['Албания','Передний обычно длиннее; может встречаться красная полоса слева; язык/окружение Балкан добивают выбор.']
     ]},
     {title:'Просто белый без синей полосы слева',type:'plain',note:'Такой номер встречается во множестве стран вне ЕС. Сразу смотри письменность и форму.',rows:[
+      ['Швейцария','Передний очень короткий; задний с гербами. Сочетай с низкой камерой и жёлтой зеброй.'],
+      ['США / Канада / Мексика','Короткие номера с региональными дизайнами. Смотри SPEED LIMIT/mph, MAXIMUM/km/h или MEXICO/ALTO.'],
       ['Россия','Кириллица; справа маленький региональный блок.'],
       ['Турция','Турецкая латиница ğ/ş/ı; длинные белые номера; домен .tr.'],
       ['Эквадор','Короткие и длинные белые номера + испанский; уточни по знакам и машине Google.'],

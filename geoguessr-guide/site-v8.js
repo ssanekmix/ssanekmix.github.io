@@ -55,8 +55,10 @@ const V8_AMBIGUOUS={
   ],
   'Испаноязычная Латинская Америка':[
     ['🇨🇴 Колумбия','почти повсеместные жёлтые номера'],
-    ['🇵🇪 Перу','очень сухая/пыльная среда, особенно Лима; номера не как EU'],
-    ['🇦🇷 Аргентина','новые номера с синей полосой сверху; характерные бетонные опоры'],
+    ['🇲🇽 Мексика','MEXICO/PEMEX, ALTO + восьмигранные столбы; ALTO есть у соседей'],
+    ['🇵🇪 Перу','чёрно-белые стойки знаков; Анды или сухая Лима помогают'],
+    ['🇪🇨 Эквадор','бирюзовые задники знаков или белый пикап без антенны'],
+    ['🇦🇷 Аргентина','синяя полоса общая с соседями; ищи ARGENTINA/.ar, старый центральный тёмный блок, двойные опоры'],
     ['🇨🇱 Чили','длинная сухая страна; север — экстремально сухой, инфраструктура аккуратнее многих соседей']
   ],
   'Группа стран с жёлтыми номерами':[
@@ -72,7 +74,8 @@ const V8_AMBIGUOUS={
   'Латинская Америка':[
     ['🇨🇴 Колумбия','жёлтые номера'],
     ['🇵🇪 Перу','сухая пыльная среда/Лима'],
-    ['🇦🇷 Аргентина','синяя полоса сверху нового номера'],
+    ['🇦🇷 Аргентина','ARGENTINA/.ar; синяя полоса нового номера не уникальна'],
+    ['🇧🇷 Бразилия','португальский, BRASIL, BR-xxx; синяя полоса сверху номера'],
     ['🇨🇱 Чили','длинные сухие ландшафты + чилийская инфраструктура']
   ],
   'Северная/Южная Америка — страна ещё не закрыта':[
@@ -97,6 +100,7 @@ function enhanceAmbiguousResultsV8(){
 
   const anchors=[['Языки','#latin-start'],['Номера','#plates'],['Разметка','#road-lines'],['Знаки','#signs'],['Столбы','#poles'],['Машина Google','#cars']];
   const patch=()=>{
+    if(choices.querySelector('button[data-next]'))return;
     const h=q.querySelector('h3'); if(!h)return;
     const title=h.textContent.trim();
     let items=V8_AMBIGUOUS[title];
@@ -163,3 +167,4 @@ function auditLayoutV8(){
   const broken=imgs.filter(i=>i.complete&&i.naturalWidth<=40).length;
   window.__geoQaV8={headerHeight:top?Math.round(top.getBoundingClientRect().height):0,navScrollbarsHidden:!!nav,overflowingCards:overflowing,images:{total:imgs.length,loaded,broken,pending:imgs.length-loaded-broken},checkedAt:new Date().toISOString()};
 }
+
