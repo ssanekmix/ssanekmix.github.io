@@ -15,7 +15,7 @@ function addRedPlates(){
 function photoCard(x){return `<article class="real-card"><img src="${x.img}" alt="${x.title}" loading="lazy"${x.position?` style="object-position:${x.position}"`:""}><div class="body"><h3>${x.title}</h3><ul>${x.facts.map(f=>`<li>${f}</li>`).join('')}</ul>${x.strength?`<span class="strength">${x.strength}</span>`:''}${photoCreditV3(x)}</div></article>`}
 
 function photoCreditV3(x){
- return x.photoSource?`<p class="photo-note"><a href="${x.photoSource}" target="_blank" rel="noopener">Фото: ${x.photoAuthor}</a> · <a href="https://creativecommons.org/licenses/by-sa/${x.photoLicense}/" target="_blank" rel="noopener">CC BY-SA ${x.photoLicense}</a> · уменьшено</p>`:'';
+ return x.photoSource?`<p class="photo-note"><a href="${x.photoSource}" target="_blank" rel="noopener">Фото: ${x.photoAuthor}</a> · <a href="${x.photoLicenseUrl||`https://creativecommons.org/licenses/by-sa/${x.photoLicense}/`}" target="_blank" rel="noopener">${x.photoLicenseUrl?'CC BY':'CC BY-SA'} ${x.photoLicense}</a> · уменьшено</p>`:'';
 }
 
 function rebuildRoadsWithPhotos(){

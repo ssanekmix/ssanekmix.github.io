@@ -5,3 +5,6 @@
 #latin-start{scroll-margin-top:82px}.env-real-photo{width:100%;height:240px;object-fit:cover;display:block;background:#08111f}.image-failed{display:none!important}
 @media(max-width:1200px){.v5-photo-grid,.v5-sign-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.v5-flow-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.v5-photo-grid,.v5-sign-grid,.v5-flow-grid{grid-template-columns:1fr}.v5-photo-card>img{height:220px}.pair-country-meta>div{min-width:140px}.v5-flow-buttons button{flex:1 1 140px}}
+
+/* Keep sign borders, labels and poles visible in the local gallery. */
+#signGrid .v5-photo-card>img{object-fit:contain;background:#102035}

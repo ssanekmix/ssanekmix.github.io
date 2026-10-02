@@ -190,7 +190,7 @@ function repairCriticalImagesV6(){
     {match:'Белый передний и жёлтый задний номер',src:commons('United Kingdom license plate DE57 UGK front and back.jpg')},
     {match:'Филиппины — бетонные плиты',src:commons('9924Rizal Anduyan, Tubao, La Union 59.jpg')},
     {match:'Нидерланды — красная велодорожка',src:commons('RedBikeLane.JPG')},
-    {match:'Польша — предупреждающий',src:commons('Hedgehog warning sign in Warsaw at night.jpg')},
+    {match:'Польша — предупреждающий',src:'./assets/sign-local-3.jpg'},
     {match:'красная велодорожка',src:commons('Netherlands, The Hague, Loudonstraat (01).jpg')},
     {match:'синие информационные указатели',src:commons('Blå vägen.JPG')}
   ];
