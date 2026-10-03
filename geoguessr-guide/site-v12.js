@@ -7,6 +7,7 @@
       if(!response.ok)throw Error('Reference data: '+response.status);
       const data=await response.json();
       build(data);
+      document.dispatchEvent(new Event("learningready"));
     }catch(error){console.error('Learning section',error);}
   };
   if(document.readyState==='complete')setTimeout(init,200);
@@ -68,7 +69,7 @@
     }
 
     addRoadReference(data);
-    addSignsAtlas(list);
+    // Sign photos are rendered by the visual catalogue.
     const library=makeSection('country-library',`${list.length} стран, территорий и регионов — по признакам`,'Открой страну, сравни сильную связку и исключения. Для территорий и треккеров отдельно указано, какие дорожные признаки неприменимы.');
     library.innerHTML+=`<div class="learn-tools"><label>Поиск страны или признака<input id="learnSearch" type="search" placeholder="Например: Бразилия, ALTO, жёлтые номера"></label><label>Регион<select id="learnRegion"><option value="all">Все регионы</option>${Object.entries(regions).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></label><span id="learnCount" role="status"></span></div><div id="learnCountries" class="learn-countries"></div><p class="learn-source-note">Основа — страновые гайды <a href="${data.sources.reference}" target="_blank" rel="noopener">Plonk It</a>; дорожные сравнения дополнены доступными материалами <a href="${data.sources.openCountries}" target="_blank" rel="noopener">OpenGuessr Education</a>. Признаки привязаны к типу номера и поколению снимка; старое покрытие может отличаться.</p>`;
     main.append(library);
@@ -76,7 +77,7 @@
       const query=document.getElementById('learnSearch').value,region=document.getElementById('learnRegion').value;
       const filtered=list.filter(c=>(region==='all'||c.region===region)&&matches(c,query));
       document.getElementById('learnCount').textContent=`${filtered.length} из ${list.length}`;
-      document.getElementById('learnCountries').innerHTML=filtered.map(c=>`<details class="learn-country" id="learn-${c.id}"><summary>${flag(c)}<span>${escape(c.name)}<small>${escape(regions[c.region]||c.region)}</small></span><span class="learn-expand">Открыть</span></summary><div class="learn-country-body">${photo(c)}<div class="learn-strong"><b>Сильная связка</b><p>${escape(c.strong)}</p></div><dl>${Object.entries(fields).map(([k,name])=>`<div><dt>${name}</dt><dd>${escape(c[k])}</dd></div>`).join('')}</dl><div class="learn-caution"><b>Похожие страны и исключения</b><p>${escape(c.confusions)}</p></div>${source(c)}<button class="learn-action" data-study-country="${c.id}">Учить эту страну →</button></div></details>`).join('')||'<p class="learn-empty">Совпадений нет. Попробуй другой признак или убери регион.</p>';
+      document.getElementById('learnCountries').innerHTML=filtered.map(c=>`<details class="learn-country" id="learn-${c.id}"><summary>${flag(c)}<span>${escape(c.name)}<small>${escape(regions[c.region]||c.region)}</small></span><span class="learn-expand">Открыть</span></summary><div class="learn-country-body">${photo(c)}<div class="learn-strong"><b>Сильная связка</b><p>${escape(c.strong)}</p></div><dl>${Object.entries(fields).map(([k,name])=>`<div><dt>${name}</dt><dd>${escape(c[k])}</dd></div>`).join('')}</dl><div class="learn-caution"><b>Похожие страны и исключения</b><p>${escape(c.confusions)}</p></div>${source(c)}<button class="learn-action" data-visual-country="${c.code}">Фотографии страны →</button><button class="learn-action" data-study-country="${c.id}">Учить эту страну →</button></div></details>`).join('')||'<p class="learn-empty">Совпадений нет. Попробуй другой признак или убери регион.</p>';
     };
     document.getElementById('learnSearch').addEventListener('input',renderLibrary);
     document.getElementById('learnRegion').addEventListener('change',renderLibrary);
