@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#151719" />
   <title>Dota Build Assistant</title>
-  <meta name="description" content="Локальный помощник по предметам Dota 2: распознаёт 10 героев на скриншоте и предлагает билд под вражеский драфт." />
+  <meta name="description" content="Помощник Dota 2: распознавание 10 героев и сборки на основе популярности предметов в профессиональных матчах OpenDota." />
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="stylesheet" href="./styles.css" />
 </head>
@@ -19,7 +19,7 @@
           <p>Скинь скрин десяти героев — получи билд под конкретную игру</p>
         </div>
       </div>
-      <div class="local-pill" title="Скриншот анализируется в браузере и никуда не отправляется">🔒 локально</div>
+      <div class="local-pill" title="Скриншот анализируется локально; статистика предметов загружается из OpenDota">🔒 локально</div>
     </header>
 
     <main class="layout">
@@ -108,7 +108,7 @@
         </div>
 
         <button id="buildBtn" class="btn primary wide big" disabled>Подобрать билд</button>
-        <p class="microcopy">Никакого API и сервера: рекомендации считаются прямо в браузере.</p>
+        <p class="microcopy">Для сборок запрашивается публичная статистика OpenDota. Если API недоступен, сайт честно сообщит об этом.</p>
       </section>
 
       <section class="panel result-panel">
@@ -124,7 +124,7 @@
               <div class="eyebrow">РЕКОМЕНДАЦИЯ</div>
               <h2 id="resultTitle">Билд</h2>
             </div>
-            <span id="ruleModeBadge" class="badge">local rules</span>
+            <span id="ruleModeBadge" class="badge">OpenDota</span>
           </div>
 
           <div id="nextItemCard" class="next-card hidden">
@@ -163,7 +163,7 @@
             <div id="matchupNotes" class="chips"></div>
           </div>
 
-          <div id="uncertaintyBox" class="uncertainty hidden"></div>
+          <div id="uncertaintyBox" class="uncertainty hidden"></div><div id="sourcesSection" class="source-links"></div>
         </div>
       </section>
     </main>
