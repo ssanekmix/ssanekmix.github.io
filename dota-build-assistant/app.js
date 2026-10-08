@@ -336,7 +336,7 @@
         if(!best)continue;
         used.add(best.h.id);
         const runner=opts.find(x=>x.h.id!==best.h.id);
-        draft[i]={hero:best.h,confidence:0,uncertain:best.s<.54||best.s-(runner?.s||0)<.075};
+        draft[i]={hero:best.h,confidence:0,uncertain:best.s<.54||best.s-(runner?.s||0)<.075,suggestions:opts.map(x=>x.h.localized_name)};
       }
       S.draft=draft;
       renderDraft();
@@ -381,7 +381,7 @@
     q = (q || '').toLowerCase();
     const root = $('heroGrid');
     root.innerHTML = '';
-    S.heroes.filter(h => !q || h.localized_name.toLowerCase().includes(q)).slice(0,100).forEach(h => {
+    S.heroes.filter(h => !q || h.localized_name.toLowerCase().includes(q)).sort((a,b) => { const hints=S.draft[S.targetIndex]?.suggestions || []; const ia=hints.indexOf(a.localized_name), ib=hints.indexOf(b.localized_name); return (ia<0?999:ia)-(ib<0?999:ib); }).slice(0,150).forEach(h => {
       const b = document.createElement('button');
       b.className = 'hero-choice';
       b.innerHTML = `<img loading="lazy" src="${hImg(h)}" alt=""><span>${esc(h.localized_name)}</span>`;
