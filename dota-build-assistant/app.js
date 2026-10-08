@@ -4,6 +4,9 @@
   const $ = (id) => document.getElementById(id);
   const CDN = 'https://cdn.cloudflare.steamstatic.com';
   const API = 'https://api.opendota.com/api/heroStats';
+  const HERO_CATALOG = './data/heroes.json';
+  const ITEM_CATALOG = './data/items.json';
+  let itemCatalog = [];
 
   const S = {
     heroes: [],
@@ -91,17 +94,25 @@
   const esc = (s) => String(s || '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 
   async function loadHeroes() {
-    let a;
+    let a = [];
     try {
-      const r = await fetch(API);
-      if (!r.ok) throw new Error();
-      a = (await r.json()).map(x => ({
-        id:x.id, localized_name:x.localized_name,
-        slug:x.name.replace('npc_dota_hero_',''), roles:x.roles || [], primary_attr:x.primary_attr || null
-      })).filter(x => x.localized_name);
+      const r = await fetch(HERO_CATALOG);
+      if (!r.ok) throw Error('catalog');
+      a = await r.json();
     } catch {
-      a = FALL;
+      try {
+        const r = await fetch(API);
+        if (!r.ok) throw Error('network');
+        a = (await r.json()).map(x => ({
+          id:x.id, localized_name:x.localized_name,
+          slug:x.name.replace('npc_dota_hero_',''), roles:x.roles || [], primary_attr:x.primary_attr || null
+        }));
+      } catch { a = FALL; }
     }
+    try {
+      const r = await fetch(ITEM_CATALOG);
+      if(r.ok) itemCatalog = await r.json();
+    } catch {}
     a.sort((x,y) => x.localized_name.localeCompare(y.localized_name));
     S.heroes = a;
     S.map = new Map(a.map(h => [h.localized_name, h]));
@@ -217,46 +228,72 @@
 
   async function refs() {
     if (S.refs) return S.refs;
-    status('Первый запуск: загружаю эталонные портреты...');
+    status('Загружаю эталонные изображения 127 героев...');
     const q = [...S.heroes], out = [];
     let done = 0;
     async function worker() {
-      while (q.length) {
+      while(q.length) {
         const h = q.shift();
         try {
           const im = await load(hImg(h));
-          out.push({h, f:feat(im)});
+          // More robust reference: compare portrait + central crop.
+          out.push({h,f:feat(im),center:feat(im,im.width*.07,im.height*.05,im.width*.86,im.height*.9)});
         } catch {}
         done++;
-        prog(Math.round(done / S.heroes.length * 100));
+        prog(Math.round(done/S.heroes.length*100));
       }
     }
-    await Promise.all(Array.from({length:8}, worker));
-    if (out.length < 10) throw new Error();
-    S.refs = out;
+    await Promise.all(Array.from({length:12},worker));
+    if(out.length < 80) throw Error('Не загрузились портреты героев');
+    S.refs=out;
     prog(null);
     return out;
   }
 
+  function matchPortrait(f, r) {
+    return r.map(o=>({h:o.h,s:Math.max(cos(f,o.f),cos(f,o.center))})).sort((a,b)=>b.s-a.s).slice(0,4);
+  }
+
   async function recognize() {
     try {
-      const r = await refs();
-      status('Распознаю 10 портретов слева направо...');
-      const w = S.img.width, h = S.img.height, arr = [];
-      for (let i=0;i<10;i++) {
-        const fw = feat(S.img, i*w/10, 0, w/10, h);
-        const scores = r.map(o => ({h:o.h, s:cos(fw,o.f)})).sort((a,b) => b.s-a.s);
-        const best = scores[0];
-        const conf = Math.max(35, Math.min(96, Math.round(55 + (best.s - (scores[1]?.s || 0))*240)));
-        arr.push({hero:best.h, confidence:conf});
+      const r=await refs();
+      status('Ищу героев на скриншоте...');
+      const w=S.img.naturalWidth||S.img.width, h=S.img.naturalHeight||S.img.height;
+      // Try a few possible crop geometries. The whole image need not be exactly the 10 portraits.
+      const candidates=[];
+      for(const heightFraction of [1,.82,.65]) {
+        for(const yFraction of [0,(1-heightFraction)/2,1-heightFraction]) {
+          for(const margin of [0,.025,.05]) {
+            let arr=[],score=0;
+            const x=w*margin, span=w*(1-2*margin), y=h*yFraction, sh=h*heightFraction;
+            for(let i=0;i<10;i++) {
+              const fw=feat(S.img,x+span*i/10,y,span/10,sh);
+              const top=matchPortrait(fw,r);
+              arr.push(top);
+              score+=top[0].s;
+            }
+            candidates.push({arr,score,margin,heightFraction,yFraction});
+          }
+        }
       }
-      S.draft = arr;
+      candidates.sort((a,b)=>b.score-a.score);
+      let best=candidates[0], used=new Set(), draft=[];
+      for(const options of best.arr) {
+        const pick=options.find(o=>!used.has(o.h.id))||options[0];
+        used.add(pick.h.id);
+        const next=options.find(o=>o.h.id!==pick.h.id);
+        const gap=pick.s-(next?.s??pick.s);
+        const confidence=Math.max(0,Math.min(99,Math.round(50+gap*280)));
+        draft.push({hero:pick.h,confidence,auto:true});
+      }
+      S.draft=draft;
       renderDraft();
-      status('Готово. Проверь всех 10 героев и выбери, где твоя команда.', 'good');
+      const uncertain=draft.filter(x=>x.confidence<70).length;
+      status(uncertain ? 'Найдены 10 кандидатов. Проверь портреты — некоторые распознаны неуверенно.' : '10 героев определены автоматически. Проверь результат и выбери своего.',uncertain?'':'good');
       prog(null);
-    } catch {
-      status('Автораспознавание не сработало. Нажми на 10 слотов и выбери героев вручную — билд всё равно будет работать.', 'error');
-      S.draft = Array.from({length:10}, () => ({hero:null, confidence:0}));
+    } catch (err) {
+      status('Автораспознавание не сработало. Проверь интернет для загрузки портретов либо выбери героев вручную.','error');
+      S.draft=Array.from({length:10},()=>({hero:null,confidence:0}));
       renderDraft();
       prog(null);
     }
@@ -397,17 +434,108 @@
     return 'Ситуативный слот под этот тип драки.';
   }
 
-  function build() {
-    const es = enemyNames();
-    const hero = $('myHeroSelect').value;
-    const pos = +$('positionSelect').value;
-    const gs = $('gameStateSelect').value;
-    const c = counts(es);
-    const base = [...(BASE[hero] || (pos === 1 ? ['Power Treads'] : pos === 3 ? ['Phase Boots','Blink Dagger'] : []))];
-    const rank = (pools[pos] || pools[1]).filter(x => !base.includes(x)).map(x => ({x, s:score(x,c,pos,gs)})).sort((a,b) => b.s-a.s);
-    const core = [...base, ...rank.slice(0, Math.max(3, 6-base.length)).map(o => o.x)].slice(0,6);
-    const sit = rank.filter(o => !core.includes(o.x)).slice(0,4).map(o => o.x);
-    show({es, hero, c, core, sit, pos});
+  const roleTypes = {
+    1:{tempo:3,damage:3,survival:1,initiation:0},
+    2:{tempo:2,damage:2,survival:1,initiation:1},
+    3:{tempo:1,damage:1,survival:2,initiation:3},
+    4:{tempo:0,damage:0,survival:2,initiation:2},
+    5:{tempo:0,damage:0,survival:3,initiation:1},
+  };
+  const DEFENSIVE = new Set(['black_king_bar','mage_slayer','sange_and_yasha','sphere','lotus_orb','pipe','crimson_guard','aeon_disk','glimmer_cape','force_staff','ghost','eternal_shroud','shivas_guard','blade_mail']);
+  const DAMAGE = new Set(['manta','butterfly','skadi','greater_crit','monkey_king_bar','diffusal_blade','disperser','mjollnir','desolator','silver_edge','abyssal_blade','satanic','daedalus','radiance','battlefury','bfury','orchid','bloodthorn','armlet','dragon_lance','hurricane_pike','khanda','phylactery']);
+  const INITIATION = new Set(['blink','overwhelming_blink','swift_blink','arcane_blink','harpoon','force_staff','shivas_guard']);
+  const EXCLUDE = new Set(['recipe','tpscroll','ward_observer','ward_sentry','dust','smoke_of_deceit','tango','clarity','flask','enchanted_mango','branches','faerie_fire','blood_grenade','quelling_blade','magic_stick','magic_wand','bottle','circlet','gauntlets','slippers','mantle','iron_branch','wind_lace','infused_raindrop','gem','cheese','aegis','refresher_shard','neutral_token','moon_shard']);
+  const EQUIPMENT = new Set(['boots','phase_boots','power_treads','travel_boots','travel_boots_2','arcane_boots','tranquil_boots','guardian_greaves']);
+  const STAGES = ['early_game_items','mid_game_items','late_game_items'];
+
+  async function livePopularity(heroId) {
+    const url='https://api.opendota.com/api/heroes/'+heroId+'/itemPopularity';
+    const response=await fetch(url,{headers:{Accept:'application/json'}});
+    if(!response.ok) throw Error('OpenDota HTTP '+response.status);
+    const result=await response.json();
+    if(!result||!STAGES.some(stage=>result[stage]&&typeof result[stage]==='object')) throw Error('Пустые данные');
+    return result;
+  }
+  function itemInfo(key) { return itemCatalog.find(it=>it.key===key); }
+  function getExisting() {
+    const raw=$('currentItemsInput').value.toLowerCase().split(/[,;]+/).map(x=>x.trim()).filter(Boolean);
+    return new Set(raw.map(t=>itemCatalog.find(i=>i.name.toLowerCase()===t||i.key===t)?.key||t.replaceAll(' ','_')));
+  }
+  function chooseBuild(data,position,hero,enemies) {
+    const existing=getExisting(), threats=counts(enemies), weights=roleTypes[position]||roleTypes[1], chosen=[], other=[];
+    for(const [stageIndex,stage] of STAGES.entries()) {
+      const bucket=data[stage]||{};
+      const list=Object.entries(bucket).map(([key,count])=>({
+        key,count:Number(count)||0,info:itemInfo(key),stage:stageIndex
+      })).filter(x=>x.info&&x.info.cost>=950&&!EXCLUDE.has(x.key)&&!existing.has(x.key));
+      list.sort((a,b)=>b.count-a.count);
+      const max=list[0]?.count||1;
+      for(const entry of list) {
+        const {key}=entry;
+        const popularity=entry.count/max;
+        const defensive=DEFENSIVE.has(key),damage=DAMAGE.has(key),initiation=INITIATION.has(key);
+        let value=popularity*8;
+        if(position===1&&damage)value+=weights.damage;
+        if(position===1&&defensive)value-=3;
+        if(position===3&&initiation)value+=weights.initiation;
+        if(position>=4&&defensive)value+=weights.survival;
+        if(threats.get('disable')>=2&&key==='black_king_bar')value+=3;
+        if(threats.get('evasion')&&key==='monkey_king_bar')value+=3;
+        if(threats.get('heal')>=2&&key==='skadi')value+=2;
+        if(threats.get('magic')>=3&&key==='pipe'&&position===3)value+=3;
+        other.push({...entry,value,defensive,damage,initiation});
+      }
+    }
+    other.sort((a,b)=>a.stage-b.stage||b.value-a.value);
+    const defLimit=position===1?2:position===2?3:4;
+    for(let i=0;i<3;i++) {
+      const picks=other.filter(o=>o.stage===i).sort((a,b)=>b.value-a.value);
+      for(const candidate of picks) {
+        if(chosen.length>=6)break;
+        if(chosen.some(o=>o.key===candidate.key))continue;
+        if(candidate.defensive&&chosen.filter(o=>o.defensive).length>=defLimit)continue;
+        if(EQUIPMENT.has(candidate.key)&&chosen.some(o=>EQUIPMENT.has(o.key)))continue;
+        if(position===1&&candidate.defensive&&chosen.length<2&&picks.some(o=>o.damage&&!chosen.some(y=>y.key===o.key)))continue;
+        chosen.push(candidate);
+        if(chosen.length >= (i===0?2:i===1?4:6))break;
+      }
+    }
+    if(position===1&&!chosen.some(o=>o.damage)){
+      const d=other.filter(o=>o.damage).sort((a,b)=>b.value-a.value)[0];
+      if(d)chosen.splice(Math.max(0,chosen.length-1),1,d);
+    }
+    const remaining=other.filter(o=>!chosen.some(c=>c.key===o.key)).sort((a,b)=>b.value-a.value).slice(0,4);
+    return {core:chosen,sit:remaining,existing};
+  }
+
+  async function build() {
+    const es=enemyNames(), heroName=$('myHeroSelect').value;
+    const hero=S.map.get(heroName),pos=+$('positionSelect').value;
+    if(!hero)return;
+    const btn=$('buildBtn');btn.disabled=true;btn.textContent='Загружаю статистику OpenDota...';
+    try {
+      const data=await livePopularity(hero.id);
+      const result=chooseBuild(data,pos,hero,es);
+      if(result.core.length<3)throw Error('Недостаточно данных по предметам');
+      const clean=x=>x.info.name;
+      show({es,hero:heroName,c:counts(es),pos,core:result.core.map(clean),sit:result.sit.map(clean)});
+      $('ruleModeBadge').textContent='OpenDota · pro item popularity';
+      $('uncertaintyBox').textContent='Основа — популярность предметов в профессиональных матчах OpenDota, не живые матчи Dota2ProTracker. Очерёдность скорректирована под роль и драфт; конкретные похожие матчи и патч этим режимом не проверяются.';
+      const src=document.getElementById('sourcesSection');
+      if(src)src.innerHTML='<a target="_blank" rel="noopener noreferrer" href="https://www.opendota.com/heroes/'+hero.id+'/items">Предметы OpenDota ↗</a> · <a target="_blank" rel="noopener noreferrer" href="https://dota2protracker.com/hero/'+encodeURIComponent(heroName.toLowerCase().replaceAll(' ','%20'))+'">Проверить D2PT ↗</a>';
+      const already=result.existing;
+      const next=result.core.find(x=>!already.has(itemCatalog.find(i=>i.name===x)?.key));
+      if(next) {
+        $('nextItemCard').classList.remove('hidden');
+        $('nextItemName').textContent=next;
+        $('nextItemIcon').src=iImg(next);
+        $('nextItemReason').textContent='Следующий предмет из последовательности на основе статистики.';
+      }
+    } catch(e) {
+      $('emptyResult').classList.remove('hidden');
+      $('result').classList.add('hidden');
+      status('Не удалось загрузить реальные данные OpenDota: '+e.message+'. Не подменяю их выдуманным билдом.','error');
+    } finally {btn.disabled=false;btn.textContent='Подобрать билд';updateBuildButton();}
   }
 
   function show(d) {
@@ -432,7 +560,7 @@
     $('uncertaintyBox').textContent = 'Локальный режим не знает текущие предметы врагов и не сверяет патч онлайн. Это приоритет по драфту, а не абсолютная сборка.';
 
     const cur = $('currentItemsInput').value.trim(), min = $('minuteInput').value.trim();
-    if (cur || min) {
+    if (false && (cur || min)) {
       const n = d.core[0];
       $('nextItemCard').classList.remove('hidden');
       $('nextItemName').textContent = n;
