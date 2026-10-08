@@ -283,10 +283,10 @@
 
   function groupLayout(img,refs,side) {
     const w=img.naturalWidth||img.width,h=img.naturalHeight||img.height;
-    const starts=side==='left'?[.005,.025,.04,.055,.075]:[.55,.58,.605,.63,.655];
-    const widths=[.30,.33,.35,.38,.41];
-    const ys=[.16,.22,.27,.32];
-    const hs=[.24,.31,.38,.46];
+    const starts=side==='left'?[.015,.04,.06]:[.57,.605,.63];
+    const widths=[.315,.34,.365,.395];
+    const ys=[.18,.25,.31];
+    const hs=[.25,.33,.42];
     let winner=null;
     for(const start of starts)for(const width of widths){
       if(start+width>1)continue;
@@ -322,10 +322,12 @@
       const reference=await refs();
       status('Нахожу портреты в двух пятёрках...');
       await new Promise(resolve=>setTimeout(resolve,0));
-      const left=groupLayout(S.img,reference,'left');
+      const geometryRefs=reference.filter(x=>x.variant==='hud');
+      const searchRefs=geometryRefs.length>=110?geometryRefs:reference;
+      const left=groupLayout(S.img,searchRefs,'left');
       prog(50);
       await new Promise(resolve=>setTimeout(resolve,0));
-      const right=groupLayout(S.img,reference,'right');
+      const right=groupLayout(S.img,searchRefs,'right');
       prog(90);
       const options=[...recognizeGroup(S.img,reference,left),...recognizeGroup(S.img,reference,right)];
       const order=options.map((o,i)=>({i,margin:(o[0]?.s||0)-(o[1]?.s||0)})).sort((a,b)=>b.margin-a.margin);
