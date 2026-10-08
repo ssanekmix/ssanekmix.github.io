@@ -12,9 +12,15 @@ from PIL import Image
 BASE = Path(__file__).resolve().parent.parent
 HEROES = json.loads((BASE / "data/heroes.json").read_text(encoding="utf-8"))
 OUTPUT = BASE / "data/portrait-features.json"
-HOSTS = (
-    "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/",
-    "https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/",
+SOURCES = (
+    ("hud", (
+        "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/heroes/{slug}_sb.png",
+        "https://cdn.steamstatic.com/apps/dota2/images/heroes/{slug}_sb.png",
+    )),
+    ("modern", (
+        "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/{slug}.png",
+        "https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/{slug}.png",
+    )),
 )
 
 def descriptor(im: Image.Image, crop: bool):
@@ -38,26 +44,31 @@ def descriptor(im: Image.Image, crop: bool):
 
 def one(hero):
     slug = hero["slug"]
-    last_error = None
-    for host in HOSTS:
-        try:
-            response = requests.get(host+slug+".png", timeout=18)
-            response.raise_for_status()
-            im=Image.open(io.BytesIO(response.content))
-            im.load()
-            gray,rgb=descriptor(im,False)
-            gray_center,rgb_center=descriptor(im,True)
-            return {"id":hero["id"], "gray":gray,"rgb":rgb,
-                    "gray_center":gray_center,"rgb_center":rgb_center}
-        except Exception as e:
-            last_error=e
-    print("Failed to fetch", slug, str(last_error))
-    return None
+    result = []
+    for variant, urls in SOURCES:
+        im = None
+        for url in urls:
+            try:
+                response = requests.get(url.format(slug=slug), timeout=18)
+                response.raise_for_status()
+                im = Image.open(io.BytesIO(response.content))
+                im.load()
+                break
+            except Exception:
+                continue
+        if im is None:
+            print("Missing portrait", slug, variant)
+            continue
+        gray,rgb=descriptor(im,False)
+        gray_center,rgb_center=descriptor(im,True)
+        result.append({"id":hero["id"],"variant":variant,"gray":gray,"rgb":rgb,
+                       "gray_center":gray_center,"rgb_center":rgb_center})
+    return result
 
 with concurrent.futures.ThreadPoolExecutor(max_workers=12) as pool:
-    features = list(pool.map(one, HEROES))
-features = sorted((f for f in features if f),key=lambda v:v["id"])
-if len(features)<110:
+    features = [feature for heroFeatures in pool.map(one, HEROES) for feature in heroFeatures]
+features = sorted(features,key=lambda v:(v["id"],v["variant"]))
+if len({f["id"] for f in features})<110:
     raise SystemExit(f"Only {len(features)}/{len(HEROES)} portraits downloaded")
 OUTPUT.write_text(json.dumps({"version":1, "features":features},separators=(",",":")),encoding="utf-8")
 print("Wrote",OUTPUT,len(features),"portraits")
@@ -67,6 +78,6 @@ def compact(vector):
 compact_path=BASE/"data/portrait-compact.json"
 compact_path.write_text(json.dumps({
     "version":1,
-    "features":[{"id":f["id"],"g":compact(f["gray"]),"gc":compact(f["gray_center"]),"c":compact(f["rgb"]),"cc":compact(f["rgb_center"])} for f in features]
+    "features":[{"id":f["id"],"variant":f["variant"],"g":compact(f["gray"]),"gc":compact(f["gray_center"]),"c":compact(f["rgb"]),"cc":compact(f["rgb_center"])} for f in features]
 },separators=(",",":")),encoding="utf-8")
 print("Wrote",compact_path)
