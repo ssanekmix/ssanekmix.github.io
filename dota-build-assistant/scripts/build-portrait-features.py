@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Precompute portrait descriptors on CI (no browser CDN CORS dependency)."""
 from __future__ import annotations
+import base64
 import concurrent.futures
 import io
 import json
@@ -60,3 +61,12 @@ if len(features)<110:
     raise SystemExit(f"Only {len(features)}/{len(HEROES)} portraits downloaded")
 OUTPUT.write_text(json.dumps({"version":1, "features":features},separators=(",",":")),encoding="utf-8")
 print("Wrote",OUTPUT,len(features),"portraits")
+
+def compact(vector):
+    return base64.b64encode(bytes(max(0,min(255,int(round(x*720+128)))) for x in vector)).decode('ascii')
+compact_path=BASE/"data/portrait-compact.json"
+compact_path.write_text(json.dumps({
+    "version":1,
+    "features":[{"id":f["id"],"g":compact(f["gray"]),"gc":compact(f["gray_center"]),"c":compact(f["rgb"]),"cc":compact(f["rgb_center"])} for f in features]
+},separators=(",",":")),encoding="utf-8")
+print("Wrote",compact_path)
