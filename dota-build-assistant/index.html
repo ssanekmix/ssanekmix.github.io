@@ -170,7 +170,7 @@
 
     <footer>
       <span>Не связан с Valve. Данные героев и изображения загружаются из публичных Dota/OpenDota-источников.</span>
-      <span>Версия распознавания: fix3 · Если герой распознан неверно, нажми на него.</span>
+      <span>Версия распознавания: fix4 · Если герой распознан неверно, нажми на него.</span>
     </footer>
   </div>
 
@@ -198,6 +198,6 @@
       caches.keys().then(keys => Promise.all(keys.filter(key => key.startsWith('dba-')).map(key => caches.delete(key)))).catch(() => {});
     }
   </script>
-  <script src="./app.js?v=20261008-fix3"></script>
+  <script src="./app.js?v=20261008-fix4"></script>
 </body>
 </html>
