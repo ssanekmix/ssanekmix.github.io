@@ -228,71 +228,113 @@
 
   async function refs() {
     if (S.refs) return S.refs;
-    status('Загружаю эталонные изображения 127 героев...');
-    const q = [...S.heroes], out = [];
-    let done = 0;
-    async function worker() {
-      while(q.length) {
-        const h = q.shift();
-        try {
-          const im = await load(hImg(h));
-          // More robust reference: compare portrait + central crop.
-          out.push({h,f:feat(im),center:feat(im,im.width*.07,im.height*.05,im.width*.86,im.height*.9)});
-        } catch {}
-        done++;
-        prog(Math.round(done/S.heroes.length*100));
+    status('Загружаю локальные эталоны героев...');
+    try {
+      const response = await fetch('./data/portrait-features.json', {cache:'no-cache'});
+      if (!response.ok) throw Error('Файл портретов ещё не опубликован');
+      const data = await response.json();
+      const byId = new Map(S.heroes.map(h => [h.id,h]));
+      const out = data.features.map(o => ({...o,h:byId.get(o.id)})).filter(o=>o.h);
+      if(out.length<80)throw Error('Недостаточно портретов в эталоне');
+      S.refs=out;
+      prog(null);
+      return out;
+    } catch (err) {
+      // Legacy fallback is allowed, but CORS failures are reported separately.
+      const q=[...S.heroes], out=[];
+      let done=0;
+      async function worker() {
+        while(q.length) {
+          const h=q.shift();
+          try {
+            const im=await load(hImg(h));
+            out.push({h,f:feat(im),center:feat(im,im.width*.07,im.height*.05,im.width*.86,im.height*.9)});
+          } catch {}
+          done++;
+          prog(Math.round(done/S.heroes.length*100));
+        }
       }
+      await Promise.all(Array.from({length:12},worker));
+      if(out.length<80)throw Error('Эталоны портретов недоступны (загружено '+out.length+'/'+S.heroes.length+').');
+      S.refs=out;
+      prog(null);
+      return out;
     }
-    await Promise.all(Array.from({length:12},worker));
-    if(out.length < 80) throw Error('Не загрузились портреты героев');
-    S.refs=out;
-    prog(null);
-    return out;
   }
 
-  function matchPortrait(f, r) {
-    return r.map(o=>({h:o.h,s:Math.max(cos(f,o.f),cos(f,o.center))})).sort((a,b)=>b.s-a.s).slice(0,4);
+  function colorFeat(img,sx,sy,sw,sh) {
+    const canvas=document.createElement('canvas');
+    canvas.width=16;canvas.height=10;
+    const ctx=canvas.getContext('2d',{willReadFrequently:true});
+    ctx.drawImage(img,sx,sy,sw,sh,0,0,16,10);
+    const d=ctx.getImageData(0,0,16,10).data;
+    const means=[0,0,0],out=[];
+    for(let i=0;i<d.length;i+=4)for(let k=0;k<3;k++)means[k]+=d[i+k]/160;
+    for(let i=0;i<d.length;i+=4)for(let k=0;k<3;k++)out.push((d[i+k]-means[k])/128);
+    const norm=Math.sqrt(out.reduce((sum,x)=>sum+x*x,0))||1;
+    return out.map(x=>x/norm);
+  }
+
+  function matchPortrait(gray,rgb,refs) {
+    return refs.map(o=>{
+      const g=Math.max(cos(gray,o.gray||o.f),cos(gray,o.gray_center||o.center||o.f));
+      const color=o.rgb ? Math.max(cos(rgb,o.rgb),cos(rgb,o.rgb_center)) : 0;
+      return {h:o.h,s:o.rgb?.length ? .45*g+.55*color : g};
+    }).sort((a,b)=>b.s-a.s).slice(0,8);
   }
 
   async function recognize() {
     try {
-      const r=await refs();
-      status('Ищу героев на скриншоте...');
+      const reference=await refs();
+      status('Ищу два блока по пять героев, пропуская счёт по центру...');
       const w=S.img.naturalWidth||S.img.width, h=S.img.naturalHeight||S.img.height;
-      // Try a few possible crop geometries. The whole image need not be exactly the 10 portraits.
       const candidates=[];
-      for(const heightFraction of [1,.82,.65]) {
-        for(const yFraction of [0,(1-heightFraction)/2,1-heightFraction]) {
-          for(const margin of [0,.025,.05]) {
-            let arr=[],score=0;
-            const x=w*margin, span=w*(1-2*margin), y=h*yFraction, sh=h*heightFraction;
-            for(let i=0;i<10;i++) {
-              const fw=feat(S.img,x+span*i/10,y,span/10,sh);
-              const top=matchPortrait(fw,r);
-              arr.push(top);
-              score+=top[0].s;
-            }
-            candidates.push({arr,score,margin,heightFraction,yFraction});
+      const layouts=[];
+      // Common in-game top-bar: five portraits / scoreboard / five portraits.
+      for(const sideWidth of [.36,.385,.405,.425,.45]){
+        for(const margin of [0,.012,.025]){
+          layouts.push(Array.from({length:10},(_,i)=>{
+            const right=i>=5, j=i%5;
+            const start=right?1-margin-sideWidth:margin;
+            return {x:w*(start+j*sideWidth/5),width:w*sideWidth/5};
+          }));
+        }
+      }
+      // Also support an image containing exactly ten adjacent portraits.
+      layouts.push(Array.from({length:10},(_,i)=>({x:w*i/10,width:w/10})));
+      for(const layout of layouts)for(const heightFraction of [1,.84,.7,.55]){
+        for(const yFraction of [0,(1-heightFraction)/2,1-heightFraction]){
+          const matches=[],y=h*yFraction,sh=h*heightFraction;
+          for(let i=0;i<10;i++){
+            const box=layout[i];
+            const inset=box.width*.04;
+            const gray=feat(S.img,box.x+inset,y,box.width-2*inset,sh);
+            const rgb=colorFeat(S.img,box.x+inset,y,box.width-2*inset,sh);
+            matches.push(matchPortrait(gray,rgb,reference));
           }
+          const topScore=matches.reduce((sum,opts)=>sum+opts[0].s,0);
+          // Duplicate portrait predictions indicate an incorrect crop/scale.
+          const distinct=new Set(matches.map(x=>x[0].h.id)).size;
+          candidates.push({matches,score:topScore-(10-distinct)*.12});
         }
       }
       candidates.sort((a,b)=>b.score-a.score);
-      let best=candidates[0], used=new Set(), draft=[];
-      for(const options of best.arr) {
+      const selected=candidates[0];
+      const used=new Set();
+      const draft=selected.matches.map(options=>{
         const pick=options.find(o=>!used.has(o.h.id))||options[0];
         used.add(pick.h.id);
-        const next=options.find(o=>o.h.id!==pick.h.id);
-        const gap=pick.s-(next?.s??pick.s);
-        const confidence=Math.max(0,Math.min(99,Math.round(50+gap*280)));
-        draft.push({hero:pick.h,confidence,auto:true});
-      }
+        const runner=options.find(o=>o.h.id!==pick.h.id);
+        const gap=pick.s-(runner?.s??pick.s);
+        return {hero:pick.h,confidence:Math.max(0,Math.min(99,Math.round(55+gap*230))),auto:true};
+      });
       S.draft=draft;
       renderDraft();
       const uncertain=draft.filter(x=>x.confidence<70).length;
-      status(uncertain ? 'Найдены 10 кандидатов. Проверь портреты — некоторые распознаны неуверенно.' : '10 героев определены автоматически. Проверь результат и выбери своего.',uncertain?'':'good');
+      status(uncertain ? 'Распознавание завершено, но есть сомнительные портреты. Проверь их вручную.' : 'Распознано 10 героев. Проверь драфт и выбери своего.',uncertain?'':'good');
       prog(null);
     } catch (err) {
-      status('Автораспознавание не сработало. Проверь интернет для загрузки портретов либо выбери героев вручную.','error');
+      status('Не удалось распознать: '+(err?.message||String(err))+' Можно выбрать героев вручную.','error');
       S.draft=Array.from({length:10},()=>({hero:null,confidence:0}));
       renderDraft();
       prog(null);
