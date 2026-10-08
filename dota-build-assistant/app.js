@@ -226,115 +226,125 @@
 
   const cos = (a,b) => a.reduce((s,x,i) => s + x*b[i], 0);
 
+
   async function refs() {
     if (S.refs) return S.refs;
-    status('Загружаю локальные эталоны героев...');
-    try {
-      const response = await fetch('./data/portrait-features.json', {cache:'no-cache'});
-      if (!response.ok) throw Error('Файл портретов ещё не опубликован');
-      const data = await response.json();
-      const byId = new Map(S.heroes.map(h => [h.id,h]));
-      const out = data.features.map(o => ({...o,h:byId.get(o.id)})).filter(o=>o.h);
-      if(out.length<80)throw Error('Недостаточно портретов в эталоне');
-      S.refs=out;
-      prog(null);
-      return out;
-    } catch (err) {
-      // Legacy fallback is allowed, but CORS failures are reported separately.
-      const q=[...S.heroes], out=[];
-      let done=0;
-      async function worker() {
-        while(q.length) {
-          const h=q.shift();
-          try {
-            const im=await load(hImg(h));
-            out.push({h,f:feat(im),center:feat(im,im.width*.07,im.height*.05,im.width*.86,im.height*.9)});
-          } catch {}
-          done++;
-          prog(Math.round(done/S.heroes.length*100));
-        }
-      }
-      await Promise.all(Array.from({length:12},worker));
-      if(out.length<80)throw Error('Эталоны портретов недоступны (загружено '+out.length+'/'+S.heroes.length+').');
-      S.refs=out;
-      prog(null);
-      return out;
-    }
+    status('Загружаю эталонные изображения из Dota...');
+    const response=await fetch('./data/portrait-features.json?v=2',{cache:'no-store'});
+    if(!response.ok)throw Error('Нет файла эталонов: HTTP '+response.status);
+    const data=await response.json();
+    const byId=new Map(S.heroes.map(h=>[h.id,h]));
+    const out=data.features.map(x=>({...x,h:byId.get(x.id)})).filter(x=>x.h);
+    if(new Set(out.map(x=>x.id)).size<110)throw Error('Недостаточно HUD-портретов');
+    S.refs=out;
+    return out;
+  }
+
+  function fastCos(a,b) {
+    if(!a||!b)return -1;
+    let sum=0;
+    for(let i=0;i<a.length;i++)sum+=a[i]*b[i];
+    return sum;
   }
 
   function colorFeat(img,sx,sy,sw,sh) {
-    const canvas=document.createElement('canvas');
-    canvas.width=16;canvas.height=10;
-    const ctx=canvas.getContext('2d',{willReadFrequently:true});
-    ctx.drawImage(img,sx,sy,sw,sh,0,0,16,10);
-    const d=ctx.getImageData(0,0,16,10).data;
-    const means=[0,0,0],out=[];
-    for(let i=0;i<d.length;i+=4)for(let k=0;k<3;k++)means[k]+=d[i+k]/160;
-    for(let i=0;i<d.length;i+=4)for(let k=0;k<3;k++)out.push((d[i+k]-means[k])/128);
-    const norm=Math.sqrt(out.reduce((sum,x)=>sum+x*x,0))||1;
-    return out.map(x=>x/norm);
+    const c=document.createElement('canvas');
+    c.width=16;c.height=10;
+    const x=c.getContext('2d',{willReadFrequently:true});
+    x.drawImage(img,sx,sy,sw,sh,0,0,16,10);
+    const d=x.getImageData(0,0,16,10).data;
+    const means=[0,0,0],v=[];
+    let saturation=0;
+    for(let i=0;i<d.length;i+=4){
+      const r=d[i],g=d[i+1],b=d[i+2];
+      means[0]+=r/160; means[1]+=g/160; means[2]+=b/160;
+      saturation+=Math.max(r,g,b)-Math.min(r,g,b);
+    }
+    for(let i=0;i<d.length;i+=4)
+      for(let j=0;j<3;j++)v.push((d[i+j]-means[j])/128);
+    const norm=Math.sqrt(v.reduce((sum,x)=>sum+x*x,0))||1;
+    return {value:v.map(x=>x/norm),colorful:saturation/160>22};
   }
 
-  function matchPortrait(gray,rgb,refs) {
-    return refs.map(o=>{
-      const g=Math.max(cos(gray,o.gray||o.f),cos(gray,o.gray_center||o.center||o.f));
-      const color=o.rgb ? Math.max(cos(rgb,o.rgb),cos(rgb,o.rgb_center)) : 0;
-      return {h:o.h,s:o.rgb?.length ? .45*g+.55*color : g};
-    }).sort((a,b)=>b.s-a.s).slice(0,8);
+  function matchPortrait(gray,color,refs) {
+    const scores=new Map();
+    for(const ref of refs){
+      const gs=Math.max(fastCos(gray,ref.gray||ref.f),fastCos(gray,ref.gray_center||ref.center||ref.f));
+      let s=gs;
+      if(color?.colorful&&ref.rgb){
+        const rgb=Math.max(fastCos(color.value,ref.rgb),fastCos(color.value,ref.rgb_center));
+        s=gs*.62+rgb*.38;
+      }
+      const old=scores.get(ref.h.id);
+      if(!old||old.s<s)scores.set(ref.h.id,{h:ref.h,s});
+    }
+    return [...scores.values()].sort((a,b)=>b.s-a.s).slice(0,8);
+  }
+
+  function groupLayout(img,refs,side) {
+    const w=img.naturalWidth||img.width,h=img.naturalHeight||img.height;
+    const starts=side==='left'?[.005,.025,.04,.055,.075]:[.55,.58,.605,.63,.655];
+    const widths=[.30,.33,.35,.38,.41];
+    const ys=[.16,.22,.27,.32];
+    const hs=[.24,.31,.38,.46];
+    let winner=null;
+    for(const start of starts)for(const width of widths){
+      if(start+width>1)continue;
+      for(const yStart of ys)for(const height of hs) {
+        if(yStart+height>1)continue;
+        const opts=[];
+        for(let i=0;i<5;i++) {
+          const slotW=width*w/5;
+          const gray=feat(img,(start+i*width/5)*w+slotW*.055,yStart*h,slotW*.89,height*h);
+          opts.push(matchPortrait(gray,null,refs));
+        }
+        const distinct=new Set(opts.map(o=>o[0]?.h.id)).size;
+        const score=opts.reduce((sum,o)=>sum+(o[0]?.s||0)+.15*Math.max(0,(o[0]?.s||0)-(o[1]?.s||0)),0)-(5-distinct)*.13;
+        if(!winner||score>winner.score)winner={start,width,yStart,height,score};
+      }
+    }
+    return winner;
+  }
+
+  function recognizeGroup(img,refs,layout) {
+    const w=img.naturalWidth||img.width,h=img.naturalHeight||img.height;
+    return Array.from({length:5},(_,i)=>{
+      const cellW=layout.width*w/5;
+      const x=(layout.start+i*layout.width/5)*w+cellW*.055;
+      const y=layout.yStart*h,sw=cellW*.89,sh=layout.height*h;
+      return matchPortrait(feat(img,x,y,sw,sh),colorFeat(img,x,y,sw,sh),refs);
+    });
   }
 
   async function recognize() {
     try {
+      prog(3);
       const reference=await refs();
-      status('Ищу два блока по пять героев, пропуская счёт по центру...');
-      const w=S.img.naturalWidth||S.img.width, h=S.img.naturalHeight||S.img.height;
-      const candidates=[];
-      const layouts=[];
-      // Common in-game top-bar: five portraits / scoreboard / five portraits.
-      for(const sideWidth of [.36,.385,.405,.425,.45]){
-        for(const margin of [0,.012,.025]){
-          layouts.push(Array.from({length:10},(_,i)=>{
-            const right=i>=5, j=i%5;
-            const start=right?1-margin-sideWidth:margin;
-            return {x:w*(start+j*sideWidth/5),width:w*sideWidth/5};
-          }));
-        }
+      status('Нахожу портреты в двух пятёрках...');
+      await new Promise(resolve=>setTimeout(resolve,0));
+      const left=groupLayout(S.img,reference,'left');
+      prog(50);
+      await new Promise(resolve=>setTimeout(resolve,0));
+      const right=groupLayout(S.img,reference,'right');
+      prog(90);
+      const options=[...recognizeGroup(S.img,reference,left),...recognizeGroup(S.img,reference,right)];
+      const order=options.map((o,i)=>({i,margin:(o[0]?.s||0)-(o[1]?.s||0)})).sort((a,b)=>b.margin-a.margin);
+      const used=new Set(),draft=Array(10);
+      for(const {i} of order){
+        const opts=options[i];
+        const best=opts.find(x=>!used.has(x.h.id))||opts[0];
+        if(!best)continue;
+        used.add(best.h.id);
+        const runner=opts.find(x=>x.h.id!==best.h.id);
+        draft[i]={hero:best.h,confidence:0,uncertain:best.s<.54||best.s-(runner?.s||0)<.075};
       }
-      // Also support an image containing exactly ten adjacent portraits.
-      layouts.push(Array.from({length:10},(_,i)=>({x:w*i/10,width:w/10})));
-      for(const layout of layouts)for(const heightFraction of [1,.84,.7,.55]){
-        for(const yFraction of [0,(1-heightFraction)/2,1-heightFraction]){
-          const matches=[],y=h*yFraction,sh=h*heightFraction;
-          for(let i=0;i<10;i++){
-            const box=layout[i];
-            const inset=box.width*.04;
-            const gray=feat(S.img,box.x+inset,y,box.width-2*inset,sh);
-            const rgb=colorFeat(S.img,box.x+inset,y,box.width-2*inset,sh);
-            matches.push(matchPortrait(gray,rgb,reference));
-          }
-          const topScore=matches.reduce((sum,opts)=>sum+opts[0].s,0);
-          // Duplicate portrait predictions indicate an incorrect crop/scale.
-          const distinct=new Set(matches.map(x=>x[0].h.id)).size;
-          candidates.push({matches,score:topScore-(10-distinct)*.12});
-        }
-      }
-      candidates.sort((a,b)=>b.score-a.score);
-      const selected=candidates[0];
-      const used=new Set();
-      const draft=selected.matches.map(options=>{
-        const pick=options.find(o=>!used.has(o.h.id))||options[0];
-        used.add(pick.h.id);
-        const runner=options.find(o=>o.h.id!==pick.h.id);
-        const gap=pick.s-(runner?.s??pick.s);
-        return {hero:pick.h,confidence:Math.max(0,Math.min(99,Math.round(55+gap*230))),auto:true};
-      });
       S.draft=draft;
       renderDraft();
-      const uncertain=draft.filter(x=>x.confidence<70).length;
-      status(uncertain ? 'Распознавание завершено, но есть сомнительные портреты. Проверь их вручную.' : 'Распознано 10 героев. Проверь драфт и выбери своего.',uncertain?'':'good');
+      const uncertain=draft.filter(x=>!x||x.uncertain).length;
+      status(uncertain ? 'Портреты найдены, но '+uncertain+' из 10 нужно проверить. Нажми на ошибочные карточки.' : 'Портреты определены. Проверь их перед подбором билда.',uncertain?'':'good');
       prog(null);
-    } catch (err) {
-      status('Не удалось распознать: '+(err?.message||String(err))+' Можно выбрать героев вручную.','error');
+    } catch(err) {
+      status('Ошибка распознавания: '+(err?.message||String(err)),'error');
       S.draft=Array.from({length:10},()=>({hero:null,confidence:0}));
       renderDraft();
       prog(null);
@@ -350,7 +360,7 @@
       b.className = 'hero-slot';
       if (i === 5) b.classList.add('team-split');
       b.innerHTML = e.hero
-        ? `<img src="${hImg(e.hero)}" alt=""><span class="confidence">${e.confidence || '?'}%</span><div class="hero-name">${esc(e.hero.localized_name)}</div>`
+        ? `<img src="${hImg(e.hero)}" alt=""><span class="confidence">${e.uncertain ? 'проверить' : 'найдено'}</span><div class="hero-name">${esc(e.hero.localized_name)}</div>`
         : '<div style="aspect-ratio:16/9;display:grid;place-items:center;color:#68717b;font-size:20px">+</div><div class="hero-name">Выбрать</div>';
       b.onclick = () => openHeroDialog(i);
       root.appendChild(b);
