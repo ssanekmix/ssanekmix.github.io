@@ -32,7 +32,7 @@
           <button id="demoBtn" class="btn ghost">Заполнить пример</button>
         </div>
 
-        <p class="hint">Ожидается одна горизонтальная строка из 10 портретов: первые 5 слева — одна команда, последние 5 справа — другая.</p>
+        <p class="hint">Ожидаются 5 портретов слева, счёт по центру и 5 портретов справа (или просто 10 портретов подряд).</p>
 
         <div id="dropZone" class="drop-zone" tabindex="0" role="button" aria-label="Загрузить скриншот">
           <input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp" hidden />
@@ -170,7 +170,7 @@
 
     <footer>
       <span>Не связан с Valve. Данные героев и изображения загружаются из публичных Dota/OpenDota-источников.</span>
-      <span>Если распознавание ошиблось — нажми на героя и исправь.</span>
+      <span>Версия распознавания: fix3 · Если герой распознан неверно, нажми на него.</span>
     </footer>
   </div>
 
@@ -186,6 +186,18 @@
     <div id="heroGrid" class="hero-grid"></div>
   </dialog>
 
-  <script src="./app.js"></script>
+  <script>
+    // Old service-worker versions can retain stale JS after a deployment.
+    // This page no longer depends on service-worker offline caching.
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations()
+        .then(list => Promise.all(list.filter(reg => new URL(reg.scope).pathname.includes('/dota-build-assistant/')).map(reg => reg.unregister())))
+        .catch(() => {});
+    }
+    if ('caches' in window) {
+      caches.keys().then(keys => Promise.all(keys.filter(key => key.startsWith('dba-')).map(key => caches.delete(key)))).catch(() => {});
+    }
+  </script>
+  <script src="./app.js?v=20261008-fix3"></script>
 </body>
 </html>
