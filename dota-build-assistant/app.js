@@ -346,6 +346,16 @@
     }).sort((a,b)=>b.score-a.score)[0];
   }
 
+  function inputPortraitThumbnail(img, layout, index) {
+    if(!layout)return null;
+    const w=img.naturalWidth||img.width,h=img.naturalHeight||img.height;
+    const x=(layout.xs[index]+layout.cellWidth*.055)*w;
+    const y=layout.top*h, sw=layout.cellWidth*.89*w, sh=layout.rowHeight*h;
+    const c=document.createElement('canvas');c.width=112;c.height=70;
+    c.getContext('2d').drawImage(img,x,y,sw,sh,0,0,c.width,c.height);
+    return c.toDataURL('image/png');
+  }
+
   let recognitionSerial=0;
   async function recognize() {
     const serial=++recognitionSerial;
@@ -369,7 +379,8 @@
         used.add(best.h.id);
         const runner=opts.find(x=>x.h.id!==best.h.id);
         draft[i]={hero:best.h,confidence:best.s,uncertain:best.s<.57||best.s-(runner?.s||0)<.09,
-          suggestions:opts.map(x=>x.h.localized_name)};
+          suggestions:opts.map(x=>x.h.localized_name),
+          sample:inputPortraitThumbnail(S.img,found.layout,i)};
       }
       S.draft=draft;
       renderDraft();
@@ -395,7 +406,7 @@
       b.className = 'hero-slot';
       if (i === 5) b.classList.add('team-split');
       b.innerHTML = e.hero
-        ? `<img src="${hImg(e.hero)}" alt=""><span class="confidence">${e.uncertain ? 'проверить' : 'найдено'}</span><div class="hero-name">${esc(e.hero.localized_name)}</div>`
+        ? `<div class="portrait-comparison"><img src="${e.sample||hImg(e.hero)}" alt="Из скриншота"><img class="hero-reference" src="${hImg(e.hero)}" alt="Эталон"></div><span class="confidence">${e.uncertain ? 'проверить' : 'вероятно'}</span><div class="hero-name">${esc(e.hero.localized_name)}</div>`
         : '<div style="aspect-ratio:16/9;display:grid;place-items:center;color:#68717b;font-size:20px">+</div><div class="hero-name">Выбрать</div>';
       b.onclick = () => openHeroDialog(i);
       root.appendChild(b);
@@ -422,7 +433,7 @@
       b.innerHTML = `<img loading="lazy" src="${hImg(h)}" alt=""><span>${esc(h.localized_name)}</span>`;
       b.onclick = () => {
         if (S.targetIndex == null) return;
-        S.draft[S.targetIndex] = {hero:h, confidence:100};
+        S.draft[S.targetIndex] = {...S.draft[S.targetIndex],hero:h,confidence:1,uncertain:false};
         $('heroDialog').close();
         renderDraft();
       };
