@@ -510,7 +510,16 @@
     if(!result||!STAGES.some(stage=>result[stage]&&typeof result[stage]==='object')) throw Error('Пустые данные');
     return result;
   }
-  function itemInfo(key) { return itemCatalog.find(it=>it.key===key); }
+  // OpenDota keys can be numeric item IDs or text keys.
+  const itemByKey=new Map(),itemById=new Map();
+  function itemInfo(raw) {
+    if(raw == null)return null;
+    if(!itemByKey.size&&itemCatalog.length)for(const it of itemCatalog){
+      itemByKey.set(it.key,it);itemById.set(String(it.id),it);
+    }
+    const key=String(raw).replace(/^item_/,'');
+    return itemByKey.get(key)||itemById.get(key)||null;
+  }
   function getExisting() {
     const raw=$('currentItemsInput').value.toLowerCase().split(/[,;]+/).map(x=>x.trim()).filter(Boolean);
     return new Set(raw.map(t=>itemCatalog.find(i=>i.name.toLowerCase()===t||i.key===t)?.key||t.replaceAll(' ','_')));
@@ -519,9 +528,14 @@
     const existing=getExisting(), threats=counts(enemies), weights=roleTypes[position]||roleTypes[1], chosen=[], other=[];
     for(const [stageIndex,stage] of STAGES.entries()) {
       const bucket=data[stage]||{};
-      const list=Object.entries(bucket).map(([key,count])=>({
-        key,count:Number(count)||0,info:itemInfo(key),stage:stageIndex
-      })).filter(x=>x.info&&x.info.cost>=950&&!EXCLUDE.has(x.key)&&!existing.has(x.key));
+      const list=Object.entries(bucket).map(([rawKey,rawCount])=>{
+         const info=itemInfo(rawKey);
+         const count=Number(rawCount&&typeof rawCount==='object'
+           ? (rawCount.games??rawCount.count??rawCount.picks??0):rawCount);
+         return {key:info?.key||String(rawKey),count,info,stage:stageIndex};
+       }).filter(x=>x.info&&x.count>0&&x.info.cost>=700
+         && x.info.qual!=='consumable'&&!x.key.startsWith('recipe_')
+         && !EXCLUDE.has(x.key)&&!existing.has(x.key));
       list.sort((a,b)=>b.count-a.count);
       const max=list[0]?.count||1;
       for(const entry of list) {
@@ -570,11 +584,17 @@
     try {
       const data=await livePopularity(hero.id);
       const result=chooseBuild(data,pos,hero,es);
-      if(result.core.length<3)throw Error('Недостаточно данных по предметам');
+      if(!result.core.length){
+         const sizes=STAGES.map(k=>Object.keys(data[k]||{}).length).join('/');
+         throw Error('В ответе нет подходящих предметов (early/mid/late: '+sizes+
+           '; каталог: '+itemCatalog.length+'). Проверь OpenDota или попробуй позже');
+       }
       const clean=x=>x.info.name;
       show({es,hero:heroName,c:counts(es),pos,core:result.core.map(clean),sit:result.sit.map(clean)});
-      $('ruleModeBadge').textContent='OpenDota · pro item popularity';
-      $('uncertaintyBox').textContent='Основа — популярность предметов в профессиональных матчах OpenDota, не живые матчи Dota2ProTracker. Очерёдность скорректирована под роль и драфт; конкретные похожие матчи и патч этим режимом не проверяются.';
+      $('ruleModeBadge').textContent='OpenDota · '+(result.core.length<3?'частичные данные':'популярность предметов');
+      $('uncertaintyBox').textContent='Источник: агрегированная популярность предметов OpenDota (без выборки по твоему рейтингу, роли и патчу). '
+         +(result.core.length<3?'Данных хватило только на '+result.core.length+' предмет(а): это частичная сборка. ':'')
+         +'Корректировки под роль и драфт — эвристики, а не статистика похожих матчей Dota2ProTracker.';
       const src=document.getElementById('sourcesSection');
       if(src)src.innerHTML='<a target="_blank" rel="noopener noreferrer" href="https://www.opendota.com/heroes/'+hero.id+'/items">Предметы OpenDota ↗</a> · <a target="_blank" rel="noopener noreferrer" href="https://dota2protracker.com/hero/'+encodeURIComponent(heroName.toLowerCase().replaceAll(' ','%20'))+'">Проверить D2PT ↗</a>';
       const already=result.existing;
@@ -588,7 +608,7 @@
     } catch(e) {
       $('emptyResult').classList.remove('hidden');
       $('result').classList.add('hidden');
-      status('Не удалось загрузить реальные данные OpenDota: '+e.message+'. Не подменяю их выдуманным билдом.','error');
+      status('Не удалось построить билд по OpenDota: '+(e?.message||String(e))+'. Не подменяю результат выдуманными данными.','error');
     } finally {btn.disabled=false;btn.textContent='Подобрать билд';updateBuildButton();}
   }
 
