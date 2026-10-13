@@ -625,11 +625,11 @@
       const src=document.getElementById('sourcesSection');
       if(src)src.innerHTML='<a target="_blank" rel="noopener noreferrer" href="https://www.opendota.com/heroes/'+hero.id+'/items">Предметы OpenDota ↗</a> · <a target="_blank" rel="noopener noreferrer" href="https://dota2protracker.com/hero/'+encodeURIComponent(heroName.toLowerCase().replaceAll(' ','%20'))+'">Проверить D2PT ↗</a>';
       const already=result.existing;
-      const next=result.core.find(x=>!already.has(itemCatalog.find(i=>i.name===x)?.key));
+      const next=result.core.find(x=>!already.has(x.key));
       if(next) {
         $('nextItemCard').classList.remove('hidden');
-        $('nextItemName').textContent=next;
-        $('nextItemIcon').src=iImg(next);
+        $('nextItemName').textContent=next.info.name;
+        $('nextItemIcon').src=iImg(next.info.name);
         $('nextItemReason').textContent='Следующий предмет из последовательности на основе статистики.';
       }
     } catch(e) {
