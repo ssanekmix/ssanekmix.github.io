@@ -7,7 +7,7 @@
   <title>Dota Build Assistant</title>
   <meta name="description" content="Помощник Dota 2: распознавание 10 героев и сборки на основе популярности предметов в профессиональных матчах OpenDota." />
   <link rel="manifest" href="./manifest.webmanifest" />
-  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./styles.css?v=20261013-fix7" />
 </head>
 <body>
   <div class="app-shell">
@@ -56,7 +56,7 @@
             <span>Справа</span>
           </div>
           <div id="draftSlots" class="hero-slots ten"></div>
-          <p class="hint">Если герой распознан неправильно — нажми на его карточку и исправь вручную.</p>
+          <p class="hint">На карточке: крупно — фрагмент твоего скриншота, миниатюра слева снизу — эталон предполагаемого героя. Нажми на карточку для исправления.</p>
         </div>
 
         <div class="divider"></div>
@@ -170,7 +170,7 @@
 
     <footer>
       <span>Не связан с Valve. Данные героев и изображения загружаются из публичных Dota/OpenDota-источников.</span>
-      <span>Версия распознавания: fix6 · Если герой распознан неверно, нажми на него.</span>
+      <span>Версия распознавания: fix7 · Если герой распознан неверно, нажми на него.</span>
     </footer>
   </div>
 
@@ -198,6 +198,6 @@
       caches.keys().then(keys => Promise.all(keys.filter(key => key.startsWith('dba-')).map(key => caches.delete(key)))).catch(() => {});
     }
   </script>
-  <script src="./app.js?v=20261013-fix6"></script>
+  <script src="./app.js?v=20261013-fix7"></script>
 </body>
 </html>
