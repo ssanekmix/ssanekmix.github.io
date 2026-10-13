@@ -285,24 +285,30 @@
   // Search both a continuous row and rows split around the central score.
   // Work on a downscaled canvas so matching is stable across screenshot resolutions.
   function detectRows(img, references) {
-    const width=640, height=Math.max(160,Math.round(width*(img.naturalHeight||img.height)/(img.naturalWidth||img.width)));
+    const originalWidth=img.naturalWidth||img.width, originalHeight=img.naturalHeight||img.height;
+    const isStrip=originalWidth/originalHeight>5;
+    const width=isStrip?960:640;
+    const height=Math.max(isStrip?40:160,Math.round(width*originalHeight/originalWidth));
     const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;
     const ctx=canvas.getContext('2d',{willReadFrequently:true});
     ctx.drawImage(img,0,0,width,height);
     const layouts=[];
-    const tops=[.01,.07,.14,.22,.30,.39,.49,.59,.70,.79];
-    const heights=[.07,.105,.145,.195,.25];
-    const sizes=[.43,.54,.67,.80,.92];
+    const tops=isStrip?[0,.025,.06,.11,.18]:[0,.015,.04,.08,.13,.20,.35,.58];
+    const heights=isStrip?[.57,.7,.82,.91,.98]:[.055,.08,.11,.15,.2,.26];
+    const sizes=isStrip?[.54,.66,.75,.85,.94]:[.4,.52,.64,.76,.9];
     for(const top of tops)for(const rowHeight of heights) {
       if(top+rowHeight>1)continue;
       for(const span of sizes)for(const start of [0,(1-span)/2,1-span]){
         const xs=Array.from({length:10},(_,i)=>start+i*span/10);
         layouts.push({xs,cellWidth:span/10,top,rowHeight});
       }
-      for(const left of [.015,.055,.095])for(const right of [.52,.57,.62]){
-        for(const span of [.27,.34,.41]){
+      const leftStarts=isStrip?[0,.025,.055,.085]:[.015,.13,.23];
+      const rightStarts=isStrip?[.56,.6,.63,.66]:[.51,.61,.72];
+      const halfWidths=isStrip?[.28,.34,.38,.42]:[.18,.27,.35];
+      for(const left of leftStarts)for(const right of rightStarts){
+        for(const span of halfWidths){
           const xs=Array.from({length:10},(_,i)=>i<5?left+i*span/5:right+(i-5)*span/5);
-          if(right+span<=1)layouts.push({xs,cellWidth:span/5,top,rowHeight});
+          if(left+span<=right&&right+span<=1)layouts.push({xs,cellWidth:span/5,top,rowHeight});
         }
       }
     }
@@ -330,13 +336,13 @@
       results.push({...l,score});
     }
     results.sort((a,b)=>b.score-a.score);
-    const finalists=results.slice(0,10);
+    const finalists=results.slice(0,20);
     return finalists.map(l=>{
       const y=l.top*height,h=l.rowHeight*height;
       const options=l.xs.map(x=>bestAt((x+l.cellWidth*.055)*width,y,l.cellWidth*.89*width,h,true));
       const unique=new Set(options.map(m=>m[0]?.h.id)).size;
       const score=options.reduce((a,m)=>a+(m[0]?.s||0)+Math.max(0,(m[0]?.s||0)-(m[1]?.s||0))*.2,0)/10-(10-unique)*.035;
-      return {options,score};
+      return {options,score,layout:l};
     }).sort((a,b)=>b.score-a.score)[0];
   }
 
