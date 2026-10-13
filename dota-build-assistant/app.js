@@ -321,11 +321,12 @@
     const results=[];
     for(const l of layouts) {
       const y=l.top*height, h=l.rowHeight*height;
-      const matches=l.xs.map(x=>bestAt((x+l.cellWidth*.055)*width,y,l.cellWidth*.89*width,h));
+      // Three probes in the first pass avoid comparing thousands of full 10-slot layouts.
+      const matches=[0,4,9].map(i=>bestAt((l.xs[i]+l.cellWidth*.055)*width,y,l.cellWidth*.89*width,h));
       const unique=new Set(matches.map(m=>m[0]?.h.id)).size;
-      const avg=matches.reduce((a,m)=>a+(m[0]?.s||0),0)/10;
-      const margin=matches.reduce((a,m)=>a+Math.max(0,(m[0]?.s||0)-(m[1]?.s||0)),0)/10;
-      const score=avg+margin*.16-(10-unique)*.025;
+      const avg=matches.reduce((a,m)=>a+(m[0]?.s||0),0)/3;
+      const margin=matches.reduce((a,m)=>a+Math.max(0,(m[0]?.s||0)-(m[1]?.s||0)),0)/3;
+      const score=avg+margin*.16-(3-unique)*.025;
       results.push({...l,score});
     }
     results.sort((a,b)=>b.score-a.score);
