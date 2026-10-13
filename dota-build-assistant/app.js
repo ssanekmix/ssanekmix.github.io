@@ -185,6 +185,7 @@
   }
 
   function clear() {
+    recognitionSerial++;
     S.img = null;
     S.draft = [];
     $('previewWrap').classList.add('hidden');
@@ -281,71 +282,96 @@
     return [...scores.values()].sort((a,b)=>b.s-a.s).slice(0,8);
   }
 
-  function groupLayout(img,refs,side) {
-    const w=img.naturalWidth||img.width,h=img.naturalHeight||img.height;
-    const starts=side==='left'?[.015,.04,.06]:[.57,.605,.63];
-    const widths=[.315,.34,.365,.395];
-    const ys=[.18,.25,.31];
-    const hs=[.25,.33,.42];
-    let winner=null;
-    for(const start of starts)for(const width of widths){
-      if(start+width>1)continue;
-      for(const yStart of ys)for(const height of hs) {
-        if(yStart+height>1)continue;
-        const opts=[];
-        for(let i=0;i<5;i++) {
-          const slotW=width*w/5;
-          const gray=feat(img,(start+i*width/5)*w+slotW*.055,yStart*h,slotW*.89,height*h);
-          opts.push(matchPortrait(gray,null,refs));
+  // Search both a continuous row and rows split around the central score.
+  // Work on a downscaled canvas so matching is stable across screenshot resolutions.
+  function detectRows(img, references) {
+    const width=640, height=Math.max(160,Math.round(width*(img.naturalHeight||img.height)/(img.naturalWidth||img.width)));
+    const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;
+    const ctx=canvas.getContext('2d',{willReadFrequently:true});
+    ctx.drawImage(img,0,0,width,height);
+    const layouts=[];
+    const tops=[.01,.07,.14,.22,.30,.39,.49,.59,.70,.79];
+    const heights=[.07,.105,.145,.195,.25];
+    const sizes=[.43,.54,.67,.80,.92];
+    for(const top of tops)for(const rowHeight of heights) {
+      if(top+rowHeight>1)continue;
+      for(const span of sizes)for(const start of [0,(1-span)/2,1-span]){
+        const xs=Array.from({length:10},(_,i)=>start+i*span/10);
+        layouts.push({xs,cellWidth:span/10,top,rowHeight});
+      }
+      for(const left of [.015,.055,.095])for(const right of [.52,.57,.62]){
+        for(const span of [.27,.34,.41]){
+          const xs=Array.from({length:10},(_,i)=>i<5?left+i*span/5:right+(i-5)*span/5);
+          if(right+span<=1)layouts.push({xs,cellWidth:span/5,top,rowHeight});
         }
-        const distinct=new Set(opts.map(o=>o[0]?.h.id)).size;
-        const score=opts.reduce((sum,o)=>sum+(o[0]?.s||0)+.15*Math.max(0,(o[0]?.s||0)-(o[1]?.s||0)),0)-(5-distinct)*.13;
-        if(!winner||score>winner.score)winner={start,width,yStart,height,score};
       }
     }
-    return winner;
+    // A coarse grayscale pass ranks candidate geometries.
+    const coarseRefs=references.filter(x=>x.variant==='hud');
+    const refs=coarseRefs.length>=110?coarseRefs:references;
+    const byRegion=new Map();
+    function bestAt(x,y,w,h,color=false){
+      const key=[Math.round(x),Math.round(y),Math.round(w),Math.round(h),color?1:0].join(':');
+      if(byRegion.has(key))return byRegion.get(key);
+      const g=feat(canvas,x,y,w,h);
+      const ranked=matchPortrait(g,color?colorFeat(canvas,x,y,w,h):null,color?references:refs);
+      byRegion.set(key,ranked);
+      return ranked;
+    }
+    const results=[];
+    for(const l of layouts) {
+      const y=l.top*height, h=l.rowHeight*height;
+      const matches=l.xs.map(x=>bestAt((x+l.cellWidth*.055)*width,y,l.cellWidth*.89*width,h));
+      const unique=new Set(matches.map(m=>m[0]?.h.id)).size;
+      const avg=matches.reduce((a,m)=>a+(m[0]?.s||0),0)/10;
+      const margin=matches.reduce((a,m)=>a+Math.max(0,(m[0]?.s||0)-(m[1]?.s||0)),0)/10;
+      const score=avg+margin*.16-(10-unique)*.025;
+      results.push({...l,score});
+    }
+    results.sort((a,b)=>b.score-a.score);
+    const finalists=results.slice(0,10);
+    return finalists.map(l=>{
+      const y=l.top*height,h=l.rowHeight*height;
+      const options=l.xs.map(x=>bestAt((x+l.cellWidth*.055)*width,y,l.cellWidth*.89*width,h,true));
+      const unique=new Set(options.map(m=>m[0]?.h.id)).size;
+      const score=options.reduce((a,m)=>a+(m[0]?.s||0)+Math.max(0,(m[0]?.s||0)-(m[1]?.s||0))*.2,0)/10-(10-unique)*.035;
+      return {options,score};
+    }).sort((a,b)=>b.score-a.score)[0];
   }
 
-  function recognizeGroup(img,refs,layout) {
-    const w=img.naturalWidth||img.width,h=img.naturalHeight||img.height;
-    return Array.from({length:5},(_,i)=>{
-      const cellW=layout.width*w/5;
-      const x=(layout.start+i*layout.width/5)*w+cellW*.055;
-      const y=layout.yStart*h,sw=cellW*.89,sh=layout.height*h;
-      return matchPortrait(feat(img,x,y,sw,sh),colorFeat(img,x,y,sw,sh),refs);
-    });
-  }
-
+  let recognitionSerial=0;
   async function recognize() {
+    const serial=++recognitionSerial;
     try {
-      prog(3);
+      prog(5);
       const reference=await refs();
-      status('Нахожу портреты в двух пятёрках...');
+      if(serial!==recognitionSerial)return;
+      status('Ищу ряд из десяти героев (в том числе с разрывом между командами)...');
       await new Promise(resolve=>setTimeout(resolve,0));
-      const geometryRefs=reference.filter(x=>x.variant==='hud');
-      const searchRefs=geometryRefs.length>=110?geometryRefs:reference;
-      const left=groupLayout(S.img,searchRefs,'left');
-      prog(50);
-      await new Promise(resolve=>setTimeout(resolve,0));
-      const right=groupLayout(S.img,searchRefs,'right');
-      prog(90);
-      const options=[...recognizeGroup(S.img,reference,left),...recognizeGroup(S.img,reference,right)];
+      const found=detectRows(S.img,reference);
+      if(serial!==recognitionSerial)return;
+      prog(95);
+      if(!found?.options?.length)throw Error('Не удалось определить положение портретов');
+      const options=found.options;
       const order=options.map((o,i)=>({i,margin:(o[0]?.s||0)-(o[1]?.s||0)})).sort((a,b)=>b.margin-a.margin);
       const used=new Set(),draft=Array(10);
-      for(const {i} of order){
+      for(const {i} of order) {
         const opts=options[i];
         const best=opts.find(x=>!used.has(x.h.id))||opts[0];
         if(!best)continue;
         used.add(best.h.id);
         const runner=opts.find(x=>x.h.id!==best.h.id);
-        draft[i]={hero:best.h,confidence:0,uncertain:best.s<.54||best.s-(runner?.s||0)<.075,suggestions:opts.map(x=>x.h.localized_name)};
+        draft[i]={hero:best.h,confidence:best.s,uncertain:best.s<.57||best.s-(runner?.s||0)<.09,
+          suggestions:opts.map(x=>x.h.localized_name)};
       }
       S.draft=draft;
       renderDraft();
       const uncertain=draft.filter(x=>!x||x.uncertain).length;
-      status(uncertain ? 'Портреты найдены, но '+uncertain+' из 10 нужно проверить. Нажми на ошибочные карточки.' : 'Портреты определены. Проверь их перед подбором билда.',uncertain?'':'good');
+      status(uncertain?'Распознавание предварительное: '+uncertain+' из 10 портретов требуют проверки. Нажми для исправления.':
+        'Распознал 10 портретов. Проверь имена перед подбором билда.',uncertain?'':'good');
       prog(null);
     } catch(err) {
+      if(serial!==recognitionSerial)return;
       status('Ошибка распознавания: '+(err?.message||String(err)),'error');
       S.draft=Array.from({length:10},()=>({hero:null,confidence:0}));
       renderDraft();
