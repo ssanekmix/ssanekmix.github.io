@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111318">
+<meta name="description" content="Dota Draft — подбор контрпиков на основе реальных результатов матчапов OpenDota.">
+<title>Dota Draft — контрпики</title>
+<link rel="stylesheet" href="./draft.css?v=1">
+</head>
+<body>
+<div class="page">
+<header class="masthead">
+ <div><div class="kicker">DOTA 2 · DRAFT ASSISTANT</div><h1>Кого пикнуть <span>против них?</span></h1><p>Выбирай открытых врагов и свою позицию. Получай героев, подкреплённых статистикой матчапов, а не случайными предметами.</p></div>
+ <div class="source-label"><span class="dot"></span> OpenDota · открытая статистика</div>
+</header>
+<main class="layout">
+ <section class="panel draft-panel">
+  <div class="head"><div><span class="step">01 / ВРАЖЕСКИЙ ДРАФТ</span><h2>Выбери врагов</h2><p class="muted">От 1 до 5 открытых пиков. Никаких скриншотов — всё выбирается за пару кликов.</p></div><button class="text-btn" id="clearBtn" type="button">Очистить</button></div>
+  <div class="enemy-slots" id="enemySlots"></div>
+  <div class="search-wrap">
+    <label for="heroSearch">Найди героя по имени</label>
+    <input id="heroSearch" placeholder="Night Stalker, Venomancer, Puck..." autocomplete="off" spellcheck="false">
+  </div>
+  <div id="heroPicker" class="hero-picker" aria-label="Выбор вражеских героев"></div>
+  <div class="quick"><span>Быстрый пример:</span><button id="exampleBtn" type="button">Night Stalker + Venomancer <span aria-hidden="true">↗</span></button></div>
+  <div class="line"></div>
+  <div class="head"><div><span class="step">02 / ТВОЯ ПОЗИЦИЯ</span><h2>Кем собираешься играть?</h2></div></div>
+  <div class="roles" id="roles">
+   <button type="button" data-role="1" class="active"><strong>1</strong><span>Керри</span></button>
+   <button type="button" data-role="2"><strong>2</strong><span>Мид</span></button>
+   <button type="button" data-role="3"><strong>3</strong><span>Оффлейн</span></button>
+   <button type="button" data-role="4"><strong>4</strong><span>Саппорт</span></button>
+   <button type="button" data-role="5"><strong>5</strong><span>Фулл-саппорт</span></button>
+  </div>
+  <button class="submit" type="button" id="recommendBtn" disabled>Подобрать контрпики <span aria-hidden="true">→</span></button>
+  <p class="micro">Показываем реальные парные матчапы. Статистика против всей пятёрки и конкретного патча отдельно не измеряется.</p>
+ </section>
+ <section class="panel results-panel">
+  <div class="result-header"><div><span class="step">РЕКОМЕНДАЦИИ</span><h2 id="resultHeading">Твой следующий пик</h2></div><span id="resultCount" class="count"></span></div>
+  <div id="status" class="status">Добавь хотя бы одного вражеского героя. Затем выбери позицию и нажми «Подобрать контрпики».</div>
+  <div id="results" class="results"></div>
+  <div id="badSection" class="bad-section hidden"><h3>Кого лучше избегать по матчапам</h3><p class="muted">Это не запрет на пик — только неблагоприятные парные результаты.</p><div id="badResults" class="bad-results"></div></div>
+  <div id="sources" class="sources hidden"><p>Источник: OpenDota, эндпоинты <code>/heroes/{id}/matchups</code>. Проценты — результаты парных встреч в доступной базе; это <strong>не прогноз винрейта против всей комбинации врагов</strong> и не выборка только хай-MMR текущего патча.</p><p>Дополнительно: <a href="https://www.dotabuff.com/heroes" target="_blank" rel="noopener noreferrer">Dotabuff ↗</a> · <a href="https://dota2protracker.com/" target="_blank" rel="noopener noreferrer">Dota2ProTracker ↗</a>.</p></div>
+ </section>
+</main>
+<footer>Не связан с Valve, Dotabuff или Dota2ProTracker. Статистика OpenDota может обновляться с задержкой. <span>Draft v1</span></footer>
+</div>
+<script src="./draft.js?v=1" defer></script>
+</body>
+</html>
