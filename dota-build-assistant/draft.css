@@ -96,3 +96,6 @@ h2{font-size:22px;letter-spacing:-.025em;margin:6px 0 8px;font-weight:750}
 footer{font-size:11px;color:#717d8b;display:flex;justify-content:space-between;gap:14px;padding:26px 2px}
 @media(max-width:1050px){.layout{grid-template-columns:1fr}.draft-panel{position:static}.results-panel{min-height:300px}}
 @media(max-width:650px){.page{padding:19px 11px}.panel{padding:15px}.masthead{display:block}.source-label{display:inline-block;margin-top:14px}.hero-picker{grid-template-columns:repeat(3,minmax(0,1fr));max-height:290px}.picker-hero img{width:32px;flex-basis:32px}.enemy-slot{height:72px}.enemy-slot.chosen>span{font-size:9px}.roles button span{font-size:8px}.candidate img{width:58px;height:36px}.candidate h3{font-size:14px}.average strong{font-size:18px}.matchups{grid-template-columns:1fr}.bad-results{grid-template-columns:1fr 1fr}}
+
+.gameplay-note{display:flex;flex-direction:column;gap:5px;margin-top:11px;border-left:3px solid #d3a05b;background:#2c241d;padding:9px 11px;border-radius:5px;font-size:11px;line-height:1.55;color:#ebd7ba}
+.gameplay-note strong{font-size:10px;letter-spacing:.02em;color:#f0bb71}
