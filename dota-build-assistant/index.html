@@ -1,203 +1,51 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#151719" />
-  <title>Dota Build Assistant</title>
-  <meta name="description" content="Помощник Dota 2: распознавание 10 героев и сборки на основе популярности предметов в профессиональных матчах OpenDota." />
-  <link rel="manifest" href="./manifest.webmanifest" />
-  <link rel="stylesheet" href="./styles.css?v=20261013-fix7" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111318">
+<meta name="description" content="Dota Draft — подбор контрпиков на основе реальных результатов матчапов OpenDota.">
+<title>Dota Draft — контрпики</title>
+<link rel="stylesheet" href="./draft.css?v=1">
 </head>
 <body>
-  <div class="app-shell">
-    <header class="topbar">
-      <div class="brand">
-        <div class="brand-mark">⚔</div>
-        <div>
-          <h1>Dota Build Assistant</h1>
-          <p>Скинь скрин десяти героев — получи билд под конкретную игру</p>
-        </div>
-      </div>
-      <div class="local-pill" title="Скриншот анализируется локально; статистика предметов загружается из OpenDota">🔒 локально</div>
-    </header>
-
-    <main class="layout">
-      <section class="panel input-panel">
-        <div class="section-head">
-          <div>
-            <div class="eyebrow">1 · ДРАФТ</div>
-            <h2>Загрузи скриншот</h2>
-          </div>
-          <button id="demoBtn" class="btn ghost">Заполнить пример</button>
-        </div>
-
-        <p class="hint">Поддерживаются 10 портретов одной полосой и две пятёрки с разделением по центру. Проверь результат распознавания перед сборкой.</p>
-
-        <div id="dropZone" class="drop-zone" tabindex="0" role="button" aria-label="Загрузить скриншот">
-          <input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp" hidden />
-          <div class="drop-icon">▣</div>
-          <div class="drop-title">Перетащи скрин сюда</div>
-          <div class="drop-sub">или нажми для выбора · PNG/JPG/WebP · можно Ctrl+V</div>
-        </div>
-
-        <div id="previewWrap" class="preview-wrap hidden">
-          <img id="previewImage" alt="Скриншот драфта" />
-          <button id="clearImageBtn" class="preview-clear" title="Убрать скрин">×</button>
-        </div>
-
-        <div id="recognitionStatus" class="status hidden"></div>
-        <div id="recognitionProgress" class="progress hidden"><div></div></div>
-
-        <div id="draftEditor" class="draft-editor hidden">
-          <div class="draft-row-head">
-            <span>Слева</span>
-            <span>10 распознанных героев</span>
-            <span>Справа</span>
-          </div>
-          <div id="draftSlots" class="hero-slots ten"></div>
-          <p class="hint">На карточке: крупно — фрагмент твоего скриншота, миниатюра слева снизу — эталон предполагаемого героя. Нажми на карточку для исправления.</p>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="eyebrow">2 · МОЯ КОМАНДА</div>
-        <label class="field full side-field">
-          <span>Где моя команда на скрине?</span>
-          <div class="segmented full-width" id="teamSideTabs">
-            <button data-side="left" class="active">← Слева</button>
-            <button data-side="right">Справа →</button>
-          </div>
-        </label>
-
-        <div class="divider compact"></div>
-
-        <div class="eyebrow">3 · МОЙ ГЕРОЙ</div>
-        <div class="form-grid">
-          <label class="field full">
-            <span>Я играю на</span>
-            <select id="myHeroSelect" disabled><option value="">Сначала распознай 10 героев</option></select>
-            <small id="heroSelectHint" class="select-hint">После распознавания здесь будут только герои твоей команды из этого скрина.</small>
-          </label>
-          <label class="field">
-            <span>Позиция</span>
-            <select id="positionSelect">
-              <option value="1">1 — керри</option>
-              <option value="2">2 — мид</option>
-              <option value="3">3 — оффлейн</option>
-              <option value="4">4 — саппорт</option>
-              <option value="5">5 — хард-саппорт</option>
-            </select>
-          </label>
-          <label class="field">
-            <span>Состояние игры</span>
-            <select id="gameStateSelect">
-              <option value="even">Равная</option>
-              <option value="ahead">Мы впереди</option>
-              <option value="behind">Мы позади</option>
-            </select>
-          </label>
-          <label class="field">
-            <span>Минута <em>необязательно</em></span>
-            <input id="minuteInput" type="number" min="0" max="120" inputmode="numeric" placeholder="22" />
-          </label>
-          <label class="field">
-            <span>Уже куплено <em>необязательно</em></span>
-            <input id="currentItemsInput" type="text" placeholder="Manta, Treads..." />
-          </label>
-        </div>
-
-        <button id="buildBtn" class="btn primary wide big" disabled>Подобрать билд</button>
-        <p class="microcopy">Для сборок запрашивается публичная статистика OpenDota. Если API недоступен, сайт честно сообщит об этом.</p>
-      </section>
-
-      <section class="panel result-panel">
-        <div id="emptyResult" class="empty-result">
-          <div class="empty-icon">⌁</div>
-          <h2>Здесь появится билд</h2>
-          <p>Загрузи 10 героев, выбери сторону своей команды и своего героя. Затем я разложу предметы по приоритету и объясню, зачем каждый нужен против этой пятёрки.</p>
-        </div>
-
-        <div id="result" class="hidden">
-          <div class="section-head result-head">
-            <div>
-              <div class="eyebrow">РЕКОМЕНДАЦИЯ</div>
-              <h2 id="resultTitle">Билд</h2>
-            </div>
-            <span id="ruleModeBadge" class="badge">OpenDota</span>
-          </div>
-
-          <div id="nextItemCard" class="next-card hidden">
-            <div class="small-label">ПОКУПАЙ СЕЙЧАС</div>
-            <div class="item-row">
-              <img id="nextItemIcon" class="item-icon lg" alt="" />
-              <div>
-                <div id="nextItemName" class="next-name"></div>
-                <div id="nextItemReason" class="muted"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="result-section">
-            <h3>Рекомендуемый порядок</h3>
-            <div id="coreBuild" class="build-chain"></div>
-          </div>
-
-          <div class="result-section">
-            <h3>Почему это работает</h3>
-            <div id="coreReasons" class="reason-list"></div>
-          </div>
-
-          <div class="result-section">
-            <h3>Ситуативные</h3>
-            <div id="situational" class="cards-grid"></div>
-          </div>
-
-          <div class="result-section danger-section">
-            <h3>Не спешил бы покупать</h3>
-            <div id="avoidList" class="reason-list"></div>
-          </div>
-
-          <div class="result-section">
-            <h3>Что опасно в их драфте</h3>
-            <div id="matchupNotes" class="chips"></div>
-          </div>
-
-          <div id="uncertaintyBox" class="uncertainty hidden"></div><div id="sourcesSection" class="source-links"></div>
-        </div>
-      </section>
-    </main>
-
-    <footer>
-      <span>Не связан с Valve. Данные героев и изображения загружаются из публичных Dota/OpenDota-источников.</span>
-      <span>Версия распознавания: fix7 · Если герой распознан неверно, нажми на него.</span>
-    </footer>
+<div class="page">
+<header class="masthead">
+ <div><div class="kicker">DOTA 2 · DRAFT ASSISTANT</div><h1>Кого пикнуть <span>против них?</span></h1><p>Выбирай открытых врагов и свою позицию. Получай героев, подкреплённых статистикой матчапов, а не случайными предметами.</p></div>
+ <div class="source-label"><span class="dot"></span> OpenDota · открытая статистика</div>
+</header>
+<main class="layout">
+ <section class="panel draft-panel">
+  <div class="head"><div><span class="step">01 / ВРАЖЕСКИЙ ДРАФТ</span><h2>Выбери врагов</h2><p class="muted">От 1 до 5 открытых пиков. Никаких скриншотов — всё выбирается за пару кликов.</p></div><button class="text-btn" id="clearBtn" type="button">Очистить</button></div>
+  <div class="enemy-slots" id="enemySlots"></div>
+  <div class="search-wrap">
+    <label for="heroSearch">Найди героя по имени</label>
+    <input id="heroSearch" placeholder="Night Stalker, Venomancer, Puck..." autocomplete="off" spellcheck="false">
   </div>
-
-  <dialog id="heroDialog" class="hero-dialog">
-    <div class="dialog-head">
-      <div>
-        <div class="eyebrow">ИСПРАВИТЬ РАСПОЗНАВАНИЕ</div>
-        <h3>Выбери героя</h3>
-      </div>
-      <button id="dialogClose" class="icon-btn">×</button>
-    </div>
-    <input id="heroSearch" class="hero-search" placeholder="Начни вводить имя..." autocomplete="off" />
-    <div id="heroGrid" class="hero-grid"></div>
-  </dialog>
-
-  <script>
-    // Old service-worker versions can retain stale JS after a deployment.
-    // This page no longer depends on service-worker offline caching.
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistrations()
-        .then(list => Promise.all(list.filter(reg => new URL(reg.scope).pathname.includes('/dota-build-assistant/')).map(reg => reg.unregister())))
-        .catch(() => {});
-    }
-    if ('caches' in window) {
-      caches.keys().then(keys => Promise.all(keys.filter(key => key.startsWith('dba-')).map(key => caches.delete(key)))).catch(() => {});
-    }
-  </script>
-  <script src="./app.js?v=20261013-fix7"></script>
+  <div id="heroPicker" class="hero-picker" aria-label="Выбор вражеских героев"></div>
+  <div class="quick"><span>Быстрый пример:</span><button id="exampleBtn" type="button">Night Stalker + Venomancer <span aria-hidden="true">↗</span></button></div>
+  <div class="line"></div>
+  <div class="head"><div><span class="step">02 / ТВОЯ ПОЗИЦИЯ</span><h2>Кем собираешься играть?</h2></div></div>
+  <div class="roles" id="roles">
+   <button type="button" data-role="1" class="active"><strong>1</strong><span>Керри</span></button>
+   <button type="button" data-role="2"><strong>2</strong><span>Мид</span></button>
+   <button type="button" data-role="3"><strong>3</strong><span>Оффлейн</span></button>
+   <button type="button" data-role="4"><strong>4</strong><span>Саппорт</span></button>
+   <button type="button" data-role="5"><strong>5</strong><span>Фулл-саппорт</span></button>
+  </div>
+  <button class="submit" type="button" id="recommendBtn" disabled>Подобрать контрпики <span aria-hidden="true">→</span></button>
+  <p class="micro">Показываем реальные парные матчапы. Статистика против всей пятёрки и конкретного патча отдельно не измеряется.</p>
+ </section>
+ <section class="panel results-panel">
+  <div class="result-header"><div><span class="step">РЕКОМЕНДАЦИИ</span><h2 id="resultHeading">Твой следующий пик</h2></div><span id="resultCount" class="count"></span></div>
+  <div id="status" class="status">Добавь хотя бы одного вражеского героя. Затем выбери позицию и нажми «Подобрать контрпики».</div>
+  <div id="results" class="results"></div>
+  <div id="badSection" class="bad-section hidden"><h3>Кого лучше избегать по матчапам</h3><p class="muted">Это не запрет на пик — только неблагоприятные парные результаты.</p><div id="badResults" class="bad-results"></div></div>
+  <div id="sources" class="sources hidden"><p>Источник: OpenDota, эндпоинты <code>/heroes/{id}/matchups</code>. Проценты — результаты парных встреч в доступной базе; это <strong>не прогноз винрейта против всей комбинации врагов</strong> и не выборка только хай-MMR текущего патча.</p><p>Дополнительно: <a href="https://www.dotabuff.com/heroes" target="_blank" rel="noopener noreferrer">Dotabuff ↗</a> · <a href="https://dota2protracker.com/" target="_blank" rel="noopener noreferrer">Dota2ProTracker ↗</a>.</p></div>
+ </section>
+</main>
+<footer>Не связан с Valve, Dotabuff или Dota2ProTracker. Статистика OpenDota может обновляться с задержкой. <span>Draft v1</span></footer>
+</div>
+<script src="./draft.js?v=1" defer></script>
 </body>
 </html>
