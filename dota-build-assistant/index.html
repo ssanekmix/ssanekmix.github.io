@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#111318">
 <meta name="description" content="Dota Draft — подбор контрпиков на основе реальных результатов матчапов OpenDota.">
 <title>Dota Draft — контрпики</title>
-<link rel="stylesheet" href="./draft.css?v=1">
+<link rel="stylesheet" href="./draft.css?v=2">
 </head>
 <body>
 <div class="page">
@@ -25,7 +25,7 @@
   <div id="heroPicker" class="hero-picker" aria-label="Выбор вражеских героев"></div>
   <div class="quick"><span>Быстрый пример:</span><button id="exampleBtn" type="button">Night Stalker + Venomancer <span aria-hidden="true">↗</span></button></div>
   <div class="line"></div>
-  <div class="head"><div><span class="step">02 / ТВОЯ ПОЗИЦИЯ</span><h2>Кем собираешься играть?</h2></div></div>
+  <div class="head"><div><span class="step">02 / ТВОЯ ПОЗИЦИЯ · ПО УМОЛЧАНИЮ КЕРРИ</span><h2>Кем собираешься играть?</h2></div></div>
   <div class="roles" id="roles">
    <button type="button" data-role="1" class="active"><strong>1</strong><span>Керри</span></button>
    <button type="button" data-role="2"><strong>2</strong><span>Мид</span></button>
@@ -44,8 +44,8 @@
   <div id="sources" class="sources hidden"><p>Источник: OpenDota, эндпоинты <code>/heroes/{id}/matchups</code>. Проценты — результаты парных встреч в доступной базе; это <strong>не прогноз винрейта против всей комбинации врагов</strong> и не выборка только хай-MMR текущего патча.</p><p>Дополнительно: <a href="https://www.dotabuff.com/heroes" target="_blank" rel="noopener noreferrer">Dotabuff ↗</a> · <a href="https://dota2protracker.com/" target="_blank" rel="noopener noreferrer">Dota2ProTracker ↗</a>.</p></div>
  </section>
 </main>
-<footer>Не связан с Valve, Dotabuff или Dota2ProTracker. Статистика OpenDota может обновляться с задержкой. <span>Draft v1</span></footer>
+<footer>Не связан с Valve, Dotabuff или Dota2ProTracker. Статистика OpenDota может обновляться с задержкой. <span>Draft v2</span></footer>
 </div>
-<script src="./draft.js?v=1" defer></script>
+<script src="./draft.js?v=2" defer></script>
 </body>
 </html>
