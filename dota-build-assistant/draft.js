@@ -24,7 +24,7 @@
   function loadStored() {
     try {
       const saved = JSON.parse(localStorage.getItem('dota-draft-selection-v1') || '{}');
-      state.role = ROLE_NAMES[saved.role] ? saved.role : '1';
+      state.role = '1'; // Always start on carry unless the user explicitly picks another role this session.
       state.selected = Array.isArray(saved.enemies) ? saved.enemies.filter(x => Number.isInteger(x)).slice(0,MAX_ENEMIES) : [];
     } catch (_) {}
   }
@@ -129,6 +129,25 @@
     const tone=pair.rate>=52?'positive':pair.rate<=48?'negative':'neutral';
     return '<div class="matchup '+tone+'"><span><img src="'+portrait(pair.enemy)+'" alt="">'+esc(pair.enemy.localized_name)+'</span><div><strong>'+pair.rate.toFixed(1)+'%</strong><small>'+fmt(pair.games)+' игр</small></div></div>';
   }
+  function gameplayNotes(hero, enemies) {
+    const has=(name)=>enemies.some(e=>e.localized_name===name);
+    const ns=has('Night Stalker'), veno=has('Venomancer');
+    const name=hero.localized_name;
+    if(!ns && !veno)return '';
+    const notes=[];
+    if(ns){
+      if(name==='Lifestealer')notes.push('Риск против Night Stalker: под Crippling Fear нельзя нажать Rage. Нужна заранее активированная защита или предмет.');
+      if(name==='Juggernaut')notes.push('Риск против Night Stalker: под Crippling Fear нельзя нажать Blade Fury. Крутилка не спасает, если сайленс уже наложен.');
+      if(name==='Terrorblade')notes.push('Сильная сторона против NS — иллюзии и заранее включённая Metamorphosis. Но Sunder под сайленсом не сработает.');
+      if(name==='Naga Siren')notes.push('Иллюзии позволяют давить карту без постоянного присутствия главного героя в радиусе сайленса NS; Song of the Siren под сайленсом не нажать.');
+      if(name==='Phantom Lancer')notes.push('Иллюзии продолжают сражаться под сайленсом, но Doppelganger нельзя нажать, если NS уже подошёл.');
+    }
+    if(veno){
+      if(name==='Naga Siren')notes.push('Venomancer умеет замедлять и травить иллюзии; не считай матчап автоматически выигранным.');
+      if(name==='Phantom Lancer')notes.push('Против Venomancer полезен долгий бой иллюзиями, но DoT и замедления опасны для настоящего героя.');
+    }
+    return notes.length?'<div class="gameplay-note"><strong>Механика матча · не часть статистики</strong><span>'+esc(notes.join(' '))+'</span></div>':'';
+  }
   function resultCard(entry,index) {
     const avg=entry.pairs.reduce((s,p)=>s+p.rate,0)/entry.pairs.length;
     const complete=entry.complete;
@@ -136,6 +155,7 @@
       '<div class="result-top"><div class="candidate"><span class="place">'+String(index+1).padStart(2,'0')+'</span><img src="'+portrait(entry.hero)+'" alt=""><div><h3>'+esc(entry.hero.localized_name)+'</h3><span>'+ROLE_NAMES[state.role]+'</span></div></div>'+
       '<div class="average"><strong>'+avg.toFixed(1)+'%</strong><span>среднее по парам</span></div></div>'+
       '<div class="matchups">'+entry.pairs.map(pairHTML).join('')+'</div>'+
+      gameplayNotes(entry.hero, state.selected.map(id=>state.heroes.find(h=>h.id===id)).filter(Boolean))+
       '<p class="readout">'+(complete ? 'Учтены все указанные враги.' : 'Часть матчапов отсутствует — результат предварительный.')+
       ' Доля побед в отдельных матчапах, не прогноз для общего драфта.</p>'+
       '</article>';
