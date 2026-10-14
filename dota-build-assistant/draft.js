@@ -35,6 +35,7 @@
     const e=$('status');e.textContent=message;e.className='status'+(type?' '+type:'');e.classList.remove('hidden');
   }
   function clearResults(message) {
+    ++state.request; // Ignore an older response after the draft or role changes.
     $('results').innerHTML='';
     $('resultCount').textContent='';
     $('badResults').innerHTML='';
@@ -119,7 +120,7 @@
       const mean=pairs.reduce((total,x)=>total+x.adjusted,0)/pairs.length;
       const worst=Math.min(...pairs.map(x=>x.adjusted));
       const score=mean-.35*Math.max(0,50-worst);
-      return {hero,pairs,mean,score,worst,complete:pairs.length===enemies.length-missing.length};
+      return {hero,pairs,mean,score,worst,complete:pairs.length===enemies.length};
     }).filter(Boolean).sort((a,b)=>{
       return Number(b.complete)-Number(a.complete)||b.score-a.score||b.pairs.length-a.pairs.length;
     });
@@ -167,7 +168,8 @@
       const positives=sorted.slice(0,10);
       $('results').innerHTML=positives.map(resultCard).join('');
       $('resultCount').textContent=positives.length+' вариантов';
-      const risk=sorted.filter(e=>e.complete&&e.score<50).sort((a,b)=>a.score-b.score).slice(0,5);
+      const shown=new Set(positives.map(x=>x.hero.id));
+      const risk=sorted.filter(e=>e.complete&&e.score<50&&!shown.has(e.hero.id)).sort((a,b)=>a.score-b.score).slice(0,5);
       if(risk.length){
         $('badResults').innerHTML=risk.map(badCard).join('');
         $('badSection').classList.remove('hidden');
