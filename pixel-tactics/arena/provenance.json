@@ -1,0 +1,5 @@
+{
+  "source": "https://store.steampowered.com/app/1601000/Pixel_Tactics_Online/",
+  "reference": "docs/ui-reference/steam-2.jpg",
+  "method": "Unaltered source crops from empty scenery; no interface, units or text. Tiles reused for personal local build. Bridge and cell framing recreated in CSS; original layered environment not available."
+}

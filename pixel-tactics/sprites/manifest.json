@@ -1,0 +1,5005 @@
+{
+  "method": "Mechanical source-pixel extraction. Exterior paper flood-fill; enclosed sprite whites retained. RGB unchanged, binary alpha, no resampling. Leader art rotated 180 degrees using exact pixel coordinates.",
+  "entries": [
+    {
+      "set": 1,
+      "index": 0,
+      "id": "alchemist",
+      "role": "hero",
+      "file": "alchemist.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        48,
+        45,
+        69,
+        106
+      ],
+      "bounds": [
+        53,
+        51,
+        63,
+        91
+      ],
+      "width": 65,
+      "height": 93,
+      "opaquePixels": 3683,
+      "discardedComponents": 0,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 0,
+      "id": "alchemist",
+      "role": "leader",
+      "file": "alchemist-leader.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        450,
+        556,
+        72,
+        130
+      ],
+      "bounds": [
+        450,
+        557,
+        72,
+        125
+      ],
+      "width": 74,
+      "height": 127,
+      "opaquePixels": 6620,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 1,
+      "id": "assassin",
+      "role": "hero",
+      "file": "assassin.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        633,
+        45,
+        69,
+        106
+      ],
+      "bounds": [
+        642,
+        45,
+        51,
+        97
+      ],
+      "width": 53,
+      "height": 99,
+      "opaquePixels": 3241,
+      "discardedComponents": 0,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 1,
+      "id": "assassin",
+      "role": "leader",
+      "file": "assassin-leader.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        1035,
+        556,
+        72,
+        130
+      ],
+      "bounds": [
+        1035,
+        557,
+        69,
+        129
+      ],
+      "width": 71,
+      "height": 131,
+      "opaquePixels": 6078,
+      "discardedComponents": 0,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 2,
+      "id": "berserker",
+      "role": "hero",
+      "file": "berserker.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        1218,
+        45,
+        69,
+        106
+      ],
+      "bounds": [
+        1223,
+        45,
+        55,
+        97
+      ],
+      "width": 57,
+      "height": 99,
+      "opaquePixels": 3714,
+      "discardedComponents": 0,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 2,
+      "id": "berserker",
+      "role": "leader",
+      "file": "berserker-leader.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        1620,
+        556,
+        72,
+        130
+      ],
+      "bounds": [
+        1620,
+        557,
+        72,
+        129
+      ],
+      "width": 74,
+      "height": 131,
+      "opaquePixels": 6993,
+      "discardedComponents": 0,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 3,
+      "id": "doppelganger",
+      "role": "hero",
+      "file": "doppelganger.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        1803,
+        45,
+        69,
+        106
+      ],
+      "bounds": [
+        1804,
+        47,
+        63,
+        95
+      ],
+      "width": 65,
+      "height": 97,
+      "opaquePixels": 3801,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 3,
+      "id": "doppelganger",
+      "role": "leader",
+      "file": "doppelganger-leader.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        2205,
+        556,
+        72,
+        130
+      ],
+      "bounds": [
+        2205,
+        557,
+        72,
+        129
+      ],
+      "width": 74,
+      "height": 131,
+      "opaquePixels": 6951,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 4,
+      "id": "dragon-mage",
+      "role": "hero",
+      "file": "dragon-mage.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        2388,
+        45,
+        69,
+        106
+      ],
+      "bounds": [
+        2393,
+        47,
+        59,
+        95
+      ],
+      "width": 61,
+      "height": 97,
+      "opaquePixels": 4171,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 4,
+      "id": "dragon-mage",
+      "role": "leader",
+      "file": "dragon-mage-leader.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        2790,
+        556,
+        72,
+        130
+      ],
+      "bounds": [
+        2790,
+        557,
+        72,
+        129
+      ],
+      "width": 74,
+      "height": 131,
+      "opaquePixels": 7710,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 5,
+      "id": "fighter",
+      "role": "hero",
+      "file": "fighter.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        2973,
+        45,
+        69,
+        106
+      ],
+      "bounds": [
+        2978,
+        47,
+        51,
+        95
+      ],
+      "width": 53,
+      "height": 97,
+      "opaquePixels": 3270,
+      "discardedComponents": 0,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 5,
+      "id": "fighter",
+      "role": "leader",
+      "file": "fighter-leader.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        3375,
+        556,
+        72,
+        130
+      ],
+      "bounds": [
+        3379,
+        557,
+        68,
+        129
+      ],
+      "width": 70,
+      "height": 131,
+      "opaquePixels": 6155,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 6,
+      "id": "gunner",
+      "role": "hero",
+      "file": "gunner.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        48,
+        865,
+        69,
+        106
+      ],
+      "bounds": [
+        49,
+        870,
+        63,
+        91
+      ],
+      "width": 65,
+      "height": 93,
+      "opaquePixels": 3501,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 6,
+      "id": "gunner",
+      "role": "leader",
+      "file": "gunner-leader.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        450,
+        1376,
+        72,
+        130
+      ],
+      "bounds": [
+        450,
+        1376,
+        72,
+        130
+      ],
+      "width": 74,
+      "height": 132,
+      "opaquePixels": 6466,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 7,
+      "id": "healer",
+      "role": "hero",
+      "file": "healer.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        633,
+        865,
+        69,
+        106
+      ],
+      "bounds": [
+        638,
+        865,
+        59,
+        96
+      ],
+      "width": 61,
+      "height": 98,
+      "opaquePixels": 4254,
+      "discardedComponents": 0,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 7,
+      "id": "healer",
+      "role": "leader",
+      "file": "healer-leader.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        1035,
+        1376,
+        72,
+        130
+      ],
+      "bounds": [
+        1035,
+        1376,
+        72,
+        130
+      ],
+      "width": 74,
+      "height": 132,
+      "opaquePixels": 7768,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 8,
+      "id": "homunculus",
+      "role": "hero",
+      "file": "homunculus.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        1218,
+        865,
+        69,
+        106
+      ],
+      "bounds": [
+        1219,
+        866,
+        63,
+        95
+      ],
+      "width": 65,
+      "height": 97,
+      "opaquePixels": 4105,
+      "discardedComponents": 0,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 8,
+      "id": "homunculus",
+      "role": "leader",
+      "file": "homunculus-leader.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        1620,
+        1376,
+        72,
+        130
+      ],
+      "bounds": [
+        1620,
+        1376,
+        72,
+        130
+      ],
+      "width": 74,
+      "height": 132,
+      "opaquePixels": 7496,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 9,
+      "id": "illusionist",
+      "role": "hero",
+      "file": "illusionist.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        1803,
+        865,
+        69,
+        106
+      ],
+      "bounds": [
+        1808,
+        866,
+        51,
+        95
+      ],
+      "width": 53,
+      "height": 97,
+      "opaquePixels": 3236,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 9,
+      "id": "illusionist",
+      "role": "leader",
+      "file": "illusionist-leader.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        2205,
+        1376,
+        72,
+        130
+      ],
+      "bounds": [
+        2209,
+        1376,
+        68,
+        130
+      ],
+      "width": 70,
+      "height": 132,
+      "opaquePixels": 6136,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 10,
+      "id": "knight",
+      "role": "hero",
+      "file": "knight.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        2388,
+        865,
+        69,
+        106
+      ],
+      "bounds": [
+        2393,
+        865,
+        59,
+        96
+      ],
+      "width": 61,
+      "height": 98,
+      "opaquePixels": 3711,
+      "discardedComponents": 0,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 10,
+      "id": "knight",
+      "role": "leader",
+      "file": "knight-leader.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        2790,
+        1376,
+        72,
+        130
+      ],
+      "bounds": [
+        2790,
+        1376,
+        72,
+        130
+      ],
+      "width": 74,
+      "height": 132,
+      "opaquePixels": 6846,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 11,
+      "id": "mystic",
+      "role": "hero",
+      "file": "mystic.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        2973,
+        865,
+        69,
+        106
+      ],
+      "bounds": [
+        2978,
+        865,
+        59,
+        96
+      ],
+      "width": 61,
+      "height": 98,
+      "opaquePixels": 4095,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 11,
+      "id": "mystic",
+      "role": "leader",
+      "file": "mystic-leader.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        3375,
+        1376,
+        72,
+        130
+      ],
+      "bounds": [
+        3375,
+        1376,
+        72,
+        130
+      ],
+      "width": 74,
+      "height": 132,
+      "opaquePixels": 7465,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 12,
+      "id": "oracle",
+      "role": "hero",
+      "file": "oracle.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        48,
+        1685,
+        69,
+        106
+      ],
+      "bounds": [
+        53,
+        1689,
+        55,
+        91
+      ],
+      "width": 57,
+      "height": 93,
+      "opaquePixels": 3666,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 12,
+      "id": "oracle",
+      "role": "leader",
+      "file": "oracle-leader.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        450,
+        2196,
+        72,
+        130
+      ],
+      "bounds": [
+        450,
+        2196,
+        72,
+        124
+      ],
+      "width": 74,
+      "height": 126,
+      "opaquePixels": 6890,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 13,
+      "id": "overlord",
+      "role": "hero",
+      "file": "overlord.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        633,
+        1685,
+        69,
+        106
+      ],
+      "bounds": [
+        634,
+        1685,
+        59,
+        95
+      ],
+      "width": 61,
+      "height": 97,
+      "opaquePixels": 3639,
+      "discardedComponents": 0,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 13,
+      "id": "overlord",
+      "role": "leader",
+      "file": "overlord-leader.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        1035,
+        2196,
+        72,
+        130
+      ],
+      "bounds": [
+        1035,
+        2196,
+        72,
+        130
+      ],
+      "width": 74,
+      "height": 132,
+      "opaquePixels": 6751,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 14,
+      "id": "paladin",
+      "role": "hero",
+      "file": "paladin.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        1218,
+        1685,
+        69,
+        106
+      ],
+      "bounds": [
+        1223,
+        1685,
+        59,
+        95
+      ],
+      "width": 61,
+      "height": 97,
+      "opaquePixels": 3838,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 14,
+      "id": "paladin",
+      "role": "leader",
+      "file": "paladin-leader.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        1620,
+        2196,
+        72,
+        130
+      ],
+      "bounds": [
+        1620,
+        2196,
+        72,
+        130
+      ],
+      "width": 74,
+      "height": 132,
+      "opaquePixels": 6916,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 15,
+      "id": "planestalker",
+      "role": "hero",
+      "file": "planestalker.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        1803,
+        1685,
+        69,
+        106
+      ],
+      "bounds": [
+        1812,
+        1685,
+        51,
+        95
+      ],
+      "width": 53,
+      "height": 97,
+      "opaquePixels": 3846,
+      "discardedComponents": 0,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 15,
+      "id": "planestalker",
+      "role": "leader",
+      "file": "planestalker-leader.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        2205,
+        2196,
+        72,
+        130
+      ],
+      "bounds": [
+        2205,
+        2196,
+        69,
+        130
+      ],
+      "width": 71,
+      "height": 132,
+      "opaquePixels": 7263,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 16,
+      "id": "priestess",
+      "role": "hero",
+      "file": "priestess.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        2388,
+        1685,
+        69,
+        106
+      ],
+      "bounds": [
+        2393,
+        1685,
+        59,
+        95
+      ],
+      "width": 61,
+      "height": 97,
+      "opaquePixels": 3721,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 16,
+      "id": "priestess",
+      "role": "leader",
+      "file": "priestess-leader.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        2790,
+        2196,
+        72,
+        130
+      ],
+      "bounds": [
+        2790,
+        2196,
+        72,
+        130
+      ],
+      "width": 74,
+      "height": 132,
+      "opaquePixels": 6912,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 17,
+      "id": "pyromancer",
+      "role": "hero",
+      "file": "pyromancer.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        2973,
+        1685,
+        69,
+        106
+      ],
+      "bounds": [
+        2978,
+        1685,
+        55,
+        95
+      ],
+      "width": 57,
+      "height": 97,
+      "opaquePixels": 3942,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 17,
+      "id": "pyromancer",
+      "role": "leader",
+      "file": "pyromancer-leader.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        3375,
+        2196,
+        72,
+        130
+      ],
+      "bounds": [
+        3375,
+        2196,
+        72,
+        130
+      ],
+      "width": 74,
+      "height": 132,
+      "opaquePixels": 7369,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 18,
+      "id": "scientist",
+      "role": "hero",
+      "file": "scientist.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        48,
+        2505,
+        69,
+        106
+      ],
+      "bounds": [
+        57,
+        2508,
+        43,
+        91
+      ],
+      "width": 45,
+      "height": 93,
+      "opaquePixels": 2965,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 18,
+      "id": "scientist",
+      "role": "leader",
+      "file": "scientist-leader.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        450,
+        3016,
+        72,
+        130
+      ],
+      "bounds": [
+        459,
+        3016,
+        60,
+        123
+      ],
+      "width": 62,
+      "height": 125,
+      "opaquePixels": 5661,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 19,
+      "id": "summoner",
+      "role": "hero",
+      "file": "summoner.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        633,
+        2505,
+        69,
+        106
+      ],
+      "bounds": [
+        638,
+        2505,
+        55,
+        94
+      ],
+      "width": 57,
+      "height": 96,
+      "opaquePixels": 3363,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 19,
+      "id": "summoner",
+      "role": "leader",
+      "file": "summoner-leader.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        1035,
+        3016,
+        72,
+        130
+      ],
+      "bounds": [
+        1035,
+        3016,
+        72,
+        130
+      ],
+      "width": 74,
+      "height": 132,
+      "opaquePixels": 6384,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 20,
+      "id": "templar",
+      "role": "hero",
+      "file": "templar.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        1218,
+        2505,
+        69,
+        106
+      ],
+      "bounds": [
+        1223,
+        2505,
+        59,
+        94
+      ],
+      "width": 61,
+      "height": 96,
+      "opaquePixels": 3087,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 20,
+      "id": "templar",
+      "role": "leader",
+      "file": "templar-leader.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        1620,
+        3016,
+        72,
+        130
+      ],
+      "bounds": [
+        1620,
+        3016,
+        72,
+        129
+      ],
+      "width": 74,
+      "height": 131,
+      "opaquePixels": 5553,
+      "discardedComponents": 4,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 21,
+      "id": "trapper",
+      "role": "hero",
+      "file": "trapper.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        1803,
+        2505,
+        69,
+        106
+      ],
+      "bounds": [
+        1804,
+        2505,
+        59,
+        94
+      ],
+      "width": 61,
+      "height": 96,
+      "opaquePixels": 3428,
+      "discardedComponents": 0,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 21,
+      "id": "trapper",
+      "role": "leader",
+      "file": "trapper-leader.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        2205,
+        3016,
+        72,
+        130
+      ],
+      "bounds": [
+        2205,
+        3016,
+        72,
+        130
+      ],
+      "width": 74,
+      "height": 132,
+      "opaquePixels": 6599,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 22,
+      "id": "vampire",
+      "role": "hero",
+      "file": "vampire.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        2388,
+        2505,
+        69,
+        106
+      ],
+      "bounds": [
+        2393,
+        2505,
+        55,
+        94
+      ],
+      "width": 57,
+      "height": 96,
+      "opaquePixels": 3384,
+      "discardedComponents": 0,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 22,
+      "id": "vampire",
+      "role": "leader",
+      "file": "vampire-leader.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        2790,
+        3016,
+        72,
+        130
+      ],
+      "bounds": [
+        2790,
+        3016,
+        72,
+        129
+      ],
+      "width": 74,
+      "height": 131,
+      "opaquePixels": 6366,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 23,
+      "id": "witch",
+      "role": "hero",
+      "file": "witch.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        2973,
+        2505,
+        69,
+        106
+      ],
+      "bounds": [
+        2974,
+        2505,
+        63,
+        94
+      ],
+      "width": 65,
+      "height": 96,
+      "opaquePixels": 3510,
+      "discardedComponents": 0,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 23,
+      "id": "witch",
+      "role": "leader",
+      "file": "witch-leader.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        3375,
+        3016,
+        72,
+        130
+      ],
+      "bounds": [
+        3375,
+        3016,
+        72,
+        130
+      ],
+      "width": 74,
+      "height": 132,
+      "opaquePixels": 6682,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 24,
+      "id": "mascot",
+      "role": "hero",
+      "file": "mascot.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        48,
+        3325,
+        69,
+        106
+      ],
+      "bounds": [
+        56,
+        3359,
+        52,
+        59
+      ],
+      "width": 54,
+      "height": 61,
+      "opaquePixels": 2249,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 1,
+      "index": 24,
+      "id": "mascot",
+      "role": "leader",
+      "file": "mascot-leader.png",
+      "source": {
+        "path": "public/art/pt1.jpg",
+        "format": "JPEG atlas",
+        "width": 3512,
+        "height": 4096
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        450,
+        3836,
+        72,
+        130
+      ],
+      "bounds": [
+        450,
+        3836,
+        69,
+        79
+      ],
+      "width": 71,
+      "height": 81,
+      "opaquePixels": 4241,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 0,
+      "id": "curse-knight",
+      "role": "hero",
+      "file": "curse-knight.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 1,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        204,
+        133,
+        102,
+        142
+      ],
+      "bounds": [
+        208,
+        138,
+        80,
+        123
+      ],
+      "width": 82,
+      "height": 125,
+      "opaquePixels": 7322,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 0,
+      "id": "curse-knight",
+      "role": "leader",
+      "file": "curse-knight-leader.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 1,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        717,
+        788,
+        127,
+        181
+      ],
+      "bounds": [
+        720,
+        794,
+        112,
+        172
+      ],
+      "width": 114,
+      "height": 174,
+      "opaquePixels": 14216,
+      "discardedComponents": 3,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 1,
+      "id": "diabolist",
+      "role": "hero",
+      "file": "diabolist.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 1,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        954,
+        133,
+        102,
+        142
+      ],
+      "bounds": [
+        966,
+        142,
+        80,
+        129
+      ],
+      "width": 82,
+      "height": 131,
+      "opaquePixels": 7858,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 1,
+      "id": "diabolist",
+      "role": "leader",
+      "file": "diabolist-leader.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 1,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        1467,
+        788,
+        127,
+        181
+      ],
+      "bounds": [
+        1476,
+        789,
+        104,
+        168
+      ],
+      "width": 106,
+      "height": 170,
+      "opaquePixels": 13214,
+      "discardedComponents": 3,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 2,
+      "id": "divinity",
+      "role": "hero",
+      "file": "divinity.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 1,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        1704,
+        133,
+        102,
+        142
+      ],
+      "bounds": [
+        1704,
+        136,
+        102,
+        138
+      ],
+      "width": 104,
+      "height": 140,
+      "opaquePixels": 8496,
+      "discardedComponents": 6,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 2,
+      "id": "divinity",
+      "role": "leader",
+      "file": "divinity-leader.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 1,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        2217,
+        788,
+        127,
+        181
+      ],
+      "bounds": [
+        2217,
+        788,
+        127,
+        181
+      ],
+      "width": 129,
+      "height": 183,
+      "opaquePixels": 14019,
+      "discardedComponents": 5,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 3,
+      "id": "druid",
+      "role": "hero",
+      "file": "druid.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 1,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        204,
+        1183,
+        102,
+        142
+      ],
+      "bounds": [
+        217,
+        1189,
+        75,
+        125
+      ],
+      "width": 77,
+      "height": 127,
+      "opaquePixels": 6345,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 3,
+      "id": "druid",
+      "role": "leader",
+      "file": "druid-leader.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 1,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        717,
+        1838,
+        127,
+        181
+      ],
+      "bounds": [
+        734,
+        1841,
+        97,
+        168
+      ],
+      "width": 99,
+      "height": 170,
+      "opaquePixels": 10821,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 4,
+      "id": "chronicler",
+      "role": "hero",
+      "file": "chronicler.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 1,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        954,
+        1183,
+        102,
+        142
+      ],
+      "bounds": [
+        963,
+        1188,
+        76,
+        121
+      ],
+      "width": 78,
+      "height": 123,
+      "opaquePixels": 6590,
+      "discardedComponents": 4,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 4,
+      "id": "chronicler",
+      "role": "leader",
+      "file": "chronicler-leader.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 1,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        1467,
+        1838,
+        127,
+        181
+      ],
+      "bounds": [
+        1474,
+        1847,
+        105,
+        168
+      ],
+      "width": 107,
+      "height": 170,
+      "opaquePixels": 12514,
+      "discardedComponents": 4,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 5,
+      "id": "immortal",
+      "role": "hero",
+      "file": "immortal.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 1,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        1704,
+        1183,
+        102,
+        142
+      ],
+      "bounds": [
+        1722,
+        1196,
+        71,
+        127
+      ],
+      "width": 73,
+      "height": 129,
+      "opaquePixels": 5566,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 5,
+      "id": "immortal",
+      "role": "leader",
+      "file": "immortal-leader.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 1,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        2217,
+        1838,
+        127,
+        181
+      ],
+      "bounds": [
+        2239,
+        1841,
+        95,
+        168
+      ],
+      "width": 97,
+      "height": 170,
+      "opaquePixels": 9642,
+      "discardedComponents": 4,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 6,
+      "id": "inventor",
+      "role": "hero",
+      "file": "inventor.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 1,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        204,
+        2233,
+        102,
+        142
+      ],
+      "bounds": [
+        220,
+        2255,
+        63,
+        102
+      ],
+      "width": 65,
+      "height": 104,
+      "opaquePixels": 4512,
+      "discardedComponents": 4,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 6,
+      "id": "inventor",
+      "role": "leader",
+      "file": "inventor-leader.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 1,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        717,
+        2888,
+        127,
+        181
+      ],
+      "bounds": [
+        731,
+        2900,
+        88,
+        143
+      ],
+      "width": 90,
+      "height": 145,
+      "opaquePixels": 8759,
+      "discardedComponents": 3,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 7,
+      "id": "lorekeeper",
+      "role": "hero",
+      "file": "lorekeeper.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 1,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        954,
+        2233,
+        102,
+        142
+      ],
+      "bounds": [
+        956,
+        2234,
+        89,
+        137
+      ],
+      "width": 91,
+      "height": 139,
+      "opaquePixels": 9058,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 7,
+      "id": "lorekeeper",
+      "role": "leader",
+      "file": "lorekeeper-leader.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 1,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        1467,
+        2888,
+        127,
+        181
+      ],
+      "bounds": [
+        1475,
+        2889,
+        117,
+        180
+      ],
+      "width": 119,
+      "height": 182,
+      "opaquePixels": 15529,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 8,
+      "id": "magical-knight",
+      "role": "hero",
+      "file": "magical-knight.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 1,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        1704,
+        2233,
+        102,
+        142
+      ],
+      "bounds": [
+        1711,
+        2241,
+        95,
+        129
+      ],
+      "width": 97,
+      "height": 131,
+      "opaquePixels": 7996,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 8,
+      "id": "magical-knight",
+      "role": "leader",
+      "file": "magical-knight-leader.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 1,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        2217,
+        2888,
+        127,
+        181
+      ],
+      "bounds": [
+        2217,
+        2890,
+        127,
+        168
+      ],
+      "width": 129,
+      "height": 170,
+      "opaquePixels": 14696,
+      "discardedComponents": 3,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 9,
+      "id": "puppeteer",
+      "role": "hero",
+      "file": "puppeteer.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 2,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        204,
+        133,
+        102,
+        142
+      ],
+      "bounds": [
+        213,
+        133,
+        83,
+        133
+      ],
+      "width": 85,
+      "height": 135,
+      "opaquePixels": 8555,
+      "discardedComponents": 4,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 9,
+      "id": "puppeteer",
+      "role": "leader",
+      "file": "puppeteer-leader.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 2,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        717,
+        788,
+        127,
+        181
+      ],
+      "bounds": [
+        723,
+        789,
+        109,
+        180
+      ],
+      "width": 111,
+      "height": 182,
+      "opaquePixels": 14959,
+      "discardedComponents": 0,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 10,
+      "id": "relic-hunter",
+      "role": "hero",
+      "file": "relic-hunter.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 2,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        954,
+        133,
+        102,
+        142
+      ],
+      "bounds": [
+        954,
+        133,
+        102,
+        136
+      ],
+      "width": 104,
+      "height": 138,
+      "opaquePixels": 9568,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 10,
+      "id": "relic-hunter",
+      "role": "leader",
+      "file": "relic-hunter-leader.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 2,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        1467,
+        788,
+        127,
+        181
+      ],
+      "bounds": [
+        1467,
+        790,
+        127,
+        179
+      ],
+      "width": 129,
+      "height": 181,
+      "opaquePixels": 16124,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 11,
+      "id": "sage",
+      "role": "hero",
+      "file": "sage.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 2,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        1704,
+        133,
+        102,
+        142
+      ],
+      "bounds": [
+        1722,
+        152,
+        65,
+        115
+      ],
+      "width": 67,
+      "height": 117,
+      "opaquePixels": 5685,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 11,
+      "id": "sage",
+      "role": "leader",
+      "file": "sage-leader.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 2,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        2217,
+        788,
+        127,
+        181
+      ],
+      "bounds": [
+        2241,
+        804,
+        85,
+        150
+      ],
+      "width": 87,
+      "height": 152,
+      "opaquePixels": 9647,
+      "discardedComponents": 3,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 12,
+      "id": "plaguebearer",
+      "role": "hero",
+      "file": "plaguebearer.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 2,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        204,
+        1183,
+        102,
+        142
+      ],
+      "bounds": [
+        217,
+        1195,
+        78,
+        126
+      ],
+      "width": 80,
+      "height": 128,
+      "opaquePixels": 7374,
+      "discardedComponents": 4,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 12,
+      "id": "plaguebearer",
+      "role": "leader",
+      "file": "plaguebearer-leader.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 2,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        717,
+        1838,
+        127,
+        181
+      ],
+      "bounds": [
+        724,
+        1839,
+        110,
+        177
+      ],
+      "width": 112,
+      "height": 179,
+      "opaquePixels": 14532,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 13,
+      "id": "monster-hunter",
+      "role": "hero",
+      "file": "monster-hunter.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 2,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        954,
+        1183,
+        102,
+        142
+      ],
+      "bounds": [
+        963,
+        1185,
+        83,
+        137
+      ],
+      "width": 85,
+      "height": 139,
+      "opaquePixels": 8040,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 13,
+      "id": "monster-hunter",
+      "role": "leader",
+      "file": "monster-hunter-leader.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 2,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        1467,
+        1838,
+        127,
+        181
+      ],
+      "bounds": [
+        1473,
+        1841,
+        109,
+        178
+      ],
+      "width": 111,
+      "height": 180,
+      "opaquePixels": 13502,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 14,
+      "id": "mastermind",
+      "role": "hero",
+      "file": "mastermind.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 2,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        1704,
+        1183,
+        102,
+        142
+      ],
+      "bounds": [
+        1716,
+        1193,
+        83,
+        132
+      ],
+      "width": 85,
+      "height": 134,
+      "opaquePixels": 6249,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 14,
+      "id": "mastermind",
+      "role": "leader",
+      "file": "mastermind-leader.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 2,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        2217,
+        1838,
+        127,
+        181
+      ],
+      "bounds": [
+        2222,
+        1842,
+        109,
+        175
+      ],
+      "width": 111,
+      "height": 177,
+      "opaquePixels": 10818,
+      "discardedComponents": 3,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 15,
+      "id": "planebinder",
+      "role": "hero",
+      "file": "planebinder.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 2,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        204,
+        2233,
+        102,
+        142
+      ],
+      "bounds": [
+        204,
+        2233,
+        94,
+        140
+      ],
+      "width": 96,
+      "height": 142,
+      "opaquePixels": 7383,
+      "discardedComponents": 4,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 15,
+      "id": "planebinder",
+      "role": "leader",
+      "file": "planebinder-leader.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 2,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        717,
+        2888,
+        127,
+        181
+      ],
+      "bounds": [
+        721,
+        2888,
+        123,
+        181
+      ],
+      "width": 125,
+      "height": 183,
+      "opaquePixels": 12800,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 16,
+      "id": "operative",
+      "role": "hero",
+      "file": "operative.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 2,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        954,
+        2233,
+        102,
+        142
+      ],
+      "bounds": [
+        969,
+        2233,
+        77,
+        128
+      ],
+      "width": 79,
+      "height": 130,
+      "opaquePixels": 7271,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 16,
+      "id": "operative",
+      "role": "leader",
+      "file": "operative-leader.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 2,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        1467,
+        2888,
+        127,
+        181
+      ],
+      "bounds": [
+        1477,
+        2892,
+        103,
+        175
+      ],
+      "width": 105,
+      "height": 177,
+      "opaquePixels": 12796,
+      "discardedComponents": 3,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 17,
+      "id": "necromancer",
+      "role": "hero",
+      "file": "necromancer.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 2,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        1704,
+        2233,
+        102,
+        142
+      ],
+      "bounds": [
+        1718,
+        2235,
+        71,
+        137
+      ],
+      "width": 73,
+      "height": 139,
+      "opaquePixels": 6364,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 17,
+      "id": "necromancer",
+      "role": "leader",
+      "file": "necromancer-leader.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 2,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        2217,
+        2888,
+        127,
+        181
+      ],
+      "bounds": [
+        2225,
+        2892,
+        95,
+        177
+      ],
+      "width": 97,
+      "height": 179,
+      "opaquePixels": 10977,
+      "discardedComponents": 3,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 18,
+      "id": "warmage",
+      "role": "hero",
+      "file": "warmage.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 3,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        204,
+        133,
+        102,
+        142
+      ],
+      "bounds": [
+        222,
+        149,
+        65,
+        61
+      ],
+      "width": 67,
+      "height": 63,
+      "opaquePixels": 2790,
+      "discardedComponents": 5,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 18,
+      "id": "warmage",
+      "role": "leader",
+      "file": "warmage-leader.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 3,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        717,
+        788,
+        127,
+        181
+      ],
+      "bounds": [
+        740,
+        873,
+        85,
+        80
+      ],
+      "width": 87,
+      "height": 82,
+      "opaquePixels": 4730,
+      "discardedComponents": 4,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 19,
+      "id": "tactician",
+      "role": "hero",
+      "file": "tactician.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 3,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        954,
+        133,
+        102,
+        142
+      ],
+      "bounds": [
+        972,
+        149,
+        69,
+        120
+      ],
+      "width": 71,
+      "height": 122,
+      "opaquePixels": 5653,
+      "discardedComponents": 3,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 19,
+      "id": "tactician",
+      "role": "leader",
+      "file": "tactician-leader.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 3,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        1467,
+        788,
+        127,
+        181
+      ],
+      "bounds": [
+        1482,
+        795,
+        91,
+        156
+      ],
+      "width": 93,
+      "height": 158,
+      "opaquePixels": 9528,
+      "discardedComponents": 3,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 20,
+      "id": "supervillain",
+      "role": "hero",
+      "file": "supervillain.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 3,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        1704,
+        133,
+        102,
+        142
+      ],
+      "bounds": [
+        1704,
+        144,
+        94,
+        109
+      ],
+      "width": 96,
+      "height": 111,
+      "opaquePixels": 8397,
+      "discardedComponents": 4,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 20,
+      "id": "supervillain",
+      "role": "leader",
+      "file": "supervillain-leader.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 3,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        2217,
+        788,
+        127,
+        181
+      ],
+      "bounds": [
+        2217,
+        804,
+        127,
+        143
+      ],
+      "width": 129,
+      "height": 145,
+      "opaquePixels": 14489,
+      "discardedComponents": 3,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 21,
+      "id": "warlock",
+      "role": "hero",
+      "file": "warlock.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 3,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        204,
+        1183,
+        102,
+        142
+      ],
+      "bounds": [
+        208,
+        1185,
+        86,
+        126
+      ],
+      "width": 88,
+      "height": 128,
+      "opaquePixels": 6743,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 21,
+      "id": "warlock",
+      "role": "leader",
+      "file": "warlock-leader.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 3,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        717,
+        1838,
+        127,
+        181
+      ],
+      "bounds": [
+        717,
+        1844,
+        119,
+        175
+      ],
+      "width": 121,
+      "height": 177,
+      "opaquePixels": 12642,
+      "discardedComponents": 4,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 22,
+      "id": "technologist",
+      "role": "hero",
+      "file": "technologist.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 3,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        954,
+        1183,
+        102,
+        142
+      ],
+      "bounds": [
+        956,
+        1188,
+        85,
+        123
+      ],
+      "width": 87,
+      "height": 125,
+      "opaquePixels": 7170,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 22,
+      "id": "technologist",
+      "role": "leader",
+      "file": "technologist-leader.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 3,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        1467,
+        1838,
+        127,
+        181
+      ],
+      "bounds": [
+        1468,
+        1843,
+        119,
+        172
+      ],
+      "width": 121,
+      "height": 174,
+      "opaquePixels": 13853,
+      "discardedComponents": 3,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 23,
+      "id": "sniper",
+      "role": "hero",
+      "file": "sniper.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 3,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        1704,
+        1183,
+        102,
+        142
+      ],
+      "bounds": [
+        1704,
+        1188,
+        96,
+        129
+      ],
+      "width": 98,
+      "height": 131,
+      "opaquePixels": 6815,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 23,
+      "id": "sniper",
+      "role": "leader",
+      "file": "sniper-leader.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 3,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        2217,
+        1838,
+        127,
+        181
+      ],
+      "bounds": [
+        2217,
+        1842,
+        127,
+        168
+      ],
+      "width": 129,
+      "height": 170,
+      "opaquePixels": 11369,
+      "discardedComponents": 3,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 24,
+      "id": "werewolf",
+      "role": "hero",
+      "file": "werewolf.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 3,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        204,
+        2233,
+        102,
+        142
+      ],
+      "bounds": [
+        215,
+        2285,
+        83,
+        83
+      ],
+      "width": 85,
+      "height": 85,
+      "opaquePixels": 4863,
+      "discardedComponents": 4,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 2,
+      "index": 24,
+      "id": "werewolf",
+      "role": "leader",
+      "file": "werewolf-leader.png",
+      "source": {
+        "path": "docs/sources/pt2-cards.pdf",
+        "page": 3,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 2550,
+        "height": 3300
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        717,
+        2888,
+        127,
+        181
+      ],
+      "bounds": [
+        726,
+        2889,
+        95,
+        180
+      ],
+      "width": 97,
+      "height": 182,
+      "opaquePixels": 12118,
+      "discardedComponents": 3,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 0,
+      "id": "adventurer",
+      "role": "hero",
+      "file": "adventurer.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 1,
+        "image": 8,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        66,
+        67,
+        93,
+        134
+      ],
+      "bounds": [
+        66,
+        67,
+        86,
+        127
+      ],
+      "width": 88,
+      "height": 129,
+      "opaquePixels": 7559,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 0,
+      "id": "adventurer",
+      "role": "leader",
+      "file": "adventurer-leader.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 1,
+        "image": 8,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        569,
+        716,
+        116,
+        168
+      ],
+      "bounds": [
+        580,
+        728,
+        105,
+        156
+      ],
+      "width": 107,
+      "height": 158,
+      "opaquePixels": 11315,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 1,
+      "id": "assistant",
+      "role": "hero",
+      "file": "assistant.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 1,
+        "image": 7,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        66,
+        67,
+        93,
+        134
+      ],
+      "bounds": [
+        77,
+        81,
+        59,
+        112
+      ],
+      "width": 61,
+      "height": 114,
+      "opaquePixels": 4785,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 1,
+      "id": "assistant",
+      "role": "leader",
+      "file": "assistant-leader.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 1,
+        "image": 7,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        569,
+        716,
+        116,
+        168
+      ],
+      "bounds": [
+        593,
+        725,
+        83,
+        157
+      ],
+      "width": 85,
+      "height": 159,
+      "opaquePixels": 9396,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 2,
+      "id": "baron",
+      "role": "hero",
+      "file": "baron.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 1,
+        "image": 6,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        66,
+        67,
+        93,
+        134
+      ],
+      "bounds": [
+        71,
+        67,
+        79,
+        126
+      ],
+      "width": 81,
+      "height": 128,
+      "opaquePixels": 6428,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 2,
+      "id": "baron",
+      "role": "leader",
+      "file": "baron-leader.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 1,
+        "image": 6,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        569,
+        716,
+        116,
+        168
+      ],
+      "bounds": [
+        576,
+        725,
+        103,
+        159
+      ],
+      "width": 105,
+      "height": 161,
+      "opaquePixels": 10590,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 3,
+      "id": "brawler",
+      "role": "hero",
+      "file": "brawler.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 1,
+        "image": 5,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        66,
+        67,
+        93,
+        134
+      ],
+      "bounds": [
+        78,
+        67,
+        67,
+        126
+      ],
+      "width": 69,
+      "height": 128,
+      "opaquePixels": 6135,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 3,
+      "id": "brawler",
+      "role": "leader",
+      "file": "brawler-leader.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 1,
+        "image": 5,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        569,
+        716,
+        116,
+        168
+      ],
+      "bounds": [
+        586,
+        725,
+        88,
+        159
+      ],
+      "width": 90,
+      "height": 161,
+      "opaquePixels": 10430,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 4,
+      "id": "calculator",
+      "role": "hero",
+      "file": "calculator.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 1,
+        "image": 4,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        66,
+        67,
+        93,
+        134
+      ],
+      "bounds": [
+        69,
+        67,
+        83,
+        126
+      ],
+      "width": 85,
+      "height": 128,
+      "opaquePixels": 6728,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 4,
+      "id": "calculator",
+      "role": "leader",
+      "file": "calculator-leader.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 1,
+        "image": 4,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        569,
+        716,
+        116,
+        168
+      ],
+      "bounds": [
+        587,
+        725,
+        98,
+        159
+      ],
+      "width": 100,
+      "height": 161,
+      "opaquePixels": 11391,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 5,
+      "id": "coordinator",
+      "role": "hero",
+      "file": "coordinator.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 1,
+        "image": 3,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        66,
+        67,
+        93,
+        134
+      ],
+      "bounds": [
+        66,
+        68,
+        93,
+        125
+      ],
+      "width": 95,
+      "height": 127,
+      "opaquePixels": 8329,
+      "discardedComponents": 0,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 5,
+      "id": "coordinator",
+      "role": "leader",
+      "file": "coordinator-leader.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 1,
+        "image": 3,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        569,
+        716,
+        116,
+        168
+      ],
+      "bounds": [
+        569,
+        727,
+        116,
+        149
+      ],
+      "width": 118,
+      "height": 151,
+      "opaquePixels": 11740,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 6,
+      "id": "dispatcher",
+      "role": "hero",
+      "file": "dispatcher.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 1,
+        "image": 2,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        66,
+        67,
+        93,
+        134
+      ],
+      "bounds": [
+        74,
+        73,
+        81,
+        120
+      ],
+      "width": 83,
+      "height": 122,
+      "opaquePixels": 6675,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 6,
+      "id": "dispatcher",
+      "role": "leader",
+      "file": "dispatcher-leader.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 1,
+        "image": 2,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        569,
+        716,
+        116,
+        168
+      ],
+      "bounds": [
+        573,
+        725,
+        102,
+        159
+      ],
+      "width": 104,
+      "height": 161,
+      "opaquePixels": 12122,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 7,
+      "id": "doomspeaker",
+      "role": "hero",
+      "file": "doomspeaker.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 1,
+        "image": 1,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        66,
+        67,
+        93,
+        134
+      ],
+      "bounds": [
+        75,
+        67,
+        77,
+        126
+      ],
+      "width": 79,
+      "height": 128,
+      "opaquePixels": 5422,
+      "discardedComponents": 3,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 7,
+      "id": "doomspeaker",
+      "role": "leader",
+      "file": "doomspeaker-leader.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 1,
+        "image": 1,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        569,
+        716,
+        116,
+        168
+      ],
+      "bounds": [
+        578,
+        724,
+        100,
+        160
+      ],
+      "width": 102,
+      "height": 162,
+      "opaquePixels": 9081,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 8,
+      "id": "dreamseer",
+      "role": "hero",
+      "file": "dreamseer.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 1,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        66,
+        67,
+        93,
+        134
+      ],
+      "bounds": [
+        70,
+        81,
+        81,
+        112
+      ],
+      "width": 83,
+      "height": 114,
+      "opaquePixels": 5069,
+      "discardedComponents": 18,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 8,
+      "id": "dreamseer",
+      "role": "leader",
+      "file": "dreamseer-leader.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 1,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        569,
+        716,
+        116,
+        168
+      ],
+      "bounds": [
+        573,
+        725,
+        108,
+        149
+      ],
+      "width": 110,
+      "height": 151,
+      "opaquePixels": 9028,
+      "discardedComponents": 24,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 9,
+      "id": "drone",
+      "role": "hero",
+      "file": "drone.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 3,
+        "image": 8,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        66,
+        67,
+        93,
+        134
+      ],
+      "bounds": [
+        74,
+        67,
+        70,
+        126
+      ],
+      "width": 72,
+      "height": 128,
+      "opaquePixels": 5688,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 9,
+      "id": "drone",
+      "role": "leader",
+      "file": "drone-leader.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 3,
+        "image": 8,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        569,
+        716,
+        116,
+        168
+      ],
+      "bounds": [
+        578,
+        725,
+        93,
+        159
+      ],
+      "width": 95,
+      "height": 161,
+      "opaquePixels": 9733,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 10,
+      "id": "dryad",
+      "role": "hero",
+      "file": "dryad.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 3,
+        "image": 7,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        66,
+        67,
+        93,
+        134
+      ],
+      "bounds": [
+        66,
+        80,
+        92,
+        113
+      ],
+      "width": 94,
+      "height": 115,
+      "opaquePixels": 6458,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 10,
+      "id": "dryad",
+      "role": "leader",
+      "file": "dryad-leader.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 3,
+        "image": 7,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        569,
+        716,
+        116,
+        168
+      ],
+      "bounds": [
+        569,
+        725,
+        116,
+        149
+      ],
+      "width": 118,
+      "height": 151,
+      "opaquePixels": 10875,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 11,
+      "id": "elementalist",
+      "role": "hero",
+      "file": "elementalist.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 3,
+        "image": 6,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": "Identical character art from opposite card side reused because requested side overlaps printed card badge/border; no missing pixels invented.",
+      "crop": [
+        569,
+        716,
+        160,
+        168
+      ],
+      "bounds": [
+        569,
+        738,
+        147,
+        146
+      ],
+      "width": 149,
+      "height": 148,
+      "opaquePixels": 12991,
+      "discardedComponents": 4,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 11,
+      "id": "elementalist",
+      "role": "leader",
+      "file": "elementalist-leader.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 3,
+        "image": 6,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        569,
+        716,
+        160,
+        168
+      ],
+      "bounds": [
+        569,
+        738,
+        147,
+        146
+      ],
+      "width": 149,
+      "height": 148,
+      "opaquePixels": 12991,
+      "discardedComponents": 4,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 12,
+      "id": "failsafe",
+      "role": "hero",
+      "file": "failsafe.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 3,
+        "image": 5,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        66,
+        67,
+        93,
+        134
+      ],
+      "bounds": [
+        76,
+        67,
+        70,
+        126
+      ],
+      "width": 72,
+      "height": 128,
+      "opaquePixels": 5674,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 12,
+      "id": "failsafe",
+      "role": "leader",
+      "file": "failsafe-leader.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 3,
+        "image": 5,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        569,
+        716,
+        116,
+        168
+      ],
+      "bounds": [
+        585,
+        725,
+        94,
+        159
+      ],
+      "width": 96,
+      "height": 161,
+      "opaquePixels": 9793,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 13,
+      "id": "galaxy-mage",
+      "role": "hero",
+      "file": "galaxy-mage.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 3,
+        "image": 4,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        66,
+        67,
+        93,
+        134
+      ],
+      "bounds": [
+        74,
+        71,
+        73,
+        122
+      ],
+      "width": 75,
+      "height": 124,
+      "opaquePixels": 6895,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 13,
+      "id": "galaxy-mage",
+      "role": "leader",
+      "file": "galaxy-mage-leader.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 3,
+        "image": 4,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        569,
+        716,
+        116,
+        168
+      ],
+      "bounds": [
+        578,
+        725,
+        93,
+        154
+      ],
+      "width": 95,
+      "height": 156,
+      "opaquePixels": 11098,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 14,
+      "id": "gambler",
+      "role": "hero",
+      "file": "gambler.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 3,
+        "image": 3,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        66,
+        67,
+        93,
+        134
+      ],
+      "bounds": [
+        81,
+        71,
+        61,
+        122
+      ],
+      "width": 63,
+      "height": 124,
+      "opaquePixels": 5396,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 14,
+      "id": "gambler",
+      "role": "leader",
+      "file": "gambler-leader.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 3,
+        "image": 3,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        569,
+        716,
+        116,
+        168
+      ],
+      "bounds": [
+        587,
+        725,
+        80,
+        159
+      ],
+      "width": 82,
+      "height": 161,
+      "opaquePixels": 9243,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 15,
+      "id": "general",
+      "role": "hero",
+      "file": "general.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 3,
+        "image": 2,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        66,
+        67,
+        93,
+        134
+      ],
+      "bounds": [
+        70,
+        76,
+        81,
+        117
+      ],
+      "width": 83,
+      "height": 119,
+      "opaquePixels": 6438,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 15,
+      "id": "general",
+      "role": "leader",
+      "file": "general-leader.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 3,
+        "image": 2,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        569,
+        716,
+        116,
+        168
+      ],
+      "bounds": [
+        574,
+        725,
+        107,
+        154
+      ],
+      "width": 109,
+      "height": 156,
+      "opaquePixels": 11154,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 16,
+      "id": "golem",
+      "role": "hero",
+      "file": "golem.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 3,
+        "image": 1,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        36,
+        32,
+        149,
+        165
+      ],
+      "bounds": [
+        40,
+        32,
+        145,
+        161
+      ],
+      "width": 147,
+      "height": 163,
+      "opaquePixels": 18019,
+      "discardedComponents": 0,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 16,
+      "id": "golem",
+      "role": "leader",
+      "file": "golem-leader.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 3,
+        "image": 1,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": "Identical character art from opposite card side reused because requested side overlaps printed card badge/border; no missing pixels invented.",
+      "crop": [
+        36,
+        32,
+        149,
+        165
+      ],
+      "bounds": [
+        40,
+        32,
+        145,
+        161
+      ],
+      "width": 147,
+      "height": 163,
+      "opaquePixels": 18019,
+      "discardedComponents": 0,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 17,
+      "id": "gunslinger",
+      "role": "hero",
+      "file": "gunslinger.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 3,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        66,
+        67,
+        93,
+        134
+      ],
+      "bounds": [
+        72,
+        67,
+        77,
+        126
+      ],
+      "width": 79,
+      "height": 128,
+      "opaquePixels": 6027,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 17,
+      "id": "gunslinger",
+      "role": "leader",
+      "file": "gunslinger-leader.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 3,
+        "image": 0,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        569,
+        716,
+        116,
+        168
+      ],
+      "bounds": [
+        577,
+        725,
+        101,
+        159
+      ],
+      "width": 103,
+      "height": 161,
+      "opaquePixels": 9773,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 18,
+      "id": "huntress",
+      "role": "hero",
+      "file": "huntress.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 5,
+        "image": 8,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        66,
+        67,
+        93,
+        134
+      ],
+      "bounds": [
+        71,
+        67,
+        79,
+        126
+      ],
+      "width": 81,
+      "height": 128,
+      "opaquePixels": 6479,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 18,
+      "id": "huntress",
+      "role": "leader",
+      "file": "huntress-leader.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 5,
+        "image": 8,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        569,
+        716,
+        116,
+        168
+      ],
+      "bounds": [
+        578,
+        725,
+        100,
+        159
+      ],
+      "width": 102,
+      "height": 161,
+      "opaquePixels": 10241,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 19,
+      "id": "mercenary",
+      "role": "hero",
+      "file": "mercenary.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 5,
+        "image": 7,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        66,
+        67,
+        93,
+        134
+      ],
+      "bounds": [
+        74,
+        67,
+        70,
+        126
+      ],
+      "width": 72,
+      "height": 128,
+      "opaquePixels": 5918,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 19,
+      "id": "mercenary",
+      "role": "leader",
+      "file": "mercenary-leader.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 5,
+        "image": 7,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        569,
+        716,
+        116,
+        168
+      ],
+      "bounds": [
+        583,
+        725,
+        94,
+        159
+      ],
+      "width": 96,
+      "height": 161,
+      "opaquePixels": 10308,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 20,
+      "id": "professor",
+      "role": "hero",
+      "file": "professor.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 5,
+        "image": 6,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        66,
+        67,
+        93,
+        134
+      ],
+      "bounds": [
+        75,
+        70,
+        71,
+        123
+      ],
+      "width": 73,
+      "height": 125,
+      "opaquePixels": 5453,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 20,
+      "id": "professor",
+      "role": "leader",
+      "file": "professor-leader.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 5,
+        "image": 6,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        569,
+        716,
+        116,
+        168
+      ],
+      "bounds": [
+        583,
+        725,
+        89,
+        154
+      ],
+      "width": 91,
+      "height": 156,
+      "opaquePixels": 8460,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 21,
+      "id": "repossessor",
+      "role": "hero",
+      "file": "repossessor.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 5,
+        "image": 5,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        66,
+        67,
+        93,
+        134
+      ],
+      "bounds": [
+        66,
+        67,
+        86,
+        126
+      ],
+      "width": 88,
+      "height": 128,
+      "opaquePixels": 7920,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 21,
+      "id": "repossessor",
+      "role": "leader",
+      "file": "repossessor-leader.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 5,
+        "image": 5,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        569,
+        716,
+        116,
+        168
+      ],
+      "bounds": [
+        572,
+        724,
+        113,
+        160
+      ],
+      "width": 115,
+      "height": 162,
+      "opaquePixels": 13707,
+      "discardedComponents": 0,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 22,
+      "id": "shadow",
+      "role": "hero",
+      "file": "shadow.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 5,
+        "image": 4,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": "Identical character art from opposite card side reused because requested side overlaps printed card badge/border; no missing pixels invented.",
+      "crop": [
+        480,
+        716,
+        205,
+        194
+      ],
+      "bounds": [
+        507,
+        724,
+        178,
+        186
+      ],
+      "width": 180,
+      "height": 188,
+      "opaquePixels": 17197,
+      "discardedComponents": 18,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 22,
+      "id": "shadow",
+      "role": "leader",
+      "file": "shadow-leader.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 5,
+        "image": 4,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        480,
+        716,
+        205,
+        194
+      ],
+      "bounds": [
+        507,
+        724,
+        178,
+        186
+      ],
+      "width": 180,
+      "height": 188,
+      "opaquePixels": 17197,
+      "discardedComponents": 18,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 23,
+      "id": "spy",
+      "role": "hero",
+      "file": "spy.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 5,
+        "image": 3,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        66,
+        67,
+        93,
+        134
+      ],
+      "bounds": [
+        85,
+        78,
+        59,
+        115
+      ],
+      "width": 61,
+      "height": 117,
+      "opaquePixels": 4966,
+      "discardedComponents": 2,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 23,
+      "id": "spy",
+      "role": "leader",
+      "file": "spy-leader.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 5,
+        "image": 3,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        569,
+        716,
+        116,
+        168
+      ],
+      "bounds": [
+        588,
+        725,
+        79,
+        150
+      ],
+      "width": 81,
+      "height": 152,
+      "opaquePixels": 8340,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 24,
+      "id": "zone-warrior",
+      "role": "hero",
+      "file": "zone-warrior.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 5,
+        "image": 2,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "hero",
+      "sourceLimitation": null,
+      "crop": [
+        66,
+        67,
+        93,
+        134
+      ],
+      "bounds": [
+        71,
+        71,
+        88,
+        122
+      ],
+      "width": 90,
+      "height": 124,
+      "opaquePixels": 5985,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    },
+    {
+      "set": 3,
+      "index": 24,
+      "id": "zone-warrior",
+      "role": "leader",
+      "file": "zone-warrior-leader.png",
+      "source": {
+        "path": "docs/sources/pt3-cards.pdf",
+        "page": 5,
+        "image": 2,
+        "format": "native embedded raster",
+        "width": 759,
+        "height": 1060
+      },
+      "sourceRole": "leader",
+      "sourceLimitation": null,
+      "crop": [
+        569,
+        716,
+        116,
+        168
+      ],
+      "bounds": [
+        569,
+        718,
+        109,
+        164
+      ],
+      "width": 111,
+      "height": 166,
+      "opaquePixels": 10340,
+      "discardedComponents": 1,
+      "qa": "source and extraction contact-sheet review"
+    }
+  ]
+}
