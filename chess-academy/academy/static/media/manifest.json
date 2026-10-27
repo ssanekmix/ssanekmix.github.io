@@ -1,0 +1,97 @@
+{
+  "neo/wk.png": {
+    "url": "https://images.chesscomfiles.com/chess-themes/pieces/neo/150/wk.png",
+    "bytes": 1614,
+    "sha256": "0d00bcc77d60d35a2f78a14628a652e7d713327b50db63636042c2ea70d4abac"
+  },
+  "neo/wq.png": {
+    "url": "https://images.chesscomfiles.com/chess-themes/pieces/neo/150/wq.png",
+    "bytes": 2035,
+    "sha256": "6c43c4866803d2e9d02e3fc837db338da22a57b5d0a153a62436cfc62bd27c7c"
+  },
+  "neo/wr.png": {
+    "url": "https://images.chesscomfiles.com/chess-themes/pieces/neo/150/wr.png",
+    "bytes": 1352,
+    "sha256": "eb91ebd24a3b2bb5b8ea719e4cee68eee635a6abef1561b86875d97c7645175b"
+  },
+  "neo/wb.png": {
+    "url": "https://images.chesscomfiles.com/chess-themes/pieces/neo/150/wb.png",
+    "bytes": 1546,
+    "sha256": "2aaea32e55733a99f88c7aac196065cf25efc92b662596e9565afdc68deb210e"
+  },
+  "neo/wn.png": {
+    "url": "https://images.chesscomfiles.com/chess-themes/pieces/neo/150/wn.png",
+    "bytes": 1577,
+    "sha256": "4b788a8d340647d9fac16f5287ae00e9aa6e29bf0f234c54440971af64c127f9"
+  },
+  "neo/wp.png": {
+    "url": "https://images.chesscomfiles.com/chess-themes/pieces/neo/150/wp.png",
+    "bytes": 1115,
+    "sha256": "d507f94f18aba246727b68c60a08fb8849fdbfd584d29811c4370acad565233c"
+  },
+  "neo/bk.png": {
+    "url": "https://images.chesscomfiles.com/chess-themes/pieces/neo/150/bk.png",
+    "bytes": 1363,
+    "sha256": "bb0878719f3aaaef16b08a5a6b414320ba2455d8eb349d14373a473a73bbe778"
+  },
+  "neo/bq.png": {
+    "url": "https://images.chesscomfiles.com/chess-themes/pieces/neo/150/bq.png",
+    "bytes": 1755,
+    "sha256": "d446d4c2647df122454bedae93905c19a51636c0886c0a43251dea2ef25d2c5d"
+  },
+  "neo/br.png": {
+    "url": "https://images.chesscomfiles.com/chess-themes/pieces/neo/150/br.png",
+    "bytes": 1208,
+    "sha256": "d603bfb09b28f2f0ecd860591ade625b72c4e28b2bc9eeccd029538e9a496a55"
+  },
+  "neo/bb.png": {
+    "url": "https://images.chesscomfiles.com/chess-themes/pieces/neo/150/bb.png",
+    "bytes": 1214,
+    "sha256": "d34b2b056f59c2054ee8be8a5708238863d3095f00cc4af1885fb2393bc69bef"
+  },
+  "neo/bn.png": {
+    "url": "https://images.chesscomfiles.com/chess-themes/pieces/neo/150/bn.png",
+    "bytes": 1379,
+    "sha256": "b4f9b3c65a14646f74a0d3c29dee4c72a0a8941f64075b6ad7f937eb02309cd5"
+  },
+  "neo/bp.png": {
+    "url": "https://images.chesscomfiles.com/chess-themes/pieces/neo/150/bp.png",
+    "bytes": 1047,
+    "sha256": "b0e078596b5f9978fe3f08277114f6f77af3f222cb487a52fec9156aeb02e981"
+  },
+  "sounds/move-self.mp3": {
+    "url": "https://images.chesscomfiles.com/chess-themes/sounds/_MP3_/default/move-self.mp3",
+    "bytes": 3433,
+    "sha256": "3a2eb75af1334c06dafd735c23388a560285e0df9436a44d27adc95a010a8547"
+  },
+  "sounds/move-opponent.mp3": {
+    "url": "https://images.chesscomfiles.com/chess-themes/sounds/_MP3_/default/move-opponent.mp3",
+    "bytes": 3433,
+    "sha256": "0931855637e50e4edbc7916ec7a66cca2f0eee763e1c791ff774a9945517ea61"
+  },
+  "sounds/capture.mp3": {
+    "url": "https://images.chesscomfiles.com/chess-themes/sounds/_MP3_/default/capture.mp3",
+    "bytes": 6889,
+    "sha256": "7158a77f3eb9a763fe723e9c9291819de8748444a1192d10383159fd8175709b"
+  },
+  "sounds/move-check.mp3": {
+    "url": "https://images.chesscomfiles.com/chess-themes/sounds/_MP3_/default/move-check.mp3",
+    "bytes": 6121,
+    "sha256": "ef4764a74d19d0db1659e413e8afadc25f1e8cfba83a4a76e6e64f28f3077d52"
+  },
+  "sounds/castle.mp3": {
+    "url": "https://images.chesscomfiles.com/chess-themes/sounds/_MP3_/default/castle.mp3",
+    "bytes": 5353,
+    "sha256": "da05719e6b3f0d04a2ac1a551e643ab14f4e840ae3b9410c0ea15ba4bcac5010"
+  },
+  "sounds/promote.mp3": {
+    "url": "https://images.chesscomfiles.com/chess-themes/sounds/_MP3_/default/promote.mp3",
+    "bytes": 4969,
+    "sha256": "69219212aa2dce6031d6a641f8813779809bdff33562a8418d8e003eea465815"
+  },
+  "sounds/game-end.mp3": {
+    "url": "https://images.chesscomfiles.com/chess-themes/sounds/_MP3_/default/game-end.mp3",
+    "bytes": 5353,
+    "sha256": "9b53d24c925bcc96b05ca4808ff1198293f0bb3422176927cef5d3a10c4c9023"
+  }
+}
