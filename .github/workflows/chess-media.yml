@@ -1,0 +1,30 @@
+name: Prepare requested chess media
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/chess-media.yml'
+      - 'chess-academy/scripts/fetch_chesscom_media.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  media:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fetch and validate original Neo pieces and default audio
+        run: python chess-academy/scripts/fetch_chesscom_media.py
+      - name: Save verified media
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add chess-academy/academy/static/media
+          if ! git diff --cached --quiet; then
+            git commit -m "Bundle requested original Neo pieces and default move sounds"
+            git push origin HEAD:main
+          fi
