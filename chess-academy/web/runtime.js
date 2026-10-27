@@ -13,6 +13,8 @@ import {
 } from "./chess-core.js";
 import { Engine } from "./engine.js";
 import { openStorage } from "./storage.js";
+import { puzzleSource } from "./puzzles.js";
+import { profileService } from "./profiles.js";
 const now = () => Date.now() / 1000,
   clone = (value) => structuredClone(value),
   stages = [
@@ -33,33 +35,13 @@ function blank() {
     reviews: [],
     attempts: [],
     personal: [],
+    profiles: {},
+    puzzleSeen: [],
     cache: {},
     next: { game: 1, exercise: 1 },
   };
 }
 export async function createRuntime() {
-  let releaseLock = () => {};
-  if (navigator.locks) {
-    const acquired = await new Promise((ok, no) => {
-      navigator.locks
-        .request(
-          "personal-chess-academy-data",
-          { ifAvailable: true },
-          async (lock) => {
-            ok(Boolean(lock));
-            if (lock)
-              await new Promise((r) => {
-                releaseLock = r;
-              });
-          },
-        )
-        .catch(no);
-    });
-    if (!acquired)
-      throw Error(
-        "Академия уже открыта в другой вкладке. Продолжите там или закройте ту вкладку и обновите эту.",
-      );
-  }
   const response = await fetch(new URL("./curriculum.json", import.meta.url));
   if (!response.ok) throw Error("Не удалось загрузить учебные материалы");
   const curriculum = await response.json(),
@@ -69,6 +51,27 @@ export async function createRuntime() {
     throw Error(
       "Хранилище создано более новой версией. Обновите приложение; данные не изменены.",
     );
+  const channel =
+    typeof BroadcastChannel === "function"
+      ? new BroadcastChannel("academy-data-v2")
+      : null;
+  let dirty = false;
+  channel?.addEventListener("message", () => {
+    dirty = true;
+  });
+  const writeLock = (fn) =>
+    navigator.locks ? navigator.locks.request("academy-write-v2", fn) : fn();
+  state.profiles ||= {};
+  state.puzzleSeen ||= [];
+  const puzzles = puzzleSource(web);
+  const profiles = profileService({
+    web,
+    mutate,
+    getState: () => state,
+    parseGames,
+    storeParsed,
+  });
+  const deepPacks = new Map();
   const engine = new Engine(),
     jobs = new Map(),
     graph = new Map(),
@@ -112,22 +115,30 @@ export async function createRuntime() {
   }
   for (const course of allCourses()) addGraph(course);
   async function mutate(fn) {
-    const previous = clone(state);
-    try {
-      const result = fn();
-      await storage.write(state);
-      return result;
-    } catch (e) {
-      state = previous;
-      throw e;
-    }
+    return writeLock(async () => {
+      state = (await storage.read()) || state;
+      state.profiles ||= {};
+      state.puzzleSeen ||= [];
+      dirty = false;
+      const previous = clone(state);
+      try {
+        const result = fn();
+        await storage.write(state);
+        channel?.postMessage("changed");
+        return result;
+      } catch (e) {
+        state = previous;
+        throw e;
+      }
+    });
   }
+
   function exercise(fen, solution, category, source, game_id = null) {
     const b = board({ fen });
     play(new Chess(b.fen()), solution);
     let row = state.exercises.find(
       (e) =>
-        key(board({ fen: e.fen })) === key(b) &&
+        (e.key ||= key(board({ fen: e.fen }))) === key(b) &&
         e.solution === solution &&
         e.source === source,
     );
@@ -135,6 +146,7 @@ export async function createRuntime() {
       row = {
         id: state.next.exercise++,
         fen,
+        key: key(b),
         solution,
         category,
         source,
@@ -193,6 +205,21 @@ export async function createRuntime() {
       }
     }
     if (!course) throw Error("Дебют не найден");
+    if (course.deep) {
+      if (!deepPacks.has(id)) {
+        const r = await fetch(
+          new URL("./courses/" + id + ".json", import.meta.url),
+        );
+        if (!r.ok)
+          throw Error(
+            "Подробный курс ещё не загружен. Откройте его с интернетом хотя бы один раз.",
+          );
+        const pack = await r.json();
+        deepPacks.set(id, pack);
+        addGraph({ ...course, ...pack });
+      }
+      return clone({ ...course, ...deepPacks.get(id) });
+    }
     return clone(course);
   }
   function check(job) {
@@ -252,15 +279,72 @@ export async function createRuntime() {
     const m = play(new Chess(b.fen()), data.uci),
       afterBoard = board(data);
     play(afterBoard, data.uci);
-    const after = await analyze(afterBoard, data, job),
-      verdict = classify(before, after, b.turn());
+    const after = await analyze(afterBoard, data, job);
+    let verdict = classify(before, after, b.turn()),
+      verification = null;
+    // Borderline independent searches can disagree, especially with a small NNUE.
+    // Re-search the candidate from the SAME root before refusing a playable move.
+    if (
+      !verdict.accepted &&
+      verdict.expected_loss < 0.3 &&
+      verdict.cp_loss < 200 &&
+      after.lines[0].mate === null &&
+      !after.terminal
+    ) {
+      const forced = await analyze(
+        b,
+        {
+          ...data,
+          multipv: 1,
+          seconds: Math.max(0.6, Number(data.seconds) || 0.35),
+          depth: Math.max(18, Number(data.depth) || 18),
+        },
+        job,
+        [data.uci],
+      );
+      verdict = classify(before, forced, b.turn());
+      verification = {
+        kind: "same-root",
+        depth: forced.lines[0].depth,
+        score: forced.lines[0].cp,
+      };
+    }
+    let prepared = false;
+    const selected = courses.find((c) => c.id === data.opening_id);
+    if (selected)
+      for (const variation of selected.variations) {
+        const line = new Chess();
+        for (const san of variation.pgn.split(/\s+/)) {
+          const at = key(line),
+            move = line.move(san);
+          if (at === key(b) && uci(move) === data.uci) prepared = true;
+        }
+      }
+    if (
+      !verdict.accepted &&
+      after.lines[0].mate === null &&
+      !after.terminal &&
+      ((verdict.expected_loss <= 0.06 && verdict.cp_loss <= 80) ||
+        (prepared && verdict.expected_loss <= 0.12 && verdict.cp_loss <= 120))
+    ) {
+      verdict = {
+        ...verdict,
+        accepted: true,
+        label: prepared ? "Теоретическая альтернатива" : "Игровая альтернатива",
+        acceptance_note: prepared
+          ? "Подготовленный теоретический ход с близкой практической оценкой; неглубокий расчёт не повод его запрещать."
+          : "Небольшая разница ограниченного расчёта: ход допускается, сравните более точную альтернативу.",
+      };
+    }
     return {
       before,
       after,
       verdict,
-      explanation: explain(b, uci(m), authored, after, verdict),
+      verification,
+      explanation: explain(b, uci(m), authored, after, verdict, before),
     };
   }
+
   function schedule(e, quality, value) {
     const ease = Math.max(
       1.3,
@@ -374,8 +458,8 @@ export async function createRuntime() {
     }
     return ids;
   }
-  async function web(url, params = {}, ttl = 86400) {
-    const cacheKey = "web:" + url + "?" + new URLSearchParams(params),
+  async function web(url, params = {}, ttl = 86400, format = "json") {
+    const cacheKey = "web:" + format + url + "?" + new URLSearchParams(params),
       cached = state.cache[cacheKey];
     if (cached && now() - cached.at < ttl)
       return {
@@ -398,6 +482,9 @@ export async function createRuntime() {
           response = await fetch(url + "?" + new URLSearchParams(params), {
             signal: abort.signal,
             credentials: "omit",
+            cache: "no-store",
+            headers:
+              format === "ndjson" ? { Accept: "application/x-ndjson" } : {},
           });
         } finally {
           clearTimeout(timeout);
@@ -413,7 +500,14 @@ export async function createRuntime() {
           throw Error("Лимит сервиса (429). Подождите не меньше минуты.");
         }
         if (!response.ok) throw Error("HTTP " + response.status);
-        const data = await response.json(),
+        const data =
+            format === "ndjson"
+              ? (await response.text())
+                  .trim()
+                  .split(/\n/)
+                  .filter(Boolean)
+                  .map((line) => JSON.parse(line))
+              : await response.json(),
           at = now();
         await mutate(() => {
           state.cache[cacheKey] = { at, data };
@@ -444,7 +538,11 @@ export async function createRuntime() {
     const b = board({ fen: game.initial_fen }),
       records = [],
       pending = [],
-      username = state.preferences.username.toLowerCase(),
+      username = (
+        game.source === "Lichess"
+          ? state.profiles.lichess?.username || state.preferences.username
+          : state.preferences.username
+      ).toLowerCase(),
       side =
         game.white.toLowerCase() === username
           ? "w"
@@ -492,8 +590,13 @@ export async function createRuntime() {
     }
     check(job);
     await mutate(() => {
-      game.analyses = records;
-      game.analyzed = 1;
+      const live = state.games.find(
+        (g) => g.id === id && g.signature === game.signature,
+      );
+      if (!live)
+        throw Error("Партия изменена в другой вкладке. Откройте её снова.");
+      live.analyses = records;
+      live.analyzed = 1;
       for (const e of pending)
         exercise(e.fen, e.solution, e.category, "Партия " + id, id);
     });
@@ -530,10 +633,15 @@ export async function createRuntime() {
       clocks = [],
       username = state.preferences.username.toLowerCase();
     for (const g of state.games) {
+      const owner = (
+        g.source === "Lichess"
+          ? state.profiles.lichess?.username || username
+          : username
+      ).toLowerCase();
       const side =
-        g.white.toLowerCase() === username
+        g.white.toLowerCase() === owner
           ? "white"
-          : g.black.toLowerCase() === username
+          : g.black.toLowerCase() === owner
             ? "black"
             : null;
       if (!side) continue;
@@ -576,7 +684,8 @@ export async function createRuntime() {
       stages,
       recommendation: stages[stage][1],
       weakest: entries[0]?.[0] || "Безопасность фигур",
-      attempts: count,
+      attempts: state.reviews.length + state.attempts.length,
+      recent_attempts: count,
       success_rate: rate,
       due: state.exercises.filter((e) => e.due <= now()).length,
       mistakes: entries.map(([category, count]) => ({ category, count })),
@@ -674,6 +783,12 @@ export async function createRuntime() {
         throw Error("Повреждённое упражнение");
       exerciseIds.add(e.id);
       play(board({ fen: e.fen }), e.solution);
+      if (e.line) {
+        if (!Array.isArray(e.line) || e.line.length > 100)
+          throw Error("Повреждённый вариант упражнения");
+        const b = board({ fen: e.fen });
+        for (const m of e.line) play(b, m);
+      }
       if (e.game_id && !ids.has(e.game_id))
         throw Error("Нарушена ссылка на партию");
     }
@@ -705,9 +820,57 @@ export async function createRuntime() {
     return { ...clone(s), cache: {} };
   }
   async function api(path, data) {
+    if (dirty) {
+      state = (await storage.read()) || state;
+      state.profiles ||= {};
+      state.puzzleSeen ||= [];
+      dirty = false;
+    }
     const url = new URL(path, "https://academy.local"),
       p = url.pathname,
       q = url.searchParams;
+    if (p === "/profiles") return clone(state.profiles);
+    if (p.startsWith("/profiles/")) {
+      const platform = p.split("/")[2];
+      return p.endsWith("/sync")
+        ? profiles.sync(platform, data.username, data)
+        : profiles.connect(platform, data.username);
+    }
+    if (p === "/puzzles/stats")
+      return {
+        solved: state.exercises.filter((e) => e.puzzleId && e.repetitions > 0)
+          .length,
+        attempts: state.reviews.filter((r) =>
+          state.exercises.some((e) => e.id === r.exercise_id && e.puzzleId),
+        ).length,
+        offline: 4096,
+      };
+    if (p === "/puzzles/next") {
+      const selected = await puzzles.next(
+        data || {},
+        new Set(state.puzzleSeen),
+      );
+      return mutate(() => {
+        const e = exercise(
+          selected.fen,
+          selected.line[0],
+          "Тактика",
+          "Lichess · " + selected.id,
+        );
+        Object.assign(e, {
+          line: selected.line,
+          puzzleId: selected.id,
+          rating: selected.rating,
+          themes: selected.themes,
+          gameUrl: selected.gameUrl,
+          offline: selected.offline,
+          warning: selected.warning,
+        });
+        if (!state.puzzleSeen.includes(selected.id))
+          state.puzzleSeen.push(selected.id);
+        return clone(e);
+      });
+    }
     if (p === "/health")
       return {
         ok: true,
@@ -812,32 +975,124 @@ export async function createRuntime() {
       const e = data.exercise_id
         ? state.exercises.find((e) => e.id === data.exercise_id)
         : null;
-      if (data.exercise_id && (!e || key(board({ fen: e.fen })) !== key(b)))
-        throw Error("Позиция не соответствует упражнению");
+      const index = Number(data.sequence_index || 0);
+      if (data.exercise_id) {
+        if (
+          !e ||
+          !Number.isInteger(index) ||
+          index < 0 ||
+          index % 2 ||
+          index >= (e.line?.length || 1) ||
+          key(board({ fen: e.fen, moves: (e.line || []).slice(0, index) })) !==
+            key(b)
+        )
+          throw Error("Позиция не соответствует упражнению");
+      }
       return submit(async (job) => {
         const result = await compare(data, job),
-          accepted = Boolean(
-            e?.solution === data.uci || result.verdict.accepted,
+          expected = e?.line?.[index] || e?.solution,
+          acceptedByScore = Boolean(
+            expected === data.uci || result.verdict.accepted,
           );
+        let accepted = acceptedByScore;
+        if (
+          e?.themes?.some((t) => /^mateIn[1-5]$/.test(t)) &&
+          data.uci !== expected &&
+          accepted
+        ) {
+          const limit =
+              Number(e.themes.find((t) => /^mateIn[1-5]$/.test(t)).slice(6)) -
+              index / 2 -
+              1,
+            score = result.after.lines[0],
+            mover = b.turn() === "w" ? 1 : -1;
+          const reached =
+            result.after.terminal === "CHECKMATE" &&
+            score.expectation === (mover === 1 ? 1 : 0);
+          accepted =
+            reached ||
+            (score.mate !== null &&
+              score.mate !== 0 &&
+              Math.sign(score.mate) === mover &&
+              Math.abs(score.mate) <= limit);
+          if (!accepted) {
+            result.verdict = {
+              ...result.verdict,
+              accepted: false,
+              label: "Не выполнена цель задачи",
+              goal_note:
+                "Для этой задачи нужен мат за указанное число ходов. Сохранить выигранную позицию недостаточно — попробуйте более быстрое продолжение.",
+            };
+            result.explanation.facts.unshift(
+              "Нужно найти мат за указанное число ходов; сохранения выигранной оценки недостаточно.",
+            );
+          }
+        }
+        if (expected === data.uci && !result.verdict.accepted) {
+          result.verdict = {
+            ...result.verdict,
+            accepted: true,
+            label: "Ход решения",
+            source_solution: true,
+          };
+          const b = board(data);
+          result.explanation = explain(
+            b,
+            data.uci,
+            authored,
+            result.after,
+            result.verdict,
+            result.before,
+          );
+        }
+        const sequence = e?.line?.length
+          ? {
+              complete:
+                accepted &&
+                (index + 1 >= e.line.length || data.uci !== expected),
+              reply:
+                accepted && data.uci === expected
+                  ? e.line[index + 1] || null
+                  : null,
+              next_index: index + 2,
+            }
+          : null;
         let scheduled = null;
         check(job);
         await mutate(() => {
-          if (e)
-            scheduled = schedule(
-              e,
-              accepted ? (data.hint ? 3 : 5) : 1,
-              data.uci,
-            );
-          else
+          if (e) {
+            if (!accepted || !sequence || sequence.complete)
+              scheduled = schedule(
+                state.exercises.find(
+                  (live) =>
+                    live.id === e.id &&
+                    live.fen === e.fen &&
+                    live.solution === e.solution,
+                ) ||
+                  (() => {
+                    throw Error(
+                      "Упражнение изменено в другой вкладке. Откройте его снова.",
+                    );
+                  })(),
+                accepted ? (data.hint ? 3 : 5) : 1,
+                data.uci,
+              );
+          } else
             state.attempts.push({
               opening_id: data.opening_id,
+              variation_id: data.variation_id,
               position: key(b),
               at: now(),
               success: accepted,
               mode: data.mode,
             });
         });
-        return { ...result, accepted, schedule: scheduled };
+        return {
+          ...result,
+          accepted,
+          schedule: scheduled,
+          continuation: sequence,
+        };
       });
     }
     if (p === "/opponent") {
@@ -892,7 +1147,14 @@ export async function createRuntime() {
               (!q.get("category") || e.category === q.get("category")),
           )
           .sort((a, b) => a.due - b.due)
-          .slice(0, 100),
+          .slice(
+            q.get("all") === "true"
+              ? 0
+              : Math.max(0, Number(q.get("offset")) || 0),
+            q.get("all") === "true"
+              ? undefined
+              : Math.max(0, Number(q.get("offset")) || 0) + 100,
+          ),
       );
     if (p === "/exercises/create") {
       const b = board(data);
@@ -1118,10 +1380,18 @@ export async function createRuntime() {
           "Остановите анализ и дождитесь завершения задач перед восстановлением",
         );
       const replacement = validateBackup(data);
-      await storage.restore(replacement, exportData());
+      await writeLock(async () => {
+        state = (await storage.read()) || state;
+        await storage.restore(replacement, exportData());
+        state = replacement;
+        channel?.postMessage("changed");
+      });
       state = replacement;
+      state.profiles ||= {};
+      state.puzzleSeen ||= [];
       graph.clear();
-      for (const c of allCourses()) addGraph(c);
+      for (const c of allCourses())
+        addGraph({ ...c, ...(deepPacks.get(c.id) || {}) });
       return { ok: true };
     }
     throw Error("Неизвестная операция: " + p);
@@ -1132,7 +1402,7 @@ export async function createRuntime() {
     shutdown: () => {
       engine.reset();
       storage.close();
-      releaseLock();
+      channel?.close();
     },
     engine,
   };

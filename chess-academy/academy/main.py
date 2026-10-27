@@ -132,12 +132,10 @@ def analyze(data:AnalysisRequest):
     engine.engine_path()
     def work(job):
         with engine.Session() as sf:
-            before=sf.analyze(b,data.seconds,data.depth,data.multipv,job['event'])
-            if not data.uci: return before
-            m=b.parse_uci(data.uci);after_board=b.copy();after_board.push(m)
-            after=sf.analyze(after_board,data.seconds,data.depth,data.multipv,job['event'])
-            verdict=engine.classify(before,after,b.turn)
-            return {'before':before,'after':after,'verdict':verdict,'explanation':explain(b,m,after,verdict)}
+            if not data.uci: return sf.analyze(b,data.seconds,data.depth,data.multipv,job['event'])
+            m=b.parse_uci(data.uci)
+            before,after,verdict,verification=engine.assess_move(sf,b,m,data.seconds,data.depth,data.multipv,job['event'])
+            return {'before':before,'after':after,'verdict':verdict,'verification':verification,'explanation':explain(b,m,after,verdict)}
     return {'job_id':queue.submit(work)}
 
 @app.get('/api/jobs/{jid}')
@@ -192,8 +190,7 @@ def train(data:Train):
     engine.engine_path()
     def work(job):
         with engine.Session() as sf:
-            before=sf.analyze(b,data.seconds,data.depth,3,job['event']);after_board=b.copy();after_board.push(m)
-            after=sf.analyze(after_board,data.seconds,data.depth,3,job['event']);verdict=engine.classify(before,after,b.turn)
+            before,after,verdict,verification=engine.assess_move(sf,b,m,data.seconds,data.depth,3,job['event'],data.opening_id)
         # Exact stored solution or any engine-equivalent alternative is accepted.
         exact=bool(exercise and exercise['solution']==m.uci())
         accepted=exact or verdict['accepted']

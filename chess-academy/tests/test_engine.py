@@ -86,3 +86,8 @@ def test_personal_exercise_from_arbitrary_branch(client):
 def test_random_opponent_uses_selected_tree(client):
     result=run(client,'/api/opponent',{'moves':['e2e4'],'opening_id':'caro','good':.7,'ordinary':.25})
     assert result['uci']=='c7c6'
+
+def test_sound_caro_kann_move_is_not_refused(client):
+    result=run(client,'/api/train',{'moves':['e2e4'],'uci':'c7c6','opening_id':'caro','seconds':.15,'depth':14})
+    assert result['accepted'],result
+    assert result['verdict']['label']!='Грубый зевок'

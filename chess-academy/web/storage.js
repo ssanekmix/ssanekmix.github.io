@@ -1,8 +1,11 @@
 // IndexedDB transactions persist private data only on the user's device.
 export async function openStorage() {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open("personal-chess-academy", 1);
-    request.onupgradeneeded = () => request.result.createObjectStore("records");
+    const request = indexedDB.open("personal-chess-academy", 2);
+    request.onupgradeneeded = () => {
+      if (!request.result.objectStoreNames.contains("records"))
+        request.result.createObjectStore("records");
+    };
     request.onerror = () =>
       reject(
         Error(

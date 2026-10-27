@@ -97,7 +97,7 @@ def main():
             # Once SW is activated, even engine and curriculum must work offline.
             expect(page.locator('#offline-status')).to_contain_text('сохранено',timeout=30000)
             context.set_offline(True);page.reload();expect(page.locator('#home-stats article')).to_have_count(3,timeout=15000)
-            page.locator('nav [data-page="study"]').click();page.select_option('#mode','Свободное исследование');page.locator('#engine-panel summary').click();page.locator('#seconds').fill('0.27');page.locator('#analyze').click()
+            page.locator('nav [data-page="study"]').click();page.select_option('#mode','Свободное исследование');page.locator('[data-coach-tab="engine"]').click();page.locator('#seconds').fill('0.27');page.locator('#analyze').click()
             expect(page.locator('#analysis')).to_contain_text('Stockfish',timeout=20000)
             page.set_viewport_size({'width':390,'height':844});assert page.locator('body').evaluate('(e)=>e.scrollWidth<=innerWidth')
             out=ROOT/'chess-academy/ui-artifacts';out.mkdir(exist_ok=True);page.screenshot(path=str(out/'github-pages-mobile.png'),full_page=True)

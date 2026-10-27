@@ -32,3 +32,11 @@ Stockfish загружается с официального GitHub Release по
 ## Версия для GitHub Pages
 
 В web/vendor поставляются проверенные по npm SHA-512 Stockfish.js 17.1.0 Lite single-thread и chess.js 1.4.0. Лицензии и адреса соответствующих исходников точных коммитов находятся в [web/vendor/SOURCE.md](web/vendor/SOURCE.md); контрольные суммы — в provenance.json. chess.js имеет BSD-2-Clause, порт Stockfish — GPL-3.0-or-later. Однопоточная сборка не требует SharedArrayBuffer или заголовков COOP/COEP, которых GitHub Pages не предоставляет. Браузерная версия не использует Python-зависимости на стороне пользователя.
+
+## Дополнительные учебные данные и фигуры
+
+- Фигуры `academy/static/pieces/*.svg`: Colin M. L. Burnett, GPL-2.0-or-later. Лицензия явно указана в строке `public/piece/cburnett` официального [COPYING Lila](https://github.com/lichess-org/lila/blob/master/COPYING.md). Поставляются исходные SVG без изменений; указание авторства — в pieces/LICENSE.md. Изображения Chess.com не использованы.
+- Локальные 4 096 задач: [официальная база Lichess](https://database.lichess.org/#puzzles), CC0-1.0. Небольшая выборка извлечена потоково из официального архива; метаданные и SHA-256 частей — web/puzzles/manifest.json. Начальная позиция задания получается после первого хода исходной CSV-записи, как требует документация. Все включённые ходы проверены python-chess на легальность; независимая глубокая движковая проверка всех 4 096 решений не заявляется. Официальные решения атрибутированы источнику.
+- Новые онлайн-задачи: официальный `GET /api/puzzle/next`, по одному запросу на действие пользователя; это не инструмент для перебора или массового скачивания API. Официальная спецификация: https://github.com/lichess-org/api/blob/master/doc/specs/tags/puzzles/api-puzzle-next.yaml . Поддерживаются анонимные запросы, углы/темы и относительная сложность.
+- Углублённые дебютные деревья построены из той же закреплённой CC0-базы ECO. Русские планы за оба цвета созданы для академии; имена редких подвариантов сохраняют исходные названия.
+- Профили Chess.com используют опубликованные /pub/player/{name}, /stats, /games/archives и месячные архивы. Lichess использует /api/user/{name} и /api/games/user/{name} с ongoing=false, finished=true и NDJSON/PGN. Ни один приватный аккаунт не подключается автоматически; токены не требуются и не сохраняются.

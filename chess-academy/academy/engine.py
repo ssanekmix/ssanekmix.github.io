@@ -83,6 +83,29 @@ def classify(before,after,color):
     else: label='Игровая альтернатива'
     return {'label':label,'expected_loss':round(loss,4),'cp_loss':round(cp_loss),'accepted':loss<=.025 and cp_loss<=50,'missed_mate':missed_mate,'provisional':True}
 
+def assess_move(sf,b,move,seconds=.35,depth=18,multipv=3,event=None,opening_id=None):
+    """Recheck borderline decisions at one root; accept playable book alternatives.
+
+    Mirrors browser policy. A named line never overrides a concrete mate or a
+    large expected-result loss. The returned evaluation remains provisional.
+    """
+    before=sf.analyze(b,seconds,depth,multipv,event)
+    following=b.copy();following.push(move)
+    after=sf.analyze(following,seconds,depth,multipv,event)
+    verdict=classify(before,after,b.turn);verification=None
+    if not verdict['accepted'] and verdict['expected_loss']<.30 and verdict['cp_loss']<200 and after['lines'][0]['mate'] is None and not after.get('terminal'):
+        forced=sf.analyze(b,max(.6,seconds),max(18,depth),1,event,root_moves=[move])
+        verdict=classify(before,forced,b.turn)
+        verification={'kind':'same-root','depth':forced['lines'][0]['depth'],'score':forced['lines'][0]['cp']}
+    prepared=False
+    if opening_id:
+        with db.connect() as c:
+            pid=db.position(c,b)
+            prepared=c.execute('SELECT 1 FROM moves m JOIN variation_moves vm ON vm.move_id=m.id JOIN variations v ON v.id=vm.variation_id WHERE m.position_id=? AND m.uci=? AND v.opening_id=? LIMIT 1',(pid,move.uci(),opening_id)).fetchone() is not None
+    if not verdict['accepted'] and after['lines'][0]['mate'] is None and not after.get('terminal') and ((verdict['expected_loss']<=.06 and verdict['cp_loss']<=80) or (prepared and verdict['expected_loss']<=.12 and verdict['cp_loss']<=120)):
+        verdict={**verdict,'accepted':True,'label':'Теоретическая альтернатива' if prepared else 'Игровая альтернатива','acceptance_note':'Практически допустимый ход: небольшой разницы ограниченного расчёта недостаточно для отказа. Сравните более точное продолжение.'}
+    return before,after,verdict,verification
+
 class Queue:
     def __init__(self):
         self.pool=ThreadPoolExecutor(max_workers=1,thread_name_prefix='uci')

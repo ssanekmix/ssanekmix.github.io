@@ -1,0 +1,3 @@
+# Optional authoring tools; the website and native app do not need zstandard.
+-r requirements.txt
+zstandard==0.25.0

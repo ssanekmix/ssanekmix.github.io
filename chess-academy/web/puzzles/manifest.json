@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "source": "https://database.lichess.org/lichess_db_puzzle.csv.zst",
+  "license": "CC0-1.0",
+  "prepared": "2026-10-27",
+  "count": 4096,
+  "compressed_bytes_read": 327680,
+  "packs": [
+    {
+      "file": "offline-1.json",
+      "count": 512,
+      "sha256": "dceadca1c6193a1b6fe510315f48704f954ef506326d27c12af244aaf70d995d"
+    },
+    {
+      "file": "offline-2.json",
+      "count": 512,
+      "sha256": "165d939ea830d064298e14e74363c85fe6d05566c2d1e97cc85dd79bf11dd733"
+    },
+    {
+      "file": "offline-3.json",
+      "count": 512,
+      "sha256": "8a7350258b06768fe2b1523d3dd4515df2c7008e2eadee3e5f2bc176678b5629"
+    },
+    {
+      "file": "offline-4.json",
+      "count": 512,
+      "sha256": "1ab655c59b21ac94b9c43faa5223190ac95a659fe6cb633b9eb54e1c98c7c69a"
+    },
+    {
+      "file": "offline-5.json",
+      "count": 512,
+      "sha256": "1a1a1d1b6f676086043c2fe35252d934d755fb6f03e068bdcb75fb87feddc1df"
+    },
+    {
+      "file": "offline-6.json",
+      "count": 512,
+      "sha256": "c444c71c45e8f1d7aee1a0bde104615496daa1e9a23fb973f64d11f82d438a3e"
+    },
+    {
+      "file": "offline-7.json",
+      "count": 512,
+      "sha256": "5e7b502e7754e07145bb87c1c2da86ecda8542864c451a997045a4903c1a6bdd"
+    },
+    {
+      "file": "offline-8.json",
+      "count": 512,
+      "sha256": "f6a5474f6a8557a542c150b63d3509baa1a2d74d457a5c500215857d162c04f2"
+    }
+  ]
+}

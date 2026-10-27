@@ -124,13 +124,7 @@ export function classify(before, after, color) {
     provisional: true,
   };
 }
-export function explain(
-  b,
-  value,
-  authored = {},
-  analysis = null,
-  verdict = null,
-) {
+function baseExplain(b, value, authored = {}, analysis = null, verdict = null) {
   const before = b.fen(),
     m = play(new Chess(before), value),
     p = b.get(m.from),
@@ -220,4 +214,152 @@ export function explain(
     "Подробный разбор всех планов для неподготовленной позиции пока отсутствует. Проверяйте альтернативы через «Что будет, если…» и смотрите лучший ответ соперника.",
   );
   return { facts, motifs, arrows: [[m.from, m.to]], attacked, pv: pv || null };
+}
+
+export function explain(
+  b,
+  value,
+  authored = {},
+  analysis = null,
+  verdict = null,
+  beforeAnalysis = null,
+) {
+  const result = baseExplain(b, value, authored, analysis, verdict),
+    m = play(new Chess(b.fen()), value),
+    after = new Chess(b.fen());
+  play(after, value);
+  const names = {
+      p: "пешка",
+      n: "конь",
+      b: "слон",
+      r: "ладья",
+      q: "ферзь",
+      k: "король",
+    },
+    position = snapshot(after),
+    controlled = position.attacks[m.to] || [],
+    targets = controlled.filter(
+      (s) => after.get(s) && after.get(s).color !== m.color,
+    ),
+    friends = controlled.filter((s) => after.get(s)?.color === m.color),
+    center = controlled.filter((s) => ["d4", "e4", "d5", "e5"].includes(s));
+  const note = authored[key(b) + "|" + value],
+    pv = analysis?.lines?.[0];
+  const task =
+    note ||
+    `${names[m.piece].charAt(0).toUpperCase() + names[m.piece].slice(1)} переходит с ${m.from} на ${m.to}. ${m.captured ? `Ход снимает ${names[m.captured]} соперника${m.isEnPassant() ? " взятием на проходе" : ` с ${m.to}`}.` : center.length ? `С нового поля усиливается контроль над ${center.join(", ")}.` : "Оцените, какую линию или поле получает фигура; отдельного авторского замысла для этой позиции пока нет."}`;
+  const attack = [
+    targets.length
+      ? "Под ударом " +
+        targets.map((s) => `${names[after.get(s).type]} ${s}`).join(", ") +
+        "."
+      : "С нового поля фигура не атакует занятых полей соперника.",
+    friends.length
+      ? "Защищаются фигуры на " + friends.join(", ") + "."
+      : "На занятых полях своих фигур дополнительной геометрической защиты нет.",
+    "Геометрическая атака ещё не доказывает выгодность взятия.",
+  ].join(" ");
+  const pawnFiles = (color) => {
+    const files = {};
+    for (const s of SQUARES)
+      if (after.get(s)?.type === "p" && after.get(s).color === color)
+        (files[s[0]] ||= []).push(s);
+    return files;
+  };
+  const files = pawnFiles(m.color),
+    doubled = Object.values(files)
+      .filter((v) => v.length > 1)
+      .flat(),
+    isolated = Object.entries(files)
+      .filter(
+        ([f]) =>
+          !files[String.fromCharCode(f.charCodeAt(0) - 1)] &&
+          !files[String.fromCharCode(f.charCodeAt(0) + 1)],
+      )
+      .flatMap(([, v]) => v);
+  const structure =
+    m.piece === "p" || m.captured === "p"
+      ? `${doubled.length ? "Сдвоенные пешки своей стороны: " + doubled.join(", ") + "." : "У своей стороны нет сдвоенных пешек."} ${isolated.length ? "Изолированные пешки: " + isolated.join(", ") + "." : "Изолированных пешек своей стороны нет."} Эти особенности сами по себе не определяют оценку.`
+      : "Этот ход не перемещает и не снимает пешку: непосредственная пешечная структура сохраняется.";
+  let response =
+      "Без движкового анализа лучший ответ не определён. Откройте «Почему?» или анализ, чтобы проверить конкретное продолжение.",
+    threat = "Конкретная форсированная угроза пока не подтверждена расчётом.";
+  if (after.isCheckmate()) {
+    threat = "Это мат: король под шахом и легальной защиты нет.";
+    response = "Партия завершена матом: легального ответа нет.";
+  } else if (after.isStalemate()) {
+    threat =
+      "Получился пат, а не выигрыш: у соперника нет легальных ходов и нет шаха.";
+    response = "Пат — ничья.";
+  } else if (after.isCheck())
+    threat =
+      "Ход даёт шах. Соперник обязан взять атакующую фигуру, закрыть линию шаха или уйти королём, если соответствующий ход легален.";
+  if (pv?.pv?.length) {
+    const reply = play(new Chess(after.fen()), pv.pv[0]);
+    response = `Лучший найденный ответ — ${reply.san}. ${reply.captured ? "Он забирает " + names[reply.captured] + (reply.isEnPassant() ? " взятием на проходе" : " на " + reply.to) + "." : reply.san.includes("+") ? "Он даёт шах — нужно немедленно решить вопрос безопасности короля." : "Сравните это продолжение с вашей задумкой."} Линия: ${pv.san.slice(0, 8).join(" ")}. Это ограниченный расчёт, а не доказательство вынужденности всех ходов.`;
+    if (reply.san.endsWith("#"))
+      response = `Ответ ${reply.san} ставит мат. Ваш ход оставляет короля без легальной защиты.`;
+  }
+  const alternative = beforeAnalysis?.lines?.find((l) => l.pv[0] !== value);
+  const instead = alternative
+    ? `Для сравнения рассмотрите ${alternative.san.slice(0, 8).join(" ")}. Оценка белых: ${alternative.mate !== null ? "мат " + alternative.mate : (alternative.cp / 100).toFixed(2)}; глубина ${alternative.depth}. Это проверенная в том же расчёте альтернатива, её качество зависит от точности поиска.`
+    : "«Что будет, если…» позволяет проверить альтернативу. Без отдельного расчёта нельзя уверенно утверждать, что случится при другом ходе.";
+  const home = m.color === "w" ? "1" : "8",
+    undeveloped = ["b", "g"]
+      .map((f) => f + home)
+      .filter(
+        (s) => after.get(s)?.type === "n" && after.get(s).color === m.color,
+      ),
+    kingSquare = SQUARES.find(
+      (s) => after.get(s)?.type === "k" && after.get(s).color === m.color,
+    ),
+    castle = m.isKingsideCastle() || m.isQueensideCastle();
+  const development = castle
+    ? "Выполнена рокировка: король и ладья поменяли положение. Открытые линии рядом с королём всё равно нужно проверить."
+    : undeveloped.length
+      ? "Кони на исходных полях " +
+        undeveloped.join(", ") +
+        ". Сравните дальнейшее развитие с конкретными угрозами."
+      : `Король находится на ${kingSquare}. Не делайте автоматических выводов о его безопасности без учёта открытых линий.`;
+  const plan = pv?.san?.length
+    ? `Начните с проверки ответа ${pv.san[0]}, затем разберите ${pv.san.slice(1, 5).join(" ") || "следующую позицию"}. Долгосрочный план сверяйте с памяткой выбранного дебюта и фактической пешечной структурой.`
+    : "Проверьте шахи, взятия и угрозы соперника. Затем сравните развитие фигур и возможный центральный подрыв; подробная авторская программа доступна в выбранном дебюте.";
+  result.sections = [
+    { id: "idea", title: "Зачем этот ход", body: task },
+    {
+      id: "response",
+      title:
+        verdict && !verdict.accepted
+          ? "Почему возникает проблема"
+          : "Лучший ответ соперника",
+      body: response,
+    },
+    { id: "attacks", title: "Что атакует и защищает", body: attack },
+    {
+      id: "center",
+      title: "Центр, развитие и король",
+      body:
+        (center.length
+          ? "Геометрический контроль центральных полей: " +
+            center.join(", ") +
+            ". "
+          : "С нового поля четыре центральных поля не атакуются напрямую. ") +
+        development,
+    },
+    { id: "structure", title: "Пешечная структура", body: structure },
+    { id: "threat", title: "Конкретные угрозы", body: threat },
+    {
+      id: "alternative",
+      title: "Что будет, если сыграть иначе",
+      body: instead,
+    },
+    {
+      id: "plan",
+      title: "Как продолжать и чего избегать",
+      body:
+        plan +
+        " Перед каждым ходом проверяйте ответные шахи и взятия; не считайте популярность доказательством качества.",
+    },
+  ];
+  return result;
 }
