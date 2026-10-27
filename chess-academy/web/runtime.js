@@ -558,7 +558,7 @@ export async function createRuntime() {
         m = play(b, move.uci),
         after = await analyze(b, { ...params, multipv: 3 }, job),
         verdict = classify(before, after, color),
-        commentary = explain(original, move.uci, authored, after, verdict);
+        commentary = explain(original, move.uci, authored, after, verdict, before);
       records.push({
         game_id: id,
         ply: i + 1,

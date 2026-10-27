@@ -51,6 +51,7 @@ def main():
             page.locator('#forward').click();page.select_option('#mode','Свободное исследование')
             page.locator('[data-square="a2"]').click();page.locator('[data-square="a3"]').click()
             expect(page.locator('#history')).to_contain_text('a3')
+            page.locator('.board-extras > summary').click()
             page.locator('summary').filter(has_text='Позиция и личные заметки').click()
             page.locator('#note').fill('Мой браузерный план');page.locator('#save-note').click()
             expect(page.locator('#saved-notes')).to_contain_text('Мой браузерный план')

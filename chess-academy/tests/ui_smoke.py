@@ -67,6 +67,7 @@ def main():
                 page.locator('[data-pool="masters"]').click()
                 expect(page.locator('#explorer-masters')).to_contain_text('100.0%')
                 expect(page.locator('#explorer-masters')).to_contain_text('10 / 5 / 5')
+                page.locator('.board-extras > summary').click()
                 page.locator('#idea').click()
                 expect(page.locator('#task')).to_contain_text('Идея предложенного хода',timeout=15000)
                 # Persist a note, then restart the server and verify it below.

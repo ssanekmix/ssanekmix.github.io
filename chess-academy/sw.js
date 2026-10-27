@@ -1,5 +1,5 @@
 // This scope contains only the academy; other GitHub Pages projects are untouched.
-const VERSION = "academy-web-v2";
+const VERSION = "academy-web-v3";
 const FILES = [
   "./",
   "./index.html",
@@ -80,7 +80,7 @@ self.addEventListener("activate", (event) =>
         const clients = await self.clients.matchAll({ type: "window" });
         for (const client of clients) {
           const url = new URL(client.url);
-          if (url.searchParams.get("upgrade") === "2") {
+          if (url.searchParams.has("upgrade")) {
             url.searchParams.delete("upgrade");
             void client.navigate(url.href).catch(() => {});
           }

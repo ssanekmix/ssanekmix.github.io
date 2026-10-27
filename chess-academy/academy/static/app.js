@@ -189,6 +189,11 @@ $("eco-search").onclick = safe(async () => {
 async function load(fen, moves = [], sans = []) {
   if (busy) return;
   clearFeedback();
+  S.reviewGame = null;
+  document.body.classList.remove("reviewing");
+  $("review-panel").hidden = true;
+  $("back").disabled = false;
+  $("forward").disabled = false;
   const old = { ...S };
   S.root = fen;
   S.moves = [...moves];
@@ -207,8 +212,12 @@ async function load(fen, moves = [], sans = []) {
     throw e;
   }
 }
+let refreshTicket = 0;
 async function refresh() {
-  S.position = await api("/position", payload());
+  const ticket = ++refreshTicket,
+    position = await api("/position", payload());
+  if (ticket !== refreshTicket) return false;
+  S.position = position;
   if ($("eval-meter")?.dataset.fen !== S.position.fen) resetEvaluation();
   S.revision++;
   S.selected = null;
@@ -246,6 +255,8 @@ async function refresh() {
     .forEach((b) => (b.onclick = safe(() => play(b.dataset.move))));
   $("explorer").innerHTML = "";
   updateStudyChrome();
+  renderReview();
+  return true;
 }
 function renderBoard() {
   const files = S.flip ? "hgfedcba" : "abcdefgh",
@@ -275,10 +286,24 @@ function renderBoard() {
       button.innerHTML =
         (p
           ? `<img class="piece" src="${window.AcademyUI.pieceSrc(p)}" alt="" draggable="false">`
-          : "") + `<span class="coordinate">${sq}</span>`;
+          : "") +
+        (f === 0
+          ? `<span class="coordinate rank-coordinate">${ranks[r]}</span>`
+          : "") +
+        (r === 7
+          ? `<span class="coordinate file-coordinate">${files[f]}</span>`
+          : "");
       button.onclick = safe(() => clickSquare(sq));
       button.onpointerdown = (event) => startDrag(event, sq);
       button.onkeydown = (event) => boardKeyboard(event, sq);
+      const reviewed = reviewRow();
+      if (reviewed && reviewed.uci.slice(2, 4) === sq && !S.preview) {
+        const mark = reviewMark(reviewed);
+        button.insertAdjacentHTML(
+          "beforeend",
+          `<span class="move-badge ${mark.kind}" title="${esc(mark.label)}">${mark.symbol}</span>`,
+        );
+      }
       $("board").append(button);
     }
   drawArrows();
@@ -501,6 +526,7 @@ async function showRefutation(count = 1) {
   S.arrows = [[last.slice(0, 2), last.slice(2, 4), "blue"]];
   renderBoard();
   evaluation(ctx.result.after, ctx.afterFen);
+  window.AcademyUI.moveSound?.(Boolean(line.san[count - 1]?.includes("x")));
   $("board-state").textContent = "Ответ соперника";
   document
     .querySelectorAll("[data-refutation-step]")
@@ -571,6 +597,12 @@ async function play(uci, automaticMove = false) {
   try {
     const response = await api("/move", { ...before, uci }),
       training = !automaticMove && $("mode").value !== "Свободное исследование";
+    window.AcademyUI.moveSound?.(Boolean(response.san.includes("x")));
+    if (S.reviewGame) {
+      S.reviewGame = null;
+      document.body.classList.remove("reviewing");
+      $("review-panel").hidden = true;
+    }
     let result = null;
     if (training) {
       const token = ++previewToken;
@@ -641,6 +673,7 @@ async function play(uci, automaticMove = false) {
         notice("Задача решена · результат сохранён");
       } else if (next.reply) {
         const reply = await api("/move", { ...payload(), uci: next.reply });
+        window.AcademyUI.moveSound?.(reply.san.includes("x"));
         S.moves.push(next.reply);
         S.sans.push(reply.san);
         S.cursor++;
@@ -725,23 +758,59 @@ $("play-color").onchange = safe(async () => {
 });
 async function jump(n) {
   if (busy) return;
+  const cursor = Math.max(0, Math.min(n, S.moves.length)),
+    moved = cursor !== S.cursor;
+  if (!moved && !S.preview) return;
   clearFeedback();
-  S.cursor = Math.max(0, Math.min(n, S.moves.length));
+  S.cursor = cursor;
   S.arrows = [];
   S.attacks = [];
   S.exercise = null;
   S.puzzle = null;
-  await refresh();
-  $("explanation").innerHTML = "";
+  const updated = await refresh();
+  if (updated === false) return;
+  if (moved)
+    window.AcademyUI.moveSound?.(Boolean(S.sans[S.cursor - 1]?.includes("x")));
+  if (!S.reviewGame) $("explanation").innerHTML = "";
   $("analysis").innerHTML = "";
 }
 $("back").onclick = safe(() => jump(S.cursor - 1));
 $("forward").onclick = safe(() => jump(S.cursor + 1));
 $("flip").onclick = () => {
   S.flip = !S.flip;
+  updateStudyChrome();
   renderBoard();
 };
-$("reset").onclick = safe(() => load(S.root));
+$("reset").onclick = safe(() => (S.reviewGame ? jump(0) : load(S.root)));
+$("first-move").onclick = safe(() => jump(0));
+$("last-move").onclick = safe(() => jump(S.moves.length));
+document.addEventListener(
+  "keydown",
+  (event) => {
+    if (
+      $("study").hidden ||
+      event.altKey ||
+      event.ctrlKey ||
+      event.metaKey ||
+      event.target.closest(
+        "input,textarea,select,[contenteditable=true],dialog",
+      )
+    )
+      return;
+    if (!S.reviewGame && event.target.closest("#board")) return;
+    const next = {
+      ArrowLeft: S.cursor - 1,
+      ArrowRight: S.cursor + 1,
+      Home: 0,
+      End: S.moves.length,
+    }[event.key];
+    if (next === undefined) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    safe(() => jump(next))();
+  },
+  true,
+);
 $("repeat").onclick = safe(() =>
   S.exercise ? load(S.exercise.fen) : jump(Math.max(0, S.cursor - 1)),
 );
@@ -762,7 +831,11 @@ $("load-fen").onclick = safe(async () => {
   updateStudyChrome();
 });
 function formatScore(l) {
-  return l.mate !== null ? "Мат " + l.mate : (l.cp / 100).toFixed(2);
+  return l.mate !== null
+    ? l.mate === 0
+      ? "Мат"
+      : "Мат " + l.mate
+    : (l.cp > 0 ? "+" : "") + (l.cp / 100).toFixed(2);
 }
 function renderAnalysis(result, anchor = payload()) {
   evaluation(result);
@@ -1070,12 +1143,19 @@ async function games() {
   $("game-list").innerHTML = rows
     .map(
       (g) =>
-        `<article><small>${esc(g.played)} · ${esc(g.source)}</small><h2>${esc(g.white)} — ${esc(g.black)}</h2><p>${esc(g.result)} · ${g.analyzed ? "Разобрана" : "Ожидает анализа"}</p><button data-game="${g.id}">Открыть партию</button></article>`,
+        `<article><small>${esc(g.played)} · ${esc(g.source)}</small><h2>${esc(g.white)} — ${esc(g.black)}</h2><p>${esc(g.result)} · ${g.analyzed ? "Разобрана" : "Ожидает анализа"}</p><button class="primary" data-review-game="${g.id}">Разобрать на доске</button><button data-game="${g.id}">Открыть партию</button></article>`,
     )
     .join("");
   document
     .querySelectorAll("[data-game]")
     .forEach((b) => (b.onclick = safe(() => showGame(Number(b.dataset.game)))));
+  document.querySelectorAll("[data-review-game]").forEach(
+    (b) =>
+      (b.onclick = safe(async () => {
+        currentGame = await api("/games/" + Number(b.dataset.reviewGame));
+        await replay();
+      })),
+  );
 }
 async function showGame(id) {
   currentGame = await api("/games/" + id);
@@ -1137,6 +1217,130 @@ async function showGame(id) {
   );
   chart(currentGame.analyses);
 }
+let reviewJob = null;
+function reviewRow() {
+  return S.reviewGame?.analyses.find((a) => a.ply === S.cursor);
+}
+function reviewMark(row) {
+  const best = JSON.parse(row.before_json).lines[0]?.pv[0],
+    verdict = JSON.parse(row.verdict);
+  if (best === row.uci)
+    return { label: "Лучший ход", kind: "best", symbol: "★" };
+  const marks = {
+      "Грубый зевок": ["blunder", "??"],
+      Ошибка: ["mistake", "?"],
+      Неточность: ["inaccuracy", "?!"],
+      "Один из лучших": ["good", "✓"],
+    },
+    [kind, symbol] = marks[verdict.label] || ["good", "✓"];
+  return { label: verdict.label, kind, symbol };
+}
+function renderReview() {
+  const game = S.reviewGame;
+  $("review-panel").hidden = !game;
+  if (!game) return;
+  document.body.classList.add("reviewing");
+  $("review-counter").textContent = `${S.cursor} / ${game.moves.length}`;
+  $("review-show-best").hidden = true;
+  $("review-return").hidden = true;
+  $("review-best").textContent = "";
+  $("review-scores").textContent = "";
+  $("explanation").innerHTML = "";
+  $("back").disabled = S.cursor === 0;
+  $("forward").disabled = S.cursor === S.moves.length;
+  const row = reviewRow();
+  if (row) {
+    const mark = reviewMark(row),
+      before = JSON.parse(row.before_json),
+      after = JSON.parse(row.after_json),
+      best = before.lines[0];
+    $("review-verdict").innerHTML =
+      `<span class="review-symbol ${mark.kind}">${mark.symbol}</span><div><b>${esc(row.san)} — ${esc(mark.label)}</b><small>Stockfish · глубина ${after.lines[0]?.depth ?? "—"}</small></div>`;
+    $("review-scores").textContent =
+      `${formatScore(before.lines[0])} → ${formatScore(after.lines[0])} · оценка белых`;
+    showExplanation(JSON.parse(row.explanation));
+    S.arrows = [];
+    evaluation(after);
+    if (best?.pv[0] && best.pv[0] !== row.uci) {
+      $("review-best").textContent =
+        `Сильнее было ${best.san[0]}. Потеря оценки: ${(JSON.parse(row.verdict).cp_loss / 100).toFixed(2)} пешки.`;
+      $("review-show-best").hidden = false;
+    } else
+      $("review-best").textContent =
+        "Это первая рекомендация движка в сохранённом анализе.";
+  } else {
+    $("review-verdict").textContent = S.cursor
+      ? `${S.sans[S.cursor - 1]} · ожидает анализа`
+      : "Начальная позиция";
+    if (S.cursor === 0 && game.analyses.length)
+      evaluation(JSON.parse(game.analyses[0].before_json));
+  }
+  $("review-history").innerHTML = game.moves
+    .map((m, i) => {
+      const record = game.analyses.find((a) => a.ply === i + 1),
+        mark = record && reviewMark(record);
+      return `<button data-review-ply="${i + 1}" class="${i + 1 === S.cursor ? "active" : ""}"><span>${i % 2 === 0 ? Math.floor(i / 2) + 1 + ". " : ""}${esc(m.san)}</span>${mark ? `<span class="review-mini ${mark.kind}" title="${esc(mark.label)}">${mark.symbol}</span><small>${esc(formatScore(JSON.parse(record.after_json).lines[0]))}</small>` : ""}</button>`;
+    })
+    .join("");
+  $("review-history")
+    .querySelectorAll("button")
+    .forEach(
+      (b) => (b.onclick = safe(() => jump(Number(b.dataset.reviewPly)))),
+    );
+  const active = $("review-history").querySelector(".active");
+  if (active)
+    $("review-history").scrollTop = Math.max(
+      0,
+      active.offsetTop -
+        $("review-history").offsetTop -
+        $("review-history").clientHeight / 2,
+    );
+  renderBoard();
+}
+$("review-show-best").onclick = safe(async () => {
+  const row = reviewRow();
+  if (!row) return;
+  const best = JSON.parse(row.before_json).lines[0],
+    revision = S.revision;
+  const position = await api("/position", { fen: row.fen });
+  if (revision !== S.revision || !S.reviewGame) return;
+  S.preview = { position, last: row.uci };
+  S.arrows = [[best.pv[0].slice(0, 2), best.pv[0].slice(2, 4), "green"]];
+  evaluation(JSON.parse(row.before_json), position.fen);
+  renderBoard();
+  $("review-return").hidden = false;
+  $("review-best").textContent =
+    `До хода ${row.san}: зелёная стрелка — ${best.san[0]}. Вариант: ${best.san.slice(0, 6).join(" ")}.`;
+});
+$("review-return").onclick = safe(() => jump(S.cursor));
+async function analyzeReview() {
+  if (!S.reviewGame || reviewJob) return;
+  const game = S.reviewGame;
+  reviewJob = { id: game.id };
+  $("review-analyze").disabled = true;
+  try {
+    await runJob(
+      "/games/" + game.id + "/analyze",
+      { seconds: Number($("seconds").value), depth: Number($("depth").value) },
+      (status) => {
+        $("review-progress").textContent =
+          `Анализ ${Math.round(status.progress * 100)}%`;
+      },
+    );
+    const updated = await api("/games/" + game.id);
+    if (currentGame?.id === game.id) currentGame = updated;
+    if (S.reviewGame?.id === game.id) {
+      S.reviewGame = updated;
+      clearFeedback();
+      renderReview();
+    }
+    $("review-progress").textContent = "Все ходы оценены";
+  } finally {
+    reviewJob = null;
+    $("review-analyze").disabled = false;
+  }
+}
+$("review-analyze").onclick = safe(analyzeReview);
 async function replay(ply = 0) {
   S.course = null;
   S.exercise = null;
@@ -1151,14 +1355,13 @@ async function replay(ply = 0) {
     currentGame.moves.map((m) => m.uci),
     currentGame.moves.map((m) => m.san),
   );
-  S.cursor = ply;
+  S.reviewGame = currentGame;
+  S.cursor = Math.max(0, Math.min(ply, S.moves.length));
+  document.body.classList.add("reviewing");
   await refresh();
-  const row = currentGame.analyses.find((a) => a.ply === ply);
-  if (row) {
-    showExplanation(JSON.parse(row.explanation));
-    renderAnalysis(JSON.parse(row.after_json));
-  }
+  window.AcademyUI.showTab("coach");
   await page("study");
+  if (!currentGame.analyzed) safe(analyzeReview)();
 }
 $("game-replay").onclick = safe(() => replay());
 $("game-analyze").onclick = safe(async () => {
@@ -1374,6 +1577,17 @@ function updateStudyChrome() {
     : S.position.turn === side || side === "both"
       ? "Ваш ход"
       : "Ход соперника";
+  if (S.reviewGame) {
+    $("player-label").textContent = S.flip
+      ? S.reviewGame.black
+      : S.reviewGame.white;
+    $("opponent-label").textContent = S.flip
+      ? S.reviewGame.white
+      : S.reviewGame.black;
+    $("board-state").textContent = S.position.terminal
+      ? S.position.result
+      : `Ход ${S.position.turn === "white" ? "белых" : "чёрных"}`;
+  }
   if (S.course) {
     const phase = S.course.guide?.phases.find((p) => S.cursor < p.until);
     $("chapter-progress").textContent = phase

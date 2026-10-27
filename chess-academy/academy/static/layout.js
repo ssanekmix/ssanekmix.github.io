@@ -4,7 +4,7 @@
   // A deliberate upgrade visit must also work while an old cached bootstrap is
   // running. Registration starts before any old single-tab runtime can fail.
   if (
-    new URL(location.href).searchParams.get("upgrade") === "2" &&
+    new URL(location.href).searchParams.has("upgrade") &&
     base.pathname.includes("/chess-academy/")
   )
     navigator.serviceWorker
@@ -66,7 +66,7 @@
   aside.classList.add("coach-column");
   tree.id = "study-tree";
   tree.querySelector("h2").textContent = "Программа дебюта";
-  workspace.insertBefore(tree, boardColumn);
+  tree.hidden = true;
   const movePanel = document.createElement("section");
   movePanel.id = "move-panel";
   movePanel.className = "panel";
@@ -110,14 +110,26 @@
     '<div id="feedback" hidden role="status"><div id="feedback-label"></div><h3 id="feedback-title"></h3><p id="feedback-summary"></p><div id="refutation-strip" class="moves"></div><div class="toolbar"><button id="show-refutation">Показать на доске</button><button id="retry-move" class="primary">Попробовать ещё раз</button><button id="show-best-move">Показать сильный ход</button></div></div>',
   );
   $("explanation").before($("feedback"));
+  const reflection = document.createElement("details");
+  reflection.className = "reflection";
+  reflection.innerHTML = "<summary>Мой план и заметки</summary>";
+  reflection.append($("answer"));
+  coach.append(reflection);
   aside.insertBefore(movePanel, $("engine-panel"));
   const tabs = document.createElement("div");
   tabs.className = "coach-tabs";
   tabs.innerHTML =
     '<button data-coach-tab="coach" class="active">Разбор</button><button data-coach-tab="moves">Ходы</button><button data-coach-tab="engine">Движок</button>';
   aside.prepend(tabs);
+  aside.prepend(document.querySelector(".study-title"));
+  tabs.insertAdjacentHTML(
+    "beforeend",
+    '<button data-coach-tab="chapters">Главы</button>',
+  );
+  aside.append(tree);
   window.AcademyUI.showTab = (tab) => {
     coach.hidden = tab !== "coach";
+    tree.hidden = tab !== "chapters";
     movePanel.hidden = tab !== "moves";
     $("engine-panel").hidden = tab !== "engine";
     if (tab === "engine") $("engine-panel").open = true;
@@ -135,12 +147,40 @@
   extras.className = "panel board-extras";
   extras.innerHTML = "<summary>Инструменты позиции</summary>";
   aside.append(extras);
+  extras.append(
+    boardColumn.querySelector(":scope > .toolbar:not(.board-controls)"),
+  );
   [...boardColumn.querySelectorAll(":scope > details")].forEach((d) =>
     extras.append(d),
   );
+  [...aside.querySelectorAll(":scope > details")]
+    .filter((d) => d !== extras && d.id !== "engine-panel")
+    .forEach((d) => extras.append(d));
   document.body.insertAdjacentHTML(
     "beforeend",
     '<dialog id="promotion-dialog"><h2>Выберите фигуру</h2><div id="promotion-options"></div><p>Можно выбрать ферзя, ладью, слона или коня.</p></dialog><div id="drag-ghost" hidden></div>',
+  );
+  document
+    .querySelector(".board-controls")
+    .insertAdjacentHTML(
+      "afterbegin",
+      '<button id="first-move" title="Начало партии (Home)" aria-label="Начало партии">|←</button>',
+    );
+  $("forward").insertAdjacentHTML(
+    "afterend",
+    '<button id="last-move" title="Конец партии (End)" aria-label="Конец партии">→|</button>',
+  );
+  document
+    .querySelector(".board-controls")
+    .insertAdjacentHTML(
+      "beforeend",
+      '<button id="sound-toggle" title="Звук ходов" aria-label="Звук ходов" aria-pressed="true">♪</button>',
+    );
+  $("back").title = "Предыдущий ход (←)";
+  $("forward").title = "Следующий ход (→)";
+  $("coach-panel").insertAdjacentHTML(
+    "afterbegin",
+    `<section id="review-panel" hidden aria-label="Разбор партии"><div class="review-top"><b>Разбор партии</b><span id="review-counter"></span></div><div id="review-verdict" aria-live="polite"></div><div id="review-scores"></div><p id="review-best"></p><button id="review-show-best">Показать лучший ход</button><button id="review-return" hidden>Вернуться к партии</button><div class="review-job"><button id="review-analyze">Анализировать партию</button><span id="review-progress" role="status"></span></div><div id="review-history" aria-label="Ходы с оценками"></div><small>← → — ходы · Home / End — начало и конец</small></section>`,
   );
   const main = document.querySelector("main");
   main.insertAdjacentHTML(
@@ -169,5 +209,63 @@
       )
       .join(""),
   );
+  let audio = null,
+    soundOn = localStorage.getItem("academy-sound") !== "off";
+  const soundButton = $("sound-toggle");
+  function soundState() {
+    soundButton.setAttribute("aria-pressed", String(soundOn));
+    soundButton.textContent = soundOn ? "♪" : "♪ ×";
+  }
+  function unlockAudio() {
+    if (!soundOn) return;
+    const Audio = window.AudioContext || window.webkitAudioContext;
+    if (!Audio) return;
+    audio ||= new Audio();
+    if (audio.state === "suspended") void audio.resume().catch(() => {});
+  }
+  document.addEventListener("pointerdown", unlockAudio, { passive: true });
+  document.addEventListener("keydown", unlockAudio, { passive: true });
+  soundButton.onclick = () => {
+    soundOn = !soundOn;
+    localStorage.setItem("academy-sound", soundOn ? "on" : "off");
+    soundState();
+    unlockAudio();
+  };
+  soundState();
+  window.AcademyUI.moveSound = (capture = false) => {
+    if (!soundOn || !audio || audio.state !== "running") return;
+    const start = audio.currentTime,
+      duration = capture ? 0.12 : 0.085;
+    const buffer = audio.createBuffer(
+      1,
+      Math.ceil(audio.sampleRate * duration),
+      audio.sampleRate,
+    );
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < data.length; i++)
+      data[i] =
+        (Math.random() * 2 - 1) * Math.exp(-i / (audio.sampleRate * 0.014));
+    const source = audio.createBufferSource(),
+      filter = audio.createBiquadFilter(),
+      gain = audio.createGain();
+    source.buffer = buffer;
+    filter.type = "lowpass";
+    filter.frequency.value = capture ? 1800 : 1100;
+    gain.gain.value = 0.55;
+    source.connect(filter).connect(gain).connect(audio.destination);
+    source.start(start);
+    const tap = audio.createOscillator(),
+      envelope = audio.createGain();
+    tap.frequency.setValueAtTime(capture ? 240 : 320, start);
+    tap.frequency.exponentialRampToValueAtTime(100, start + duration);
+    envelope.gain.setValueAtTime(0.12, start);
+    envelope.gain.exponentialRampToValueAtTime(0.001, start + duration);
+    tap.connect(envelope).connect(audio.destination);
+    tap.start(start);
+    tap.stop(start + duration);
+    soundButton.dataset.played = String(
+      Number(soundButton.dataset.played || 0) + 1,
+    );
+  };
   document.documentElement.style.colorScheme = "dark";
 })();
