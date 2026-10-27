@@ -1,0 +1,2 @@
+# Optional: install into the development venv, then playwright install chromium.
+playwright==1.62.0

@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Личная шахматная академия</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="brand">
+        ♞
+        <span
+          >Личная академия<small>Шахматы · понимание · практика</small></span
+        >
+      </div>
+      <span id="health">Запуск…</span>
+    </header>
+    <nav id="nav">
+      <button data-page="home" class="active">Мой путь</button
+      ><button data-page="openings">Дебюты</button
+      ><button data-page="study">Доска</button
+      ><button data-page="games">Мои партии</button
+      ><button data-page="reviews">Повторения</button
+      ><button data-page="lessons">Тактика и эндшпиль</button
+      ><button data-page="progress">Прогресс</button>
+    </nav>
+    <main>
+      <div id="notice" role="status" aria-live="polite"></div>
+      <section id="home" class="page">
+        <div class="hero">
+          <p class="eyebrow">ОТ ПЕРВЫХ ПЛАНОВ К САМОСТОЯТЕЛЬНОЙ ИГРЕ</p>
+          <h1>Понимать каждый ход.</h1>
+          <p>
+            Учитесь на доске, проверяйте свои идеи и возвращайтесь к ошибкам,
+            пока сильный ход не станет привычкой.
+          </p>
+          <button id="continue" class="primary">Продолжить обучение →</button>
+        </div>
+        <div id="home-stats" class="cards"></div>
+        <div class="cards">
+          <article>
+            <h2>01 · Дебюты со смыслом</h2>
+            <p>
+              16 учебных программ, открытая база ECO и свободное исследование
+              любой легальной ветки.
+            </p>
+            <button data-page="openings">Выбрать дебют</button>
+          </article>
+          <article>
+            <h2>02 · Ваши партии — ваши уроки</h2>
+            <p>
+              Импортируйте завершённую партию. Локальный движок найдёт
+              критические моменты и сохранит упражнения.
+            </p>
+            <button data-page="games">Разобрать партию</button>
+          </article>
+          <article>
+            <h2>03 · Практика без спешки</h2>
+            <p>
+              Начните с безопасности фигур, простых матов и развития. Двигайтесь
+              дальше по результатам упражнений.
+            </p>
+            <button data-page="reviews">Повторить ошибки</button>
+          </article>
+        </div>
+      </section>
+      <section id="openings" class="page" hidden>
+        <h1>Библиотека дебютов</h1>
+        <p>
+          Подготовленные курсы — на русском. Открытая база ECO сохраняет
+          исходные международные названия.
+        </p>
+        <div class="toolbar">
+          <input
+            id="opening-query"
+            placeholder="Название или ECO…"
+            aria-label="Поиск дебюта"
+          /><select id="color-filter" aria-label="Цвет">
+            <option value="">Оба цвета</option>
+            <option value="white">За белых</option>
+            <option value="black">За чёрных</option></select
+          ><select id="family-filter" aria-label="Тип дебюта">
+            <option value="">Все типы</option>
+            <option>Открытые</option>
+            <option>Полуоткрытые</option>
+            <option>Закрытые</option>
+          </select>
+        </div>
+        <div id="opening-list" class="cards"></div>
+        <details>
+          <summary>Добавить свою ветку репертуара</summary>
+          <input
+            id="repertoire-name"
+            placeholder="Название дебюта на русском"
+            aria-label="Название своего дебюта"
+          /><select id="repertoire-color" aria-label="Цвет своего дебюта">
+            <option value="white">За белых</option>
+            <option value="black">За чёрных</option></select
+          ><textarea
+            id="repertoire-pgn"
+            placeholder="1. e4 e5 2. Nf3 Nc6 *"
+            aria-label="PGN варианта"
+          ></textarea
+          ><button id="save-repertoire">Добавить ветку</button>
+          <p>
+            Одинаковое название и цвет объединяют ветки в одно дерево.
+            Количество дебютов не ограничено.
+          </p>
+        </details>
+        <details>
+          <summary>Открытая база ECO: другие дебюты</summary>
+          <input
+            id="eco-query"
+            placeholder="Например: A00, English, Sicilian"
+            aria-label="Поиск ECO"
+          /><button id="eco-search">Найти</button>
+          <div id="eco-list" class="cards"></div>
+        </details>
+      </section>
+      <section id="study" class="page" hidden>
+        <div class="study-title">
+          <div>
+            <p class="eyebrow" id="study-kind">СВОБОДНОЕ ИССЛЕДОВАНИЕ</p>
+            <h1 id="study-title">Шахматная лаборатория</h1>
+          </div>
+          <select id="play-color" aria-label="Сторона тренировки">
+            <option value="white">Играю белыми</option>
+            <option value="black">Играю чёрными</option>
+            <option value="both">Обе стороны</option>
+          </select>
+        </div>
+        <div class="workspace">
+          <div>
+            <div id="board-wrap">
+              <div id="board" role="grid" aria-label="Шахматная доска"></div>
+              <svg id="arrows" viewBox="0 0 800 800" aria-hidden="true">
+                <defs>
+                  <marker
+                    id="arrowhead"
+                    markerWidth="4"
+                    markerHeight="4"
+                    refX="2.8"
+                    refY="2"
+                    orient="auto"
+                  >
+                    <path d="M0,0 L4,2 L0,4" fill="#d59632" />
+                  </marker>
+                </defs>
+                <g id="arrow-lines"></g>
+              </svg>
+            </div>
+            <div class="toolbar board-controls">
+              <button id="back" title="Предыдущий ход">← Назад</button
+              ><button id="forward">Вперёд →</button
+              ><button id="flip">↻ Повернуть</button
+              ><button id="reset">Сначала</button>
+            </div>
+            <p id="turn" aria-live="polite"></p>
+            <div class="toolbar">
+              <button id="idea">Показать идею</button
+              ><button id="threat">Показать угрозу</button
+              ><button id="repeat">Повторить</button
+              ><button id="next-position">Следующая позиция</button>
+            </div>
+            <details>
+              <summary>Произвольная позиция (FEN)</summary>
+              <input id="fen" aria-label="FEN" /><button id="load-fen">
+                Открыть FEN
+              </button>
+            </details>
+            <details>
+              <summary>Все легальные ходы</summary>
+              <div id="legal" class="moves"></div>
+            </details>
+          </div>
+          <aside>
+            <div class="panel">
+              <label for="mode">Режим</label
+              ><select id="mode">
+                <option>Обучение</option>
+                <option>Угадай лучший ход</option>
+                <option>Найди ошибку</option>
+                <option>Накажи ошибку соперника</option>
+                <option>Тренировка по памяти</option>
+                <option>Случайный соперник</option>
+                <option>Свободное исследование</option>
+              </select>
+              <p id="task">
+                Выберите фигуру и поле. Подсвеченные точки — легальные ходы.
+              </p>
+              <div id="plan"></div>
+              <div id="explanation" aria-live="polite"></div>
+              <div class="toolbar">
+                <button id="why">Почему?</button
+                ><button id="what-if">Что будет, если…?</button>
+              </div>
+              <textarea
+                id="answer"
+                placeholder="Моё объяснение ошибки или план (самооценка)"
+                aria-label="Моё объяснение"
+              ></textarea>
+            </div>
+            <details class="panel" id="engine-panel">
+              <summary>Локальный анализ Stockfish</summary>
+              <div class="toolbar">
+                <label
+                  >Секунды
+                  <input
+                    id="seconds"
+                    type="number"
+                    min="0.05"
+                    max="5"
+                    step="0.1"
+                    value="0.35" /></label
+                ><label
+                  >Глубина
+                  <input
+                    id="depth"
+                    type="number"
+                    min="1"
+                    max="40"
+                    value="18" /></label
+                ><label
+                  >MultiPV
+                  <input id="multipv" type="number" min="1" max="8" value="3"
+                /></label>
+              </div>
+              <div class="toolbar">
+                <button id="analyze" class="primary">Анализировать</button
+                ><button id="deep">Глубже</button
+                ><button id="stop">Остановить</button>
+              </div>
+              <p id="job-status" aria-live="polite"></p>
+              <div id="analysis"></div>
+            </details>
+            <details class="panel">
+              <summary>Случайный соперник</summary>
+              <label
+                >Вероятность лучшего хода
+                <input
+                  type="number"
+                  id="good"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  value="0.7" /></label
+              ><label
+                >Вероятность обычного хода
+                <input
+                  type="number"
+                  id="ordinary"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  value="0.25" /></label
+              ><button id="opponent">Ход соперника</button>
+              <p>
+                Остаток вероятности выбирает последний рассчитанный ход MultiPV.
+                Это не гарантия слабого хода.
+              </p>
+            </details>
+            <details class="panel">
+              <summary>Позиция и личные заметки</summary>
+              <textarea
+                id="note"
+                placeholder="Что я хочу запомнить?"
+                aria-label="Заметка"
+              ></textarea
+              ><button id="save-note">Сохранить позицию и заметку</button
+              ><button id="create-exercise">
+                Создать упражнение из позиции
+              </button>
+              <div id="saved-notes"></div>
+            </details>
+          </aside>
+        </div>
+        <div class="panel">
+          <h2>Дерево вариантов и история</h2>
+          <div id="variations" class="toolbar"></div>
+          <div id="history" class="moves"></div>
+          <h3>Подготовленные продолжения из текущей позиции</h3>
+          <div id="branches" class="moves"></div>
+          <p>
+            Варианты могут переходить в другие дебюты. Вы можете сделать любой
+            легальный ход вне дерева.
+          </p>
+        </div>
+        <div class="panel">
+          <h2>Opening Explorer</h2>
+          <p>
+            Запрашивается только текущая позиция. Статистика кешируется
+            локально; частоты не заменяют движковую оценку.
+          </p>
+          <div class="toolbar">
+            <button data-pool="masters">Мастера</button
+            ><button data-pool="beginner">Любители до 1200 Lichess</button
+            ><button data-pool="strong">Любители 2000+ Lichess</button>
+          </div>
+          <div id="explorer"></div>
+        </div>
+      </section>
+      <section id="games" class="page" hidden>
+        <h1>Разбор завершённых партий</h1>
+        <p>
+          Академия не подключается к текущим партиям и не делает ходов на
+          Chess.com.
+        </p>
+        <div class="cards">
+          <article>
+            <h2>Импорт PGN</h2>
+            <textarea
+              id="pgn"
+              placeholder='[Result "1-0"]&#10;&#10;1. e4 e5 2. Bc4 Nc6 3. Qh5 Nf6 4. Qxf7# 1-0'
+              aria-label="PGN завершённой партии"
+            ></textarea
+            ><input
+              type="file"
+              id="pgn-file"
+              accept=".pgn,.txt"
+              aria-label="Файл PGN"
+            /><button id="import-pgn" class="primary">Импортировать</button>
+          </article>
+          <article>
+            <h2>Chess.com Published Data API</h2>
+            <input
+              id="username"
+              value="Sanekmix"
+              placeholder="Ник"
+              aria-label="Ник Chess.com"
+            /><button id="archives">Показать архивы</button
+            ><select id="archive-month" aria-label="Месяц архива"></select
+            ><button id="import-archive">Загрузить месяц</button>
+            <p>Только публичные завершённые партии. Авторизация не нужна.</p>
+          </article>
+        </div>
+        <div id="game-list" class="cards"></div>
+        <article id="game-detail" hidden>
+          <h2 id="game-title"></h2>
+          <div class="toolbar">
+            <button id="game-analyze">Анализировать всю партию</button
+            ><button id="game-stop">Остановить</button
+            ><button id="game-replay">Открыть доску</button>
+          </div>
+          <p id="game-job"></p>
+          <canvas
+            id="eval-chart"
+            width="900"
+            height="170"
+            aria-label="График оценки белых"
+            role="img"
+          ></canvas>
+          <div id="game-moves" class="moves"></div>
+          <div id="game-errors"></div>
+        </article>
+      </section>
+      <section id="reviews" class="page" hidden>
+        <h1>Повторить и закрепить</h1>
+        <p>
+          Срок следующего повторения зависит от ответа и использования
+          подсказки. Ошибки возвращаются через 10 минут, успешные ответы — через
+          1, 6 и далее больше дней.
+        </p>
+        <button id="all-exercises">Показать все упражнения</button>
+        <div id="exercise-list" class="cards"></div>
+      </section>
+      <section id="lessons" class="page" hidden>
+        <h1>Тактика, стратегия и эндшпиль</h1>
+        <p>
+          Авторские короткие уроки и интерактивные позиции. Уроки с меткой
+          «Исследование» не являются автоматически проверяемыми задачами.
+        </p>
+        <div class="toolbar">
+          <select id="lesson-filter" aria-label="Раздел">
+            <option value="">Все разделы</option>
+            <option>Тактика</option>
+            <option>Стратегия</option>
+            <option>Эндшпиль</option>
+          </select>
+        </div>
+        <div id="lesson-list" class="cards"></div>
+      </section>
+      <section id="progress" class="page" hidden>
+        <h1>Мой прогресс</h1>
+        <div id="progress-data"></div>
+        <article>
+          <h2>Профиль обучения</h2>
+          <label
+            >Ориентир Chess.com Rapid
+            <input
+              id="rating"
+              type="number"
+              value="355"
+              min="100"
+              max="4000" /></label
+          ><button id="save-preferences">Сохранить</button>
+          <p>
+            Рейтинг предлагает программу; переход к сложному материалу также
+            требует успешной практики.
+          </p>
+        </article>
+        <article>
+          <h2>Резервная копия</h2>
+          <a href="/api/export" download
+            >Экспортировать пользовательские данные JSON</a
+          >
+          <p>
+            Восстановление заменяет текущие данные. Перед ним автоматически
+            сохраняется резервная копия SQLite.
+          </p>
+          <input
+            type="file"
+            id="restore-file"
+            accept=".json"
+            aria-label="Резервная копия JSON"
+          /><button id="restore">Восстановить из файла…</button>
+        </article>
+      </section>
+    </main>
+    <footer>
+      Локально · без регистрации · без платных API · Stockfish · python-chess ·
+      открытые данные Lichess
+    </footer>
+    <script src="/static/app.js"></script>
+  </body>
+</html>

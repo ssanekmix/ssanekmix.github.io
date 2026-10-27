@@ -1,0 +1,19 @@
+{
+  "id": "./",
+  "name": "Личная шахматная академия",
+  "short_name": "Шахматы",
+  "lang": "ru",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f2e9",
+  "theme_color": "#285b48",
+  "icons": [
+    {
+      "src": "./web/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

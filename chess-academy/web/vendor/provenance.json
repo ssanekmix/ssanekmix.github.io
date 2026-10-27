@@ -1,0 +1,24 @@
+[
+  {
+    "package": "chess.js",
+    "version": "1.4.0",
+    "tarball": "https://registry.npmjs.org/chess.js/-/chess.js-1.4.0.tgz",
+    "integrity": "sha512-BBJgrrtKQOzFLonR0l+k64A98NLemPwNsCskwb+29bRwobUa4iTm51E1kwGPbWXAcfdDa18nad6vpPPKPWarqw==",
+    "gitHead": "ce1ff9e9fc342984ff75ca475ab39f37888cb28a",
+    "repository": {
+      "url": "git+https://github.com/jhlywa/chess.js.git",
+      "type": "git"
+    }
+  },
+  {
+    "package": "stockfish",
+    "version": "17.1.0",
+    "tarball": "https://registry.npmjs.org/stockfish/-/stockfish-17.1.0.tgz",
+    "integrity": "sha512-LvxdOzngaMjwdDKkZML4riABX9EWUkIE2ZJUsNvR2yFnM4WLiM6ggEXcBY8v53dK7uAfbxdJFcBiKTIQyGg6Zg==",
+    "gitHead": "602fd7e1a571a2be71f242942db90483731f2a1f",
+    "repository": {
+      "url": "git://github.com/nmrugg/stockfish.js.git",
+      "type": "git"
+    }
+  }
+]
