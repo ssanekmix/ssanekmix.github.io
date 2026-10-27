@@ -2190,3 +2190,43 @@ body:has(#study:not([hidden])) .profile-pill {
     max-width: calc(100dvh - 164px);
   }
 }
+#lesson-goal,
+#branch-banner {
+  padding: 14px;
+  margin-bottom: 16px;
+  background: #2c3524;
+  border-left: 3px solid #81b64c;
+  border-radius: 5px;
+}
+#lesson-goal h3 {
+  font-size: 17px;
+  color: #edf1e7;
+  margin: 6px 0;
+}
+#lesson-goal p,
+#branch-banner p {
+  font-size: 13px;
+  line-height: 1.65;
+  color: #c6d1b9;
+}
+.lesson-action {
+  border-top: 1px solid #4b5940;
+  margin-top: 12px;
+  padding-top: 12px;
+}
+#lesson-goal button,
+#branch-banner button {
+  margin-top: 12px;
+  width: 100%;
+}
+#lesson-goal small {
+  color: #aabc95;
+  font-size: 11px;
+}
+#study:has(#lesson-goal:not([hidden])) #task {
+  display: none;
+}
+#branch-banner {
+  background: #273643;
+  border-color: #63a9e8;
+}

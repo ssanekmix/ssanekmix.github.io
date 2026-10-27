@@ -190,6 +190,9 @@ async function load(fen, moves = [], sans = []) {
   if (busy) return;
   clearFeedback();
   S.reviewGame = null;
+  S.branch = null;
+  S.analysisOpen = false;
+  $("branch-banner").hidden = true;
   document.body.classList.remove("reviewing");
   $("review-panel").hidden = true;
   $("back").disabled = false;
@@ -255,6 +258,7 @@ async function refresh() {
     .forEach((b) => (b.onclick = safe(() => play(b.dataset.move))));
   $("explorer").innerHTML = "";
   updateStudyChrome();
+  lessonGoal();
   renderReview();
   return true;
 }
@@ -279,7 +283,7 @@ function renderBoard() {
         button.classList.add("last");
       if (
         S.selected &&
-        S.position.legal.some((m) => m.uci.startsWith(S.selected + sq))
+        shownPosition().legal.some((m) => m.uci.startsWith(S.selected + sq))
       )
         button.classList.add("legal");
       if (S.attacks.includes(sq)) button.classList.add("attacked");
@@ -325,15 +329,15 @@ function drawArrows() {
       const color =
         { green: "#95bb4a", red: "#e15b64", blue: "#63a9e8" }[kind] ||
         "#95bb4a";
-      return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="16" opacity=".8" marker-end="url(#arrow-${kind})"/>`;
+      return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="20" opacity=".75" marker-end="url(#arrow-${kind})"/>`;
     })
     .join("");
 }
 async function clickSquare(sq) {
   if (busy || Date.now() < suppressClickUntil) return;
-  if (S.preview) retryPosition();
+  if (S.preview && !S.reviewGame && !S.branch) retryPosition();
   if (S.selected) {
-    const options = S.position.legal.filter((m) =>
+    const options = shownPosition().legal.filter((m) =>
       m.uci.startsWith(S.selected + sq),
     );
     if (options.length) {
@@ -586,6 +590,14 @@ async function rejectMove(before, uci, response, result) {
 }
 async function play(uci, automaticMove = false) {
   if (busy) return;
+  if (
+    !automaticMove &&
+    (S.reviewGame ||
+      S.analysisOpen ||
+      S.branch ||
+      $("mode").value === "Свободное исследование")
+  )
+    return branchPlay(uci);
   if (S.preview) retryPosition();
   const legal = S.position.legal.find((m) => m.uci === uci);
   if (!legal) throw Error("Этот ход сейчас нелегален");
@@ -597,7 +609,7 @@ async function play(uci, automaticMove = false) {
   try {
     const response = await api("/move", { ...before, uci }),
       training = !automaticMove && $("mode").value !== "Свободное исследование";
-    window.AcademyUI.moveSound?.(Boolean(response.san.includes("x")));
+    window.AcademyUI.moveSound?.(response.san.includes("x"), response.san);
     if (S.reviewGame) {
       S.reviewGame = null;
       document.body.classList.remove("reviewing");
@@ -689,11 +701,154 @@ async function play(uci, automaticMove = false) {
   } finally {
     busy = false;
   }
+  lessonGoal();
   if (!automaticMove && !puzzle) await automatic();
 }
 
+async function branchPlay(uci) {
+  if (reviewJob?.worker) await api("/jobs/" + reviewJob.worker + "/cancel", {});
+  const position = shownPosition();
+  if (!position.legal.some((m) => m.uci === uci))
+    throw Error("Этот ход сейчас нелегален");
+  if (!S.branch) {
+    S.branch = {
+      root: S.root,
+      moves: [...S.moves],
+      sans: [...S.sans],
+      cursor: S.cursor,
+      reviewGame: S.reviewGame,
+      mode: $("mode").value,
+    };
+  }
+  if (S.preview) {
+    S.root = position.fen;
+    S.moves = [];
+    S.sans = [];
+    S.cursor = 0;
+    clearFeedback();
+  }
+  busy = true;
+  try {
+    const response = await api("/move", { ...payload(), uci });
+    S.moves = S.moves.slice(0, S.cursor);
+    S.sans = S.sans.slice(0, S.cursor);
+    S.moves.push(uci);
+    S.sans.push(response.san);
+    S.cursor++;
+    S.arrows = [];
+    S.selected = null;
+    window.AcademyUI.moveSound?.(response.san.includes("x"), response.san);
+    await refresh();
+    $("branch-banner").hidden = false;
+    window.AcademyUI.showTab("coach");
+    $("branch-return").textContent = S.branch.reviewGame
+      ? "Вернуться к партии"
+      : "Вернуться к обучению";
+    $("branch-status").textContent =
+      "Считаю последствия хода… Можно сразу сделать следующий ход за другую сторону.";
+    showExplanation(response.explanation);
+  } finally {
+    busy = false;
+  }
+  void evaluateCurrent();
+}
+async function restoreBranch(ply) {
+  if (!S.branch || busy) return;
+  const saved = S.branch;
+  clearFeedback();
+  S.root = saved.root;
+  S.moves = saved.moves;
+  S.sans = saved.sans;
+  S.cursor = ply ?? saved.cursor;
+  S.reviewGame = saved.reviewGame;
+  S.branch = null;
+  S.analysisOpen = false;
+  $("mode").value = saved.mode;
+  $("branch-banner").hidden = true;
+  $("explanation").innerHTML = "";
+  await refresh();
+}
+$("branch-return").onclick = safe(() => restoreBranch());
+function lessonGoal() {
+  const box = $("lesson-goal");
+  box.hidden = !S.course || Boolean(S.branch);
+  if (box.hidden) return;
+  const line = S.line?.pgn.split(/\s+/) || [],
+    matches = S.sans.slice(0, S.cursor).every((m, i) => line[i] === m);
+  const next =
+    matches && S.position.legal.find((m) => m.san === line[S.cursor]);
+  const color = S.position.turn === "white" ? "white" : "black",
+    guide = S.course.guide?.[color] || S.course.plan;
+  box.innerHTML = `<small>${esc(S.course.name)} · ${esc(S.line?.name || "Глава")}</small><h3>Ваша цель сейчас</h3>`;
+  if (!next) {
+    box.insertAdjacentHTML(
+      "beforeend",
+      `<b>${matches ? "Глава пройдена. Повторите её без подсказок." : "Вы ушли из выбранной линии. Для закрепления вернитесь к её началу."}</b><button id="restart-chapter" class="primary">Отработать эту главу ещё раз</button>`,
+    );
+    $("restart-chapter").onclick = safe(async () => {
+      await load(START);
+      await automatic();
+    });
+    return;
+  }
+  const from = next.uci.slice(0, 2),
+    to = next.uci.slice(2, 4),
+    piece = S.position.pieces[from]?.toLowerCase();
+  const names = {
+    p: "пешкой",
+    n: "конём",
+    b: "слоном",
+    r: "ладьёй",
+    q: "ферзём",
+    k: "королём",
+  };
+  const aims = {
+    g1f3:
+      (S.position.pieces.e5?.toLowerCase() === "p"
+        ? "Нападите на пешку e5 и возьмите под контроль d4."
+        : "Возьмите под контроль e5 и d4.") + " Освободите g1 для рокировки.",
+    b1c3: "Укрепите e4 и d5. Развивайте коня, не закрывая слону диагональ.",
+    b8c6:
+      (S.position.pieces.e5 === "p"
+        ? "Защитите пешку e5"
+        : "Усильте контроль e5") + " и усилите контроль d4.",
+    g8f6: "Усильте давление на e4 и контроль d5; приготовьте рокировку.",
+    f1c4: "Направьте слона по диагонали c4–d5–e6–f7. На f7 ориентир атаки, но немедленный выигрыш ещё нужно доказать.",
+    f8c5: "Развейте слона на активную диагональ c5–d4–e3–f2 и подготовьте рокировку.",
+    f1b5:
+      S.position.pieces.c6 === "n"
+        ? "Создайте давление на коня c6. Не меняйте его без проверки последствий для центра."
+        : "Направьте слона на диагональ b5–c6–d7. Следите за развитием коня соперника на c6.",
+    c2c3: "Подготовьте пешечный центр d4: пешка c3 сможет поддержать d4. Учтите, что поле c3 пока закрыто коню.",
+    d2d3: "Поддержите e4 и откройте диагональ слону c1. Затем завершите развитие и рокировку.",
+    e7e6: "Поддержите центральное поле d5 и откройте диагональ слону f8; слону c8 пока тесно.",
+    c7c6: "Укрепите центральное поле d5 пешкой c6; слон c8 ещё может выйти до e6.",
+    g7g6: "Приготовьте слона f8 на g7: оттуда он будет действовать по большой диагонали.",
+  };
+  let aim =
+    aims[next.uci] ||
+    (next.san.startsWith("O-O")
+      ? "Уведите короля из центра и подключите ладью. Сравните безопасность короля после рокировки."
+      : next.san.includes("x")
+        ? `Разберите взятие на ${to}: кто сможет взять в ответ и что изменится в центре?`
+        : piece === "p"
+          ? `Измените пешечный контроль ходом на ${to}; затем завершайте развитие и следите за ответным подрывом соперника.`
+          : `Активизируйте фигуру на ${to}. Сравните её линии действия и ответ соперника; не считайте один развивающий ход выигрышем.`);
+  const memory = $("mode").value === "Тренировка по памяти";
+  box.insertAdjacentHTML(
+    "beforeend",
+    `<div class="lesson-action"><b>${memory ? "Вспомните следующий ход выбранной главы" : `Сыграйте ${names[piece] || "фигурой"} ${from} → ${to} (${esc(next.san)})`}</b><p>${esc(aim)}</p><small>Позиция ${S.cursor + 1} из ${line.length}. ${color === "white" ? "За белых" : "За чёрных"}. ${S.position.check ? "Сначала устраните шах." : ""}</small></div>`,
+  );
+  box.insertAdjacentHTML(
+    "beforeend",
+    `<details><summary>Общий план за ${color === "white" ? "белых" : "чёрных"}</summary><p>${esc(guide)}</p></details>`,
+  );
+  if (!memory && $("mode").value === "Обучение")
+    S.arrows = [[from, to, "green"]];
+  renderBoard();
+}
 async function automatic() {
-  if (busy || !S.course || S.position.terminal) return;
+  if (busy || S.branch || !S.course || S.position.terminal) return;
   const color = $("play-color").value;
   if (color === "both" || color === S.position.turn) return;
   if ($("mode").value === "Свободное исследование") return;
@@ -714,7 +869,7 @@ async function automatic() {
   await opponent();
 }
 async function evaluateCurrent() {
-  if (busy || S.position.terminal) return;
+  if (busy) return;
   const revision = S.revision,
     positionFen = S.position.fen;
   try {
@@ -724,7 +879,16 @@ async function evaluateCurrent() {
       depth: 14,
       multipv: 1,
     });
-    if (revision === S.revision) evaluation(result, positionFen);
+    if (revision === S.revision) {
+      evaluation(result, positionFen);
+      const move = result.lines[0]?.pv[0];
+      S.arrows = move ? [[move.slice(0, 2), move.slice(2, 4), "green"]] : [];
+      if (S.branch)
+        $("branch-status").textContent =
+          `Оценка ${formatScore(result.lines[0])}. Лучший ответ: ${result.lines[0]?.san[0] || "партия завершена"}. Ходите за обе стороны или вернитесь к партии.`;
+      if (S.course && !S.branch) lessonGoal();
+      renderBoard();
+    }
   } catch {
     if (revision === S.revision) resetEvaluation();
   }
@@ -772,6 +936,11 @@ async function jump(n) {
   if (moved)
     window.AcademyUI.moveSound?.(Boolean(S.sans[S.cursor - 1]?.includes("x")));
   if (!S.reviewGame) $("explanation").innerHTML = "";
+  if (
+    S.branch ||
+    (!S.reviewGame && $("mode").value === "Свободное исследование")
+  )
+    void evaluateCurrent();
   $("analysis").innerHTML = "";
 }
 $("back").onclick = safe(() => jump(S.cursor - 1));
@@ -869,6 +1038,7 @@ function renderAnalysis(result, anchor = payload()) {
 }
 async function analyze() {
   if (busy) return;
+  S.analysisOpen = true;
   busy = true;
   const rev = S.revision;
   try {
@@ -1037,6 +1207,9 @@ $("next-position").onclick = safe(async () => {
   );
 });
 $("mode").onchange = safe(async () => {
+  S.arrows = [];
+  lessonGoal();
+  renderBoard();
   const mode = $("mode").value;
   if (mode === "Найди ошибку" || mode === "Накажи ошибку соперника") {
     const rows = await api("/exercises?due=false&all=true");
@@ -1219,6 +1392,7 @@ async function showGame(id) {
 }
 let reviewJob = null;
 function reviewRow() {
+  if (S.branch) return null;
   return S.reviewGame?.analyses.find((a) => a.ply === S.cursor);
 }
 function reviewMark(row) {
@@ -1239,6 +1413,10 @@ function renderReview() {
   const game = S.reviewGame;
   $("review-panel").hidden = !game;
   if (!game) return;
+  if (S.branch) {
+    $("review-panel").hidden = true;
+    return;
+  }
   document.body.classList.add("reviewing");
   $("review-counter").textContent = `${S.cursor} / ${game.moves.length}`;
   $("review-show-best").hidden = true;
@@ -1259,11 +1437,15 @@ function renderReview() {
     $("review-scores").textContent =
       `${formatScore(before.lines[0])} → ${formatScore(after.lines[0])} · оценка белых`;
     showExplanation(JSON.parse(row.explanation));
-    S.arrows = [];
+    const next = after.lines[0]?.pv[0];
+    S.arrows = next ? [[next.slice(0, 2), next.slice(2, 4), "green"]] : [];
     evaluation(after);
     if (best?.pv[0] && best.pv[0] !== row.uci) {
       $("review-best").textContent =
         `Сильнее было ${best.san[0]}. Потеря оценки: ${(JSON.parse(row.verdict).cp_loss / 100).toFixed(2)} пешки.`;
+      S.arrows.push([best.pv[0].slice(0, 2), best.pv[0].slice(2, 4), "blue"]);
+      $("review-best").textContent +=
+        " Синяя стрелка — альтернатива до вашего хода; зелёная — лучший ответ в текущей позиции.";
       $("review-show-best").hidden = false;
     } else
       $("review-best").textContent =
@@ -1272,8 +1454,12 @@ function renderReview() {
     $("review-verdict").textContent = S.cursor
       ? `${S.sans[S.cursor - 1]} · ожидает анализа`
       : "Начальная позиция";
-    if (S.cursor === 0 && game.analyses.length)
-      evaluation(JSON.parse(game.analyses[0].before_json));
+    if (S.cursor === 0 && game.analyses.length) {
+      const first = JSON.parse(game.analyses[0].before_json),
+        move = first.lines[0]?.pv[0];
+      evaluation(first);
+      S.arrows = move ? [[move.slice(0, 2), move.slice(2, 4), "green"]] : [];
+    }
   }
   $("review-history").innerHTML = game.moves
     .map((m, i) => {
@@ -1312,7 +1498,9 @@ $("review-show-best").onclick = safe(async () => {
   $("review-best").textContent =
     `До хода ${row.san}: зелёная стрелка — ${best.san[0]}. Вариант: ${best.san.slice(0, 6).join(" ")}.`;
 });
-$("review-return").onclick = safe(() => jump(S.cursor));
+$("review-return").onclick = safe(() =>
+  S.branch ? restoreBranch() : jump(S.cursor),
+);
 async function analyzeReview() {
   if (!S.reviewGame || reviewJob) return;
   const game = S.reviewGame;
@@ -1323,6 +1511,7 @@ async function analyzeReview() {
       "/games/" + game.id + "/analyze",
       { seconds: Number($("seconds").value), depth: Number($("depth").value) },
       (status) => {
+        if (reviewJob) reviewJob.worker = status.id;
         $("review-progress").textContent =
           `Анализ ${Math.round(status.progress * 100)}%`;
       },
@@ -1331,10 +1520,16 @@ async function analyzeReview() {
     if (currentGame?.id === game.id) currentGame = updated;
     if (S.reviewGame?.id === game.id) {
       S.reviewGame = updated;
-      clearFeedback();
-      renderReview();
+      if (!S.branch) {
+        clearFeedback();
+        renderReview();
+      }
     }
     $("review-progress").textContent = "Все ходы оценены";
+  } catch (error) {
+    if (error.message !== "Анализ остановлен") throw error;
+    $("review-progress").textContent =
+      "Полный расчёт приостановлен для пробного варианта";
   } finally {
     reviewJob = null;
     $("review-analyze").disabled = false;
@@ -1700,8 +1895,8 @@ function boardKeyboard(event, sq) {
   squares[Math.max(0, Math.min(63, index + keys[event.key]))]?.focus();
 }
 function startDrag(event, sq) {
-  if (event.button !== 0 || busy || !S.position.pieces[sq]) return;
-  const piece = S.position.pieces[sq],
+  if (event.button !== 0 || busy || !shownPosition().pieces[sq]) return;
+  const piece = shownPosition().pieces[sq],
     start = { x: event.clientX, y: event.clientY },
     ghost = $("drag-ghost");
   let dragging = false;
@@ -1729,7 +1924,7 @@ function startDrag(event, sq) {
     const target = document
       .elementFromPoint(e.clientX, e.clientY)
       ?.closest("[data-square]")?.dataset.square;
-    const choices = S.position.legal.filter((m) =>
+    const choices = shownPosition().legal.filter((m) =>
       m.uci.startsWith(sq + (target || "??")),
     );
     if (choices.length)

@@ -45,6 +45,7 @@ def main():
    print(page.evaluate('''async()=>{const api=academyAPI,courses=(await api('/openings')).filter(c=>c.deep);if(courses.length!==10)throw Error('ten deep courses required');let count=0;for(const c of courses){const deep=await api('/openings/'+c.id);if(!deep.guide.white||!deep.guide.black||deep.variations.length<50)throw Error('incomplete course');count+=deep.variations.length}return count+' real legal opening branches loaded across ten courses';}'''))
    page.get_by_role('button',name='Продолжить обучение →').click()
    assert page.locator('#board img.piece').count()==32
+   expect(page.locator('#lesson-goal')).to_contain_text('e2 → e4')
    page.locator('[data-coach-tab=chapters]').click()
    page.locator('#more-variations').click();expect(page.locator('[data-variation]')).to_have_count(160)
    # Selecting a string variation id used to lose the chosen branch.
@@ -53,6 +54,9 @@ def main():
    # Real drag-and-drop, then autoplay the theoretical response.
    source=page.locator('[data-square="e2"]').bounding_box();target=page.locator('[data-square="e4"]').bounding_box();page.mouse.move(source['x']+source['width']/2,source['y']+source['height']/2);page.mouse.down();page.mouse.move(target['x']+target['width']/2,target['y']+target['height']/2,steps=10);page.mouse.up()
    expect(page.locator('#history')).to_contain_text('e5',timeout=20000)
+   expect(page.locator('#lesson-goal')).to_contain_text('g1 → f3')
+   expect(page.locator('#lesson-goal')).to_contain_text('e5')
+   expect(page.locator('#lesson-goal')).to_contain_text('d4')
    # A bad move must never enter history and must return the same exercise position.
    page.locator('.board-extras > summary').click();page.locator('.board-extras details').filter(has=page.locator('#fen')).locator('summary').click()
    page.locator('#fen').fill(FEN);page.locator('#load-fen').click();page.select_option('#mode','Угадай лучший ход')

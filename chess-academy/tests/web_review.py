@@ -14,7 +14,8 @@ def main():
         with sync_playwright() as p:
             browser = p.chromium.launch(headless=True, executable_path=shutil.which('chromium'))
             context = browser.new_context(viewport={'width': 1915, 'height': 884})
-            page = context.new_page(); errors = []
+            page = context.new_page(); errors = []; sound_requests = []
+            page.on("request", lambda request: sound_requests.append(request.url) if "images.chesscomfiles.com/chess-themes/sounds/" in request.url else None)
             page.on('pageerror', lambda error: errors.append(str(error)))
             page.goto(f'http://127.0.0.1:{server.server_port}/chess-academy/')
             expect(page.locator('#home-stats article')).to_have_count(3, timeout=20000)
@@ -51,6 +52,17 @@ def main():
             page.locator('#last-move').click(); expect(page.locator('#review-counter')).to_have_text('4 / 4')
             page.locator('#review-history [data-review-ply="2"]').click()
             expect(page.locator('#review-counter')).to_have_text('2 / 4')
+            # Exploring is automatic: both sides can move, and the source game survives.
+            page.locator('[data-square=g1]').click(); page.locator('[data-square=h3]').click()
+            expect(page.locator('#branch-banner')).to_be_visible()
+            page.locator('[data-square=b8]').click(); page.locator('[data-square=c6]').click()
+            expect(page.locator('#branch-status')).to_contain_text('Оценка', timeout=20000)
+            assert page.locator('#arrow-lines line').count() > 0
+            assert page.evaluate('async()=> (await academyAPI("/games/1")).moves.length') == 4
+            page.locator('#branch-return').click()
+            expect(page.locator('#review-counter')).to_have_text('2 / 4')
+            expect(page.locator('[data-square=g1] img')).to_be_visible()
+            expect(page.locator('[data-square=b8] img')).to_be_visible()
             page.locator('#sound-toggle').click()
             played = page.locator('#sound-toggle').get_attribute('data-played')
             page.keyboard.press('ArrowRight'); expect(page.locator('#review-counter')).to_have_text('3 / 4')
@@ -62,9 +74,10 @@ def main():
             page.set_viewport_size({'width':390, 'height':844})
             page.screenshot(path='/tmp/academy-review-mobile.png', full_page=True)
             assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
+            assert any("/default/move-self.mp3" in url for url in sound_requests), sound_requests
             assert not errors, errors
             browser.close()
-            print('PASS: 720px board, 16 edge coordinates; real WASM per-move grades; fast arrows/Home/End/list; best-move preview/restore; sound and mute; mobile; no JS errors.')
+            print('PASS: 720px board, 16 edge coordinates; real WASM per-move grades; fast arrows/Home/End/list; best-move preview/restore; official audio URL requests and mute; mobile; no JS errors.')
     finally:
         server.shutdown()
 if __name__ == '__main__': main()

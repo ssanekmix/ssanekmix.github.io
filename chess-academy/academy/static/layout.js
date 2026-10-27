@@ -209,63 +209,56 @@
       )
       .join(""),
   );
-  let audio = null,
-    soundOn = localStorage.getItem("academy-sound") !== "off";
+  let soundOn = localStorage.getItem("academy-sound") !== "off";
   const soundButton = $("sound-toggle");
+  const source =
+    "https://images.chesscomfiles.com/chess-themes/sounds/_MP3_/default/";
+  const sounds = Object.fromEntries(
+    ["move-self", "capture", "move-check", "castle"].map((name) => {
+      const audio = new Audio(source + name + ".mp3");
+      audio.preload = "none";
+      audio.addEventListener("error", () => {
+        soundButton.title =
+          "Звук Chess.com недоступен: проверьте доступ к images.chesscomfiles.com";
+      });
+      return [name, audio];
+    }),
+  );
   function soundState() {
     soundButton.setAttribute("aria-pressed", String(soundOn));
     soundButton.textContent = soundOn ? "♪" : "♪ ×";
   }
-  function unlockAudio() {
-    if (!soundOn) return;
-    const Audio = window.AudioContext || window.webkitAudioContext;
-    if (!Audio) return;
-    audio ||= new Audio();
-    if (audio.state === "suspended") void audio.resume().catch(() => {});
-  }
-  document.addEventListener("pointerdown", unlockAudio, { passive: true });
-  document.addEventListener("keydown", unlockAudio, { passive: true });
   soundButton.onclick = () => {
     soundOn = !soundOn;
     localStorage.setItem("academy-sound", soundOn ? "on" : "off");
     soundState();
-    unlockAudio();
   };
   soundState();
-  window.AcademyUI.moveSound = (capture = false) => {
-    if (!soundOn || !audio || audio.state !== "running") return;
-    const start = audio.currentTime,
-      duration = capture ? 0.12 : 0.085;
-    const buffer = audio.createBuffer(
-      1,
-      Math.ceil(audio.sampleRate * duration),
-      audio.sampleRate,
-    );
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < data.length; i++)
-      data[i] =
-        (Math.random() * 2 - 1) * Math.exp(-i / (audio.sampleRate * 0.014));
-    const source = audio.createBufferSource(),
-      filter = audio.createBiquadFilter(),
-      gain = audio.createGain();
-    source.buffer = buffer;
-    filter.type = "lowpass";
-    filter.frequency.value = capture ? 1800 : 1100;
-    gain.gain.value = 0.55;
-    source.connect(filter).connect(gain).connect(audio.destination);
-    source.start(start);
-    const tap = audio.createOscillator(),
-      envelope = audio.createGain();
-    tap.frequency.setValueAtTime(capture ? 240 : 320, start);
-    tap.frequency.exponentialRampToValueAtTime(100, start + duration);
-    envelope.gain.setValueAtTime(0.12, start);
-    envelope.gain.exponentialRampToValueAtTime(0.001, start + duration);
-    tap.connect(envelope).connect(audio.destination);
-    tap.start(start);
-    tap.stop(start + duration);
+  window.AcademyUI.moveSound = (capture = false, san = "") => {
+    if (!soundOn) return;
+    const name = /[+#]/.test(san)
+      ? "move-check"
+      : san.startsWith("O-O")
+        ? "castle"
+        : capture
+          ? "capture"
+          : "move-self";
+    const audio = sounds[name];
+    audio.currentTime = 0;
+    void audio
+      .play()
+      .then(() => {
+        soundButton.title = "Оригинальные звуки Chess.com";
+      })
+      .catch(() => {});
     soundButton.dataset.played = String(
       Number(soundButton.dataset.played || 0) + 1,
     );
   };
+  $("coach-panel").insertAdjacentHTML(
+    "afterbegin",
+    '<section id="lesson-goal" hidden></section><section id="branch-banner" hidden><b>Пробный вариант</b><p id="branch-status">Ходите за обе стороны. Исходная партия сохранена.</p><button id="branch-return" class="primary">Вернуться к партии</button></section>',
+  );
+  tabs.before($("branch-banner"));
   document.documentElement.style.colorScheme = "dark";
 })();

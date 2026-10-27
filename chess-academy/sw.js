@@ -1,5 +1,5 @@
 // This scope contains only the academy; other GitHub Pages projects are untouched.
-const VERSION = "academy-web-v3";
+const VERSION = "academy-web-v4";
 const FILES = [
   "./",
   "./index.html",
